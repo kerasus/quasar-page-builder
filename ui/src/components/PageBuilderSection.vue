@@ -1,30 +1,48 @@
 <template>
-  <div
-    class="page-builder-section"
-    :class="className"
-    :id="defaultOptions.id"
-    :style="style"
-  >
-    <page-builder-row
-      v-for="(row, rowIndex) in data.rows"
-      :key="rowIndex"
-      :cols="row.cols"
-      :options="row.options"
-      :containerFullHeight="containerFullHeight"
-      :get-data="getData"
-    />
-  </div>
+  <ComponentWrapper :editable="editable"
+                    @callAction="callAction($event)">
+    <template v-slot:body>
+      <div
+        class="page-builder-section"
+        :class="className"
+        :id="defaultOptions.id"
+        :style="style"
+      >
+        <page-builder-row
+          v-for="(row, rowIndex) in data.rows"
+          :key="rowIndex"
+          v-model:options="row.options"
+          :containerFullHeight="containerFullHeight"
+          :get-data="getData"
+          :editable="editable"
+          v-model:cols="row.cols"
+          @yieldSelf="setRow($event,{row,rowIndex})"
+        />
+      </div>
+    </template>
+  </ComponentWrapper>
+  <PageBuilderDialog :dialog="elementFormDialog"
+                     :formData="form"
+                     :action="action"
+                     :type="'col'"
+                     @closeDialog="elementFormDialog = false"
+                     @submit="onSubmitElement" />
+  <q-resize-observer @resize="Resize" />
 </template>
 
 <script>
-import PageBuilderRow from './PageBuilderRow.vue'
 import mixinWidget from '../mixin/Widgets'
+import ComponentWrapper from './PageBuilderEditor.vue'
+import PageBuilderDialog from './PageBuilderDialog'
+import PageBuilderRow from './PageBuilderRow.vue'
 
 export default {
   name: 'PageBuilderSection',
   mixins: [mixinWidget],
   components: {
-    PageBuilderRow
+    PageBuilderRow,
+    ComponentWrapper,
+    PageBuilderDialog
   },
   props: {
     data: {
@@ -36,14 +54,31 @@ export default {
     getData: {
       type: Function,
       default: () => {}
+    },
+    editable: {
+      type: Boolean,
+      default: false
+    },
+    containerFullHeight: {
+      type: [String, Boolean],
+      default: false
     }
   },
+  emits: ['yieldSelf'],
   data () {
     return {
       defaultBackground: null,
+      eventRow: {},
+      action: '',
+      form: {},
+      elementFormDialog: false,
       defaultOptions: {
         background: [],
         style: {}
+      },
+      windowSize: {
+        x: 0,
+        y: 0
       }
     }
   },
@@ -51,13 +86,6 @@ export default {
     this.setFullHeight()
   },
   computed: {
-    windowSize () {
-      return {
-        x: window.screen.width,
-        y: window.screen.height
-      }
-      // return this.$store.getters['AppLayout/windowSize']
-    },
     windowWidth () {
       return this.windowSize.x
     },
@@ -71,13 +99,58 @@ export default {
     },
     windowHeight() {
       this.setFullHeight()
+    },
+    containerFullHeight() {
+      this.setFullHeight()
     }
-
   },
   methods: {
+    Resize(newVal) {
+      this.windowSize.x = newVal.width
+      this.windowSize.y = newVal.height
+    },
     setFullHeight () {
-      if (!this.defaultOptions.fullHeight) return
-      this.defaultOptions.style.minHeight += this.containerFullHeight
+      if (this.containerFullHeight !== false) {
+        this.defaultOptions.style.minHeight = this.containerFullHeight
+        console.log(this.containerFullHeight, 1, this.defaultOptions.style.minHeight)
+      } else {
+        this.defaultOptions.style.minHeight = '10px'
+        console.log(this.containerFullHeight, 2, this.defaultOptions.style.minHeight)
+      }
+    },
+    callAction(event) {
+      this.$emit('yieldSelf', event)
+    },
+    onSubmitElement(widget) {
+      let widgetData = widget.item.info
+      if (widget.item.info !== undefined) {
+        widgetData.options = widget.options
+      }
+      if (this.action === 'add') {
+        this.$props.data.rows[this.eventRow.rowIndex].cols.push(widgetData)
+      } else if (this.action === 'edit') {
+        widgetData = widget.item
+        this.$props.data.rows[this.eventRow.rowIndex] = widgetData
+      }
+      this.elementFormDialog = false
+    },
+    setRow(event, rowItem) {
+      this.action = event
+      this.eventRow = {
+        rowIndex: rowItem.rowIndex,
+        row: rowItem.row
+      }
+      if (event === 'add') {
+        this.elementFormDialog = true
+      } else if (event === 'edit') {
+        this.form = this.eventRow.row
+        this.form.type = 'row'
+        this.elementFormDialog = true
+      } else if (event === 'delete') {
+        this.$props.data.rows.splice(this.eventRow.rowIndex, 1)
+      } else if (event === 'duplicate') {
+        this.$props.data.rows.push(this.eventRow.row)
+      }
     }
   }
 }

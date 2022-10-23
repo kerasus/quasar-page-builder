@@ -1,31 +1,48 @@
 <template>
-    <div :class="{'boxed': defaultOptions.boxed, 'boxedInFullWidthStatus': boxedInFullWidthStatus}"
-         :style="style"
-    >
-      <div class="page-builder-row row"
-           :id="defaultOptions.id"
+  <ComponentWrapper :editable="editable"
+                    @callAction="callAction($event)">
+    <template v-slot:body>
+      <div :class="{'boxed': options?.boxed?.value, 'boxedInFullWidthStatus': boxedInFullWidthStatus}"
+           :style="style"
       >
-        <page-builder-col
-          v-for="(col, colIndex) in cols"
-          :key="colIndex"
-          :widgets="col.widgets"
-          :options="col.options"
-          :containerFullHeight="containerFullHeight"
-          :get-data="getData"
-        />
+        <div class="page-builder-row row"
+             :id="defaultOptions.id"
+        >
+          <page-builder-col
+            v-for="(col, colIndex) in cols"
+            :key="colIndex"
+            v-model:options="col.options"
+            :containerFullHeight="containerFullHeight"
+            :get-data="getData"
+            :editable="editable"
+            @yieldSelf="setCol($event,{col,colIndex})"
+            v-model:widgets="col.widgets"
+          />
+        </div>
       </div>
-    </div>
+    </template>
+  </ComponentWrapper>
+  <PageBuilderDialog :dialog="elementFormDialog"
+                     :formData="form"
+                     :action="action"
+                     :type="'widget'"
+                     @closeDialog="elementFormDialog = false"
+                     @submit="onSubmitElement" />
 </template>
 
 <script>
 import PageBuilderCol from './PageBuilderCol.vue'
 import mixinWidget from '../mixin/Widgets'
+import ComponentWrapper from './PageBuilderEditor.vue'
+import PageBuilderDialog from './PageBuilderDialog'
 
 export default {
   name: 'PageBuilderRow',
   mixins: [mixinWidget],
   components: {
-    PageBuilderCol
+    PageBuilderCol,
+    ComponentWrapper,
+    PageBuilderDialog
   },
   props: {
     cols: {
@@ -37,15 +54,27 @@ export default {
     getData: {
       type: Function,
       default: () => {}
+    },
+    editable: {
+      type: Boolean,
+      default: false
+    },
+    options: {
+      type: Object,
+      default: () => {}
     }
   },
   data () {
     return {
       deviceWidth: 1920,
       boxedInFullWidthStatus: false,
+      form: {},
+      action: '',
+      eventCol: {},
+      elementFormDialog: false,
       defaultOptions: {
         height: 'auto',
-        boxedWidth: 1200,
+        boxedWidth: 1200
       }
     }
   },
@@ -64,10 +93,44 @@ export default {
 
       this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
       this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
-      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth;
+      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth
     },
     onResize () {
       this.updateBoxedStyle()
+    },
+    callAction(event) {
+      this.$emit('yieldSelf', event)
+    },
+    onSubmitElement(widget) {
+      console.log(widget)
+      const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
+      if (widget.item.info !== undefined) {
+        widgetData.options = widget.options
+      }
+      if (this.action === 'add') {
+        this.$props.cols[this.eventCol.colIndex].widgets.push(widgetData)
+      } else if (this.action === 'edit') {
+        this.$props.cols[this.eventCol.colIndex] = widgetData
+      }
+      this.elementFormDialog = false
+    },
+    setCol(event, colItem) {
+      this.action = event
+      this.eventCol = {
+        colIndex: colItem.colIndex,
+        col: colItem.col
+      }
+      if (event === 'add') {
+        this.elementFormDialog = true
+      } else if (event === 'edit') {
+        this.form = this.eventCol.col
+        this.form.type = 'col'
+        this.elementFormDialog = true
+      } else if (event === 'delete') {
+        this.$props.cols.splice(this.eventCol.colIndex, 1)
+      } else if (event === 'duplicate') {
+        this.$props.cols.push(this.eventCol.col)
+      }
     }
   }
 }

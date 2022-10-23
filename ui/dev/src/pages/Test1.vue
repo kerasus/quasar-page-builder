@@ -1,6 +1,11 @@
 <template>
   <q-page padding>
-    <q-page-builder :sections="sections" :options="pageConfig"/>
+    <q-page-builder
+      v-model:sections="sections"
+      :options="pageConfig"
+      :preview="true"
+      :editable="editable"
+      @toggleEdit="toggleEdit"/>
   </q-page>
 </template>
 
@@ -9,6 +14,7 @@ export default {
   name: 'BaseComponent',
   data() {
     return {
+      editable: false,
       pageConfig: {
         padding: {
           a: 'md'
@@ -221,6 +227,11 @@ export default {
           }
         }
       ],
+    }
+  },
+  methods: {
+    toggleEdit() {
+      this.editable = !this.editable
     }
   }
 }

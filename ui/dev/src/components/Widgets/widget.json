@@ -1,0 +1,20 @@
+{
+  "path": "/home/alaa/projects/quasar-page-builder/ui/dev/src/components/Widgets",
+  "name": "Widgets",
+  "self_type": "folder",
+  "children": [
+    {
+      "path": "components/Widgets/TestComponent1Widget",
+      "name": "TestComponent1Widget",
+      "self_type": "folder",
+      "type": "widget"
+    },
+    {
+      "path": "components/Widgets/TestComponent2Widget",
+      "name": "TestComponent2Widget",
+      "self_type": "folder",
+      "type": "widget"
+    }
+  ],
+  "type": "folder"
+}

@@ -1,20 +1,28 @@
 <template>
-  <component
-    :is="widget.name"
-    :data="widget.data"
-    :options="widget.options"
-    :containerFullHeight="containerFullHeight"
-    :get-data="getData"
-  />
+  <ComponentWrapper :editable="editable"
+                    @callAction="callAction($event)">
+    <template v-slot:body>
+      <component
+        :is="widget.name"
+        v-model:data="computedWidget"
+        v-model:options="computedWidget"
+        :containerFullHeight="containerFullHeight"
+        :get-data="getData"
+      />
+    </template>
+  </ComponentWrapper>
 </template>
 
 <script>
-import { defineAsyncComponent } from 'vue'
+import { defineAsyncComponent, computed } from 'vue'
 import mixinWidget from '../mixin/Widgets'
-import { componentsData } from 'src/boot/page-builder'
+import { widgets } from 'src/boot/page-builder'
+import ComponentWrapper from './PageBuilderEditor.vue'
 
 // generating define async imports
-const components = {}
+const components = {
+  ComponentWrapper
+}
 
 components.PageBuilderSection = defineAsyncComponent(() =>
   import('./PageBuilderSection.vue')
@@ -34,19 +42,33 @@ export default {
     getData: {
       type: Function,
       default: () => {}
+    },
+    editable: {
+      type: Boolean,
+      default: false
     }
   },
   mixins: [mixinWidget],
   created() {},
-  setup() {
-    componentsData.forEach((component) => {
+  setup(props, { emit }) {
+    widgets.forEach((component) => {
       components[component.name] = defineAsyncComponent(() => {
-        return import(
-          'components/Widgets' + component.path + component.name + '.vue'
-        )
+        return import('src/' + component.path + '/' + component.name + '.vue')
       })
     })
-    return {}
+
+    const computedWidget = computed(() => {
+      return props.widget
+    })
+
+    const callAction = (event) => {
+      emit('yieldSelf', event)
+    }
+
+    return {
+      computedWidget,
+      callAction
+    }
   }
 }
 </script>
