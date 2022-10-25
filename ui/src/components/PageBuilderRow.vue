@@ -102,7 +102,6 @@ export default {
       this.$emit('yieldSelf', event)
     },
     onSubmitElement(widget) {
-      console.log(widget)
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
       if (widget.item.info !== undefined) {
         widgetData.options = widget.options

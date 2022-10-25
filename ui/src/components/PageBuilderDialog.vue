@@ -39,8 +39,16 @@
             </div>
           </q-tab-panel>
           <q-tab-panel name="form">
-            <PageBuilderForm :formData="form"
-                             @submit="passFormData($event)" />
+            <component
+            v-if="isWidget"
+            :is="widget"
+            @submit="passFormData($event)" 
+            />
+            <PageBuilderForm 
+              v-else
+              :formData="form"
+              @submit="passFormData($event)" 
+            />
           </q-tab-panel>
         </q-tab-panels>
       </q-card-section>
@@ -49,9 +57,10 @@
 </template>
 
 <script>
-import { defineComponent, computed, ref } from 'vue'
+import { defineComponent, defineAsyncComponent, computed, ref } from 'vue'
 import PageBuilderForm from './PageBuilderForm.vue'
 import PageBuilderWidgetList from './PageBuilderWidgetList.vue'
+
 
 export default defineComponent({
   name: 'PageBuilderDialog',
@@ -77,6 +86,11 @@ export default defineComponent({
       required: true
     }
   },
+//   components: {
+//     OptionPanel: defineAsyncComponent(() =>
+//   import(`${this.formData.OptionPanel}`)
+// )
+//   },
   emits: ['submit', 'closeDialog'],
   setup(props, { emit }) {
     const dialogValue = computed(() => {
@@ -84,6 +98,7 @@ export default defineComponent({
     })
     const tab = ref('action')
     const form = ref({})
+    const isWidget = ref(false)
     const selectedItem = ref({})
     const baseElements = ref({
       section: {
@@ -106,6 +121,18 @@ export default defineComponent({
             type: 'text',
             value: 'center',
             name: 'verticalAlign'
+          },
+          style: {
+            label: 'استایل',
+            type: 'text',
+            value: 'center',
+            name: 'style'
+          },
+          className: {
+            label: 'کلاس',
+            type: 'text',
+            value: 'center',
+            name: 'className'
           }
         },
         info: {
@@ -189,7 +216,22 @@ export default defineComponent({
     }
     const selectWidget = (element) => {
       selectedItem.value = element
-      form.value = element.options
+      if (element.type === 'section' || element.type === 'row' || element.type === 'col') {
+        isWidget.value = false
+        if (element.options !== undefined) {
+          for (const opt in element.options) {
+            const optionValue = element.options[`${opt}`]
+            element.options[`${opt}`] = baseElements.value[`${element.type}`].options[`${opt}`]
+            element.options[`${opt}`].value = optionValue
+          }
+        }
+        form.value = element.options
+      } else if (element.OptionPanel !== undefined) {
+        isWidget.value = true
+        defineAsyncComponent(() =>
+          import(`${element.OptionPanel}`)
+        )
+      }
       tab.value = 'form'
     }
 
@@ -209,6 +251,8 @@ export default defineComponent({
       dialogValue,
       tab,
       form,
+      isWidget,
+
       baseElements,
       passFormData,
       selectWidget,

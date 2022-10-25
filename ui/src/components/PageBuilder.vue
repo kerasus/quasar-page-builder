@@ -8,7 +8,7 @@
       v-for="(section, sectionIndex) in sections"
       :key="sectionIndex"
       v-model:options="section.options"
-      :containerFullHeight="section.options.fullHeight.value ? section.options.height.value : false"
+      :containerFullHeight="section.options.fullHeight"
       :get-data="getData"
       :editable="editable"
       v-model:data="section.data"
@@ -66,7 +66,6 @@ export default {
   },
   data() {
     return {
-      height: '',
       action: '',
       addType: '',
       form: {},
@@ -85,15 +84,13 @@ export default {
     getData (url) {
       return GetWidgetsData.getData(url)
     },
-    calculateHeight (height) {
-      this.height = height
-    },
     setSection(event, sectionItem) {
+      const thisItem = JSON.parse(JSON.stringify(sectionItem))
       this.action = event
       this.addType = 'row'
       this.eventSection = {
-        sectionIndex: sectionItem.sectionIndex,
-        section: sectionItem.section
+        sectionIndex: thisItem.sectionIndex,
+        section: thisItem.section
       }
       if (event === 'add') {
         this.elementFormDialog = true
@@ -114,9 +111,9 @@ export default {
             rows: []
           },
           options: {
-            fullHeight: widget.options.fullHeight,
-            height: widget.options.height,
-            verticalAlign: widget.options.verticalAlign
+            fullHeight: widget.options.fullHeight.value,
+            height: widget.options.height.value,
+            verticalAlign: widget.options.verticalAlign.value
           }
         }
         this.$props.sections.push(section)
@@ -132,26 +129,14 @@ export default {
       this.elementFormDialog = false
     },
     initialSection() {
-      if (this.$props.sections.length === 0) {
-        this.addType = 'section'
-        this.action = 'initial'
-        this.elementFormDialog = true
+      if (this.$props.sections.length !== 0) {
+        return
       }
+
+      this.addType = 'section'
+      this.action = 'initial'
+      this.elementFormDialog = true
     },
-    extractWidgets(json) {
-      const widgets = []
-      json.children.forEach(element => {
-        if (element.type === 'widget') {
-          widgets.push(element)
-        } else {
-          // eslint-disable-next-line no-prototype-builtins
-          if (element.hasOwnProperty('children')) {
-            extractWidgets(element)
-          }
-        }
-      })
-      return widgets
-    }
   },
   watch: {
     editable: {

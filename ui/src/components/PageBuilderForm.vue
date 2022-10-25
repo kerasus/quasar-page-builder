@@ -8,7 +8,7 @@
          :key="index">
       <label for="form"></label>
       <q-input v-model="item.value"
-               v-if="item.name === 'height' ? (item.type === 'text' && formData.fullHeight.value === true) :item.type === 'text'"
+               v-if="item.name === 'height' ? (item.type === 'text' && formData.fullHeight === true) :item.type === 'text'"
                outlined
                type="text"
                :label="item.label" />

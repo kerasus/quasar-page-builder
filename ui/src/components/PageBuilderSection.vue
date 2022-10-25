@@ -60,7 +60,7 @@ export default {
       default: false
     },
     containerFullHeight: {
-      type: [String, Boolean],
+      type: [Boolean, String],
       default: false
     }
   },
@@ -110,12 +110,13 @@ export default {
       this.windowSize.y = newVal.height
     },
     setFullHeight () {
-      if (this.containerFullHeight !== false) {
+      if (this.containerFullHeight === true) {
+        this.defaultOptions.style.minHeight = '100vh'
+        return
+      } else if (this.containerFullHeight !== false) {
         this.defaultOptions.style.minHeight = this.containerFullHeight
-        console.log(this.containerFullHeight, 1, this.defaultOptions.style.minHeight)
       } else {
-        this.defaultOptions.style.minHeight = '10px'
-        console.log(this.containerFullHeight, 2, this.defaultOptions.style.minHeight)
+        this.defaultOptions.style.minHeight = 'auto'
       }
     },
     callAction(event) {

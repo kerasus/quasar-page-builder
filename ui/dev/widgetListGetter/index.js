@@ -15,6 +15,9 @@ const setJson = (obj) => {
           const jsonData = JSON.parse(rawData)
           obj.info = jsonData
         }
+        if (element.self_type === 'file' && element.file_type === 'vue' && element.name === 'OptionPanel') {
+          obj.optionPanel = element.path
+        }
       })
       delete obj.children
       return
@@ -29,6 +32,9 @@ const setJson = (obj) => {
           const rawData = fs.readFileSync(element.path)
           const jsonData = JSON.parse(rawData)
           obj.info = jsonData
+        }
+        if (element.file_type === 'vue' && element.name === 'OptionPanel') {
+          obj.optionPanel = element.path
         }
       }
     })

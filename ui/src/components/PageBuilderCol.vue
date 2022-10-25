@@ -134,6 +134,9 @@ export default {
         elementFormDialog.value = true
       } else if (event === 'edit') {
         form.value = eventWidget.value.widget.options
+        if (eventWidget.value.widget.optionPanel !== undefined) {
+          form.optionPanel = eventWidget.value.widget.optionPanel
+        }
         elementFormDialog.value = true
       } else if (event === 'delete') {
         computedWidget.value.splice(eventWidget.value.widgetIndex, 1)
