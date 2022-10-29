@@ -16,7 +16,9 @@ const setJson = (obj) => {
           obj.info = jsonData
         }
         if (element.self_type === 'file' && element.file_type === 'vue' && element.name === 'OptionPanel') {
-          obj.optionPanel = element.path
+          const optionPath = path.resolve('src/') + '/'
+          obj.optionPanel = element.path.replace(optionPath, '')
+          obj.optionPanelName = obj.name + 'OptionPanel'
         }
       })
       delete obj.children

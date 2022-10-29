@@ -40,13 +40,9 @@
           </q-tab-panel>
           <q-tab-panel name="form">
             <component
-            v-if="isWidget"
-            :is="widget"
-            @submit="passFormData($event)" 
-            />
-            <PageBuilderForm 
-              v-else
-              :formData="form"
+              :is="optionPanel"
+              :data="formData.data"
+              :options="formData.options"
               @submit="passFormData($event)" 
             />
           </q-tab-panel>
@@ -58,16 +54,24 @@
 
 <script>
 import { defineComponent, defineAsyncComponent, computed, ref } from 'vue'
-import PageBuilderForm from './PageBuilderForm.vue'
-import PageBuilderWidgetList from './PageBuilderWidgetList.vue'
+import PageBuilderForm from './PageBuilderForm'
+import PageBuilderWidgetList from './PageBuilderWidgetList'
+import SectionOptionPanel from './SectionOptionPanel'
+import RowOptionPanel from './RowOptionPanel'
+import ColOptionPanel from './ColOptionPanel'
+import { widgetExpanded } from 'src/boot/page-builder'
 
+const components= {
+  PageBuilderForm,
+  PageBuilderWidgetList,
+  SectionOptionPanel,
+  RowOptionPanel,
+  ColOptionPanel
+}
 
 export default defineComponent({
   name: 'PageBuilderDialog',
-  components: {
-    PageBuilderForm,
-    PageBuilderWidgetList
-  },
+  components,
   props: {
     dialog: {
       type: Boolean,
@@ -86,18 +90,23 @@ export default defineComponent({
       required: true
     }
   },
-//   components: {
-//     OptionPanel: defineAsyncComponent(() =>
-//   import(`${this.formData.OptionPanel}`)
-// )
-//   },
   emits: ['submit', 'closeDialog'],
   setup(props, { emit }) {
+    widgetExpanded.forEach(element => {
+      if (element.optionPanel !== undefined) {
+        components[element.optionPanelName] = defineAsyncComponent(() => {
+          //let path = 'src/' + element.optionPanel
+          return import('src/' + element.optionPanel)
+        })
+      }
+    });
+
     const dialogValue = computed(() => {
       return props.dialog
     })
     const tab = ref('action')
     const form = ref({})
+    const optionPanel = ref('')
     const isWidget = ref(false)
     const selectedItem = ref({})
     const baseElements = ref({
@@ -217,20 +226,11 @@ export default defineComponent({
     const selectWidget = (element) => {
       selectedItem.value = element
       if (element.type === 'section' || element.type === 'row' || element.type === 'col') {
+        optionPanel.value = element.type.charAt(0).toUpperCase() + element.type.slice(1) + 'OptionPanel'
         isWidget.value = false
-        if (element.options !== undefined) {
-          for (const opt in element.options) {
-            const optionValue = element.options[`${opt}`]
-            element.options[`${opt}`] = baseElements.value[`${element.type}`].options[`${opt}`]
-            element.options[`${opt}`].value = optionValue
-          }
-        }
-        form.value = element.options
-      } else if (element.OptionPanel !== undefined) {
-        isWidget.value = true
-        defineAsyncComponent(() =>
-          import(`${element.OptionPanel}`)
-        )
+      } else if (element.optionPanel !== undefined) {
+        isWidget.value = true     
+        optionPanel.value = element.optionPanelName
       }
       tab.value = 'form'
     }
@@ -252,8 +252,10 @@ export default defineComponent({
       tab,
       form,
       isWidget,
-
+      optionPanel,
+      widgetExpanded,
       baseElements,
+      components,
       passFormData,
       selectWidget,
       close,

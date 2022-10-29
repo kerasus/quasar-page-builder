@@ -58,6 +58,7 @@ import PageBuilderWidget from './PageBuilderWidget.vue'
 import mixinWidget from '../mixin/Widgets'
 import ComponentWrapper from './PageBuilderEditor.vue'
 import PageBuilderDialog from './PageBuilderDialog'
+import { widgetExpanded } from 'src/boot/page-builder'
 
 export default {
   name: 'PageBuilderCol',
@@ -128,14 +129,20 @@ export default {
       action.value = event
       eventWidget.value = {
         widgetIndex: widgetItem.widgetIndex,
-        widget: widgetItem.widget
+        widget: widgetItem.widget,
+        optionPanel: widgetExpanded.find(x => x.name ===  _snake2Pascal(widgetItem.widget.name)).optionPanel,
+        optionPanelName: widgetExpanded.find(x => x.name ===  _snake2Pascal(widgetItem.widget.name)).optionPanelName
       }
       if (event === 'add') {
         elementFormDialog.value = true
       } else if (event === 'edit') {
-        form.value = eventWidget.value.widget.options
-        if (eventWidget.value.widget.optionPanel !== undefined) {
-          form.optionPanel = eventWidget.value.widget.optionPanel
+        if (eventWidget.value.widget.options !== undefined) {
+          form.value = eventWidget.value.widget.options
+        }
+        form.value.type = 'widget'
+        if (eventWidget.value.optionPanel !== undefined) {
+          form.value.optionPanel = eventWidget.value.optionPanel
+          form.value.optionPanelName = eventWidget.value.optionPanelName
         }
         elementFormDialog.value = true
       } else if (event === 'delete') {
@@ -144,7 +151,17 @@ export default {
         computedWidget.value.push(eventWidget.value.widget)
       }
     }
+    function _snake2Pascal( str ){
+        str +='';
+        str = str.split('-');
+        for(var i=0;i<str.length;i++){ 
+            str[i] = str[i].slice(0,1).toUpperCase() + str[i].slice(1,str[i].length);
+        }
+        return str.join('');
+    }
     return {
+      action,
+      form,
       computedWidget,
       elementFormDialog,
       classes,

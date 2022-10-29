@@ -7,7 +7,9 @@
       "path": "components/Widgets/TestComponent1Widget",
       "name": "TestComponent1Widget",
       "self_type": "folder",
-      "type": "widget"
+      "type": "widget",
+      "optionPanel": "components/Widgets/TestComponent1Widget/OptionPanel.vue",
+      "optionPanelName": "TestComponent1WidgetOptionPanel"
     },
     {
       "path": "components/Widgets/TestComponent2Widget",

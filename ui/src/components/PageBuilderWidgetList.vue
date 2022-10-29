@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="widgets-container">
-        <div v-for="item in widgets"
+        <div v-for="item in widgetExpanded"
              :key="item"
              @click="$emit('selectWidget', item)"
              class="widget-item">
@@ -18,14 +18,14 @@
 
 <script>
 import { defineComponent } from 'vue'
-import { widgets } from 'src/boot/page-builder'
+import { widgetExpanded } from 'src/boot/page-builder'
 
 export default defineComponent({
   name: 'PageBuilderWidgetList',
   emits: ['selectWidget'],
   setup() {
     return {
-      widgets
+      widgetExpanded
     }
   }
 })

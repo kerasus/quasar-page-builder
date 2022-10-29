@@ -16,7 +16,7 @@
 <script>
 import { defineAsyncComponent, computed } from 'vue'
 import mixinWidget from '../mixin/Widgets'
-import { widgets } from 'src/boot/page-builder'
+import { widgetExpanded } from 'src/boot/page-builder'
 import ComponentWrapper from './PageBuilderEditor.vue'
 
 // generating define async imports
@@ -51,7 +51,7 @@ export default {
   mixins: [mixinWidget],
   created() {},
   setup(props, { emit }) {
-    widgets.forEach((component) => {
+    widgetExpanded.forEach((component) => {
       components[component.name] = defineAsyncComponent(() => {
         return import('src/' + component.path + '/' + component.name + '.vue')
       })
