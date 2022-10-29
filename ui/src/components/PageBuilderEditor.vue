@@ -3,6 +3,10 @@
        class="editor-wrapper">
     <q-btn-group outline
                  class="edit-toolbar">
+      <q-btn v-if="label"
+             outline
+             color="white"
+             :label="label" />
       <q-btn outline
              @click="$emit('callAction', 'delete')"
              color="white"
@@ -21,7 +25,6 @@
              @click="$emit('callAction', 'add')" />
     </q-btn-group>
     <slot name="body"></slot>
-
   </div>
   <slot v-else
         name="body"></slot>
@@ -33,6 +36,10 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'ComponentWrapper',
   props: {
+    label: {
+      type: String,
+      default: null
+    },
     editable: {
       type: Boolean,
       default: false

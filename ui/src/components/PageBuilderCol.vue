@@ -1,5 +1,6 @@
 <template>
   <ComponentWrapper :editable="editable"
+                    :label="'column'"
                     @callAction="callAction($event)">
     <template v-slot:body>
       <div class="page-builder-col"
@@ -154,7 +155,7 @@ export default {
     function _snake2Pascal( str ){
         str +='';
         str = str.split('-');
-        for(var i=0;i<str.length;i++){ 
+        for(var i=0;i<str.length;i++){
             str[i] = str[i].slice(0,1).toUpperCase() + str[i].slice(1,str[i].length);
         }
         return str.join('');

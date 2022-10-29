@@ -1,5 +1,6 @@
 <template>
   <ComponentWrapper :editable="editable"
+                    :label="'row'"
                     @callAction="callAction($event)">
     <template v-slot:body>
       <div :class="{'boxed': options?.boxed?.value, 'boxedInFullWidthStatus': boxedInFullWidthStatus}"

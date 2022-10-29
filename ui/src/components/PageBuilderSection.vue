@@ -1,5 +1,6 @@
 <template>
   <ComponentWrapper :editable="editable"
+                    :label="'section'"
                     @callAction="callAction($event)">
     <template v-slot:body>
       <div

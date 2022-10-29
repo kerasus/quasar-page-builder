@@ -43,7 +43,7 @@
               :is="optionPanel"
               :data="formData.data"
               :options="formData.options"
-              @submit="passFormData($event)" 
+              @submit="passFormData($event)"
             />
           </q-tab-panel>
         </q-tab-panels>
@@ -59,7 +59,7 @@ import PageBuilderWidgetList from './PageBuilderWidgetList'
 import SectionOptionPanel from './SectionOptionPanel'
 import RowOptionPanel from './RowOptionPanel'
 import ColOptionPanel from './ColOptionPanel'
-import { widgetExpanded } from 'src/boot/page-builder'
+// import { widgetExpanded } from 'ui/dev/src/boot/page-builder'
 
 const components= {
   PageBuilderForm,
@@ -92,14 +92,14 @@ export default defineComponent({
   },
   emits: ['submit', 'closeDialog'],
   setup(props, { emit }) {
-    widgetExpanded.forEach(element => {
-      if (element.optionPanel !== undefined) {
-        components[element.optionPanelName] = defineAsyncComponent(() => {
-          //let path = 'src/' + element.optionPanel
-          return import('src/' + element.optionPanel)
-        })
-      }
-    });
+    // widgetExpanded.forEach(element => {
+    //   if (element.optionPanel !== undefined) {
+    //     components[element.optionPanelName] = defineAsyncComponent(() => {
+    //       //let path = 'src/' + element.optionPanel
+    //       return import('src/' + element.optionPanel)
+    //     })
+    //   }
+    // });
 
     const dialogValue = computed(() => {
       return props.dialog
@@ -229,7 +229,7 @@ export default defineComponent({
         optionPanel.value = element.type.charAt(0).toUpperCase() + element.type.slice(1) + 'OptionPanel'
         isWidget.value = false
       } else if (element.optionPanel !== undefined) {
-        isWidget.value = true     
+        isWidget.value = true
         optionPanel.value = element.optionPanelName
       }
       tab.value = 'form'
@@ -253,9 +253,8 @@ export default defineComponent({
       form,
       isWidget,
       optionPanel,
-      widgetExpanded,
+      // widgetExpanded,
       baseElements,
-      components,
       passFormData,
       selectWidget,
       close,

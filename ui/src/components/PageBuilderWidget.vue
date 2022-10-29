@@ -1,5 +1,6 @@
 <template>
   <ComponentWrapper :editable="editable"
+                    :label="widget.name === 'page-builder-section' ? 'section' :  widget.name"
                     @callAction="callAction($event)">
     <template v-slot:body>
       <component
