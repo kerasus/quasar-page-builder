@@ -1,29 +1,24 @@
 <template>
-  <div class="row">
-    <div class="col-12">
-      <div class="widgets-container">
-        <div v-for="item in widgetExpanded"
-             :key="item"
-             @click="$emit('selectWidget', item)"
-             class="widget-item">
-          <q-icon size="40px"
-                  name="widgets"
-                  color="primary" />
-          <div class="widget-name">{{item.name.split(/(?=[A-Z])/).join(' ')}}</div>
-        </div>
-      </div>
+  <div class="widgets-container row q-col-gutter-md">
+    <div v-for="item in widgetExpanded"
+         :key="item"
+         @click="$emit('selectWidget', item)"
+         class="col text-center">
+      <q-btn outline rounded icon="widgets" color="primary" :label="item.name" />
     </div>
   </div>
 </template>
 
 <script>
+import {useQuasar} from 'quasar'
 import { defineComponent } from 'vue'
-import { widgetExpanded } from 'src/boot/page-builder'
 
 export default defineComponent({
   name: 'PageBuilderWidgetList',
   emits: ['selectWidget'],
   setup() {
+    const $q = useQuasar()
+    const widgetExpanded = $q.$QPageBuilderWidgetList
     return {
       widgetExpanded
     }
@@ -40,7 +35,7 @@ export default defineComponent({
     margin: 15px;
 
     .widget-item {
-      width: 100px;
+      width: 100%;
       height: 85px;
       padding: 5px;
       margin: 10px 15px;

@@ -5,11 +5,11 @@
 </template>
 
 <script>
-import { mixinWidget } from 'ui'
+// import { mixinWidget } from 'ui'
 
 export default {
   name: 'Test-component-2widget',
-  mixins: [mixinWidget]
+  // mixins: [mixinWidget]
 }
 </script>
 

@@ -1,5 +1,61 @@
 <template>
-  <div :style="style" :class="className">
+  <div :style="options.style">
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
+    Test-component-1
     Test-component-1
   </div>
 </template>
@@ -10,7 +66,6 @@ import { mixinWidget } from 'ui'
 export default {
   name: 'Test-component-1widget',
   mixins: [mixinWidget]
-
 }
 </script>
 

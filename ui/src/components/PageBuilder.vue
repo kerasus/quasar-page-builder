@@ -1,49 +1,75 @@
 <template>
-  <div
-    class="page-builder"
-    :class="className"
-    :style="style"
+  <div class="page-builder"
+       :class="className"
+       :style="pageBuilderOptions.style"
   >
-    <page-builder-section
-      v-for="(section, sectionIndex) in sections"
-      :key="sectionIndex"
-      v-model:options="section.options"
-      :containerFullHeight="section.options.fullHeight"
-      :get-data="getData"
-      :editable="editable"
-      v-model:data="section.data"
-      @yieldSelf="setSection($event, {section, sectionIndex})"
+    <editor-box v-if="editable"
+                label="page-builder"
+                :show-delete="false"
+                :show-duplicate="false"
+                @callAction="onPageBuilderEdit"
     />
-    <PageBuilderDialog :dialog="elementFormDialog"
-                       :formData="form"
-                       :action="action"
-                       :type="addType"
-                       @closeDialog="elementFormDialog = false"
-                       @submit="onSubmitElement" />
-    <q-page-sticky position="bottom-left"
-                   :offset="[18, 18]">
-      <q-btn color="primary"
-             v-if="preview"
-             :icon="editable ? 'preview' : 'data_array'"
-             @click="$emit('toggleEdit')" />
-    </q-page-sticky>
+    <page-builder-section v-for="(section, sectionIndex) in pageBuilderSections"
+                          :key="sectionIndex"
+                          v-model:data="section.data"
+                          v-model:options="section.options"
+                          :get-data="getData"
+                          :editable="editable"
+                          @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
+    />
+    <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
+                         :show="optionPanelDialog"
+                         :action-type="selectedNode.event"
+                         :widget-name="selectedNode.name"
+                         @closeDialog="optionPanelDialog = false"
+                         @submit="onSubmitElement"
+                         @addWidget="onAddWidget"
+    />
+    <q-btn v-if="preview"
+           color="primary"
+           :icon="editable ? 'preview' : 'data_array'"
+           @click="$emit('toggleEdit')"
+           class="btn-toggle-edit-page-builder"
+    />
   </div>
 </template>
 
 <script>
-import PageBuilderSection from './PageBuilderSection.vue'
+import {useQuasar} from 'quasar'
+import {defineAsyncComponent} from 'vue'
 import mixinWidget from '../mixin/Widgets'
+import OptionPanelDialog from './OptionPanelDialog'
+import EditorBox from '../components/EditorBox.vue'
 import GetWidgetsData from '../mixin/GetWidgetsData'
-import PageBuilderDialog from './PageBuilderDialog'
+import PageBuilderSection from './Section/Section.vue'
 
 export default {
   name: 'PageBuilder',
   mixins: [mixinWidget],
   components: {
-    PageBuilderSection,
-    PageBuilderDialog
+    EditorBox,
+    OptionPanelDialog,
+    PageBuilderSection
   },
   emits: ['toggleEdit'],
+  computed: {
+    pageBuilderSections: {
+      get() {
+        return this.sections
+      },
+      set(newValue) {
+        this.$emit('update:sections', newValue)
+      }
+    },
+    pageBuilderOptions: {
+      get() {
+        return this.options
+      },
+      set(newValue) {
+        this.$emit('update:options', newValue)
+      }
+    },
+  },
   props: {
     sections: {
       type: Array,
@@ -66,11 +92,23 @@ export default {
   },
   data() {
     return {
-      action: '',
-      addType: '',
-      form: {},
-      eventSection: {},
-      elementFormDialog: false
+      sampleEmptySection: {
+        data: {}
+      },
+      sampleEmptyRow: {
+        cols: []
+      },
+      sampleEmptyCol: {
+        widgets: []
+      },
+      optionPanelDialog: false,
+      selectedNode: {
+        event: null,
+        name: null,
+        widget: {
+          options: {}
+        }
+      }
     }
   },
   created() {
@@ -79,74 +117,161 @@ export default {
       this.initialSection()
     }
   },
-
   methods: {
-    getData (url) {
+    getData(url) {
       return GetWidgetsData.getData(url)
     },
-    setSection(event, sectionItem) {
-      const thisItem = JSON.parse(JSON.stringify(sectionItem))
-      this.action = event
-      this.addType = 'row'
-      this.eventSection = {
-        sectionIndex: thisItem.sectionIndex,
-        section: thisItem.section
-      }
-      if (event === 'add') {
-        this.elementFormDialog = true
-      } else if (event === 'edit') {
-        this.form = this.eventSection.section
-        this.form.type = 'section'
-        this.elementFormDialog = true
-      } else if (event === 'delete') {
-        this.$props.sections.splice(this.eventSection.sectionIndex, 1)
-      } else if (event === 'duplicate') {
-        this.$props.sections.push(this.eventSection.section)
-      }
+    getWidgetNameFromTagName(tagName) {
+      let regex = /-./gms;
+      return tagName.slice(0, 1).toUpperCase() + tagName.slice(1).replace(regex, (match) => {
+        return match.replace('-', '').toUpperCase()
+      })
     },
-    onSubmitElement(widget) {
-      if (this.$props.sections.length === 0 && this.action === 'initial') {
-        const section = {
-          data: {
-            rows: []
-          },
-          options: {
-            fullHeight: widget.options.fullHeight.value,
-            height: widget.options.height.value,
-            verticalAlign: widget.options.verticalAlign.value
-          }
-        }
-        this.$props.sections.push(section)
-      }
-      let widgetData = widget.item.info
-      if (this.action === 'add') {
-        widgetData.options = widget.options
-        this.$props.sections[this.eventSection.sectionIndex].data.rows.push(widgetData)
-      } else if (this.action === 'edit') {
-        widgetData = widget.item
-        this.$props.sections[this.eventSection.sectionIndex] = widgetData
-      }
-      this.elementFormDialog = false
-    },
-    initialSection() {
-      if (this.$props.sections.length !== 0) {
-        return
+    getNodeByPath(path, nodesData, callback) {
+      let result = null
+      let parent = null
+      let index = null
+      if (path.node !== 'data.rows') {
+        parent = nodesData[path.node]
+        index = path.index
+        result = parent[index]
+      } else {
+        parent = nodesData.data.rows
+        index = path.index
+        result = parent[index]
       }
 
-      this.addType = 'section'
-      this.action = 'initial'
-      this.elementFormDialog = true
+      if (path.child) {
+        return this.getNodeByPath(path.child, result, callback)
+      }
+
+      if (typeof callback === 'function') {
+        callback(parent, result, index)
+      }
+      return result
+    },
+    setNodeName(node) {
+      if (node.name) {
+        return
+      }
+      node.name = this.getWidgetNameFromTagName(node.widget.name)
+    },
+    setOptionPanelData(selectedNode, selectedSection) {
+      selectedNode.path.index = selectedSection.widgetIndex
+      this.selectedNode = selectedNode
+      if (!this.selectedNode.widget) {
+        this.selectedNode.widget = {}
+      }
+      this.selectedNode.widget.options = selectedNode?.widget?.options ? selectedNode.widget.options : {}
+    },
+    onPageBuilderEdit(event) {
+      if (event === 'add') {
+        this.pageBuilderSections.push(this.sampleEmptySection)
+        return
+      }
+      this.selectedNode.event = event
+      this.selectedNode.name = 'pageBuilder'
+      this.selectedNode.widget.name = 'pageBuilder'
+      this.selectedNode.widget.options = this.pageBuilderOptions
+      this.optionPanelDialog = true
+    },
+    onAddWidget (widget) {
+      this.actionOnSelectedNode((parent, node, index) => {
+        node.widgets.push({name: widget.name[0].toLowerCase() + widget.name.slice(1, widget.name.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)})
+      })
+    },
+    onOptionAction(selectedNode, selectedSection) {
+      this.setNodeName(selectedNode)
+      this.setOptionPanelData(selectedNode, selectedSection)
+      this.actionOnSelectedNode((parent, node, index) => {
+        if (selectedNode.event === 'add') {
+          if (selectedNode.name === 'section') {
+            node.data.rows.push(this.sampleEmptyRow)
+          } else if (selectedNode.name === 'row') {
+            node.cols.push(this.sampleEmptyCol)
+          }
+          this.optionPanelDialog = true
+        } else if (selectedNode.event === 'edit') {
+          this.selectedNode.widget = node
+          this.optionPanelDialog = true
+        } else if (selectedNode.event === 'delete') {
+          parent.splice(index, 1)
+        } else if (selectedNode.event === 'duplicate') {
+          parent.splice(index, 0, node)
+        }
+      })
+    },
+    actionOnSelectedNode(callback) {
+      this.actionOnNode(this.selectedNode, callback)
+    },
+    actionOnNode(node, callback) {
+      this.getNodeByPath(node.path, {widgets: this.pageBuilderSections}, callback)
+    },
+    onSubmitElement(widget) {
+      if (this.selectedNode.event === 'edit') {
+        this.actionOnSelectedNode((parent, node, index) => {
+          node.options = widget.options
+        })
+        return
+      }
+    },
+    initialSection() {
+      if (this.pageBuilderSections.length !== 0) {
+        return
+      }
+      this.selectedNode.name = 'section'
+      this.selectedNode.event = 'initial'
+      this.optionPanelDialog = true
     },
   },
   watch: {
-    editable: {
-      deep: true,
-      handler() {
-        this.initialSection()
-      }
+    editable() {
+      this.initialSection()
     }
+  },
+  setup() {
+    const $q = useQuasar()
+    const widgetExpanded = $q.$QPageBuilderWidgetList
+
+    function registerWidgets(widgetsList) {
+      const components = {}
+      const optionPanels = {}
+      widgetsList.forEach(element => {
+        const widgetComponentName = element.name
+        const widgetComponentPath = element.path + '/' + widgetComponentName
+        const widgetOptionPanelPath = element.path + '/' + 'OptionPanel'
+        components[widgetComponentName] = defineAsyncComponent(() => import('src/' + widgetComponentPath + '.vue'))
+        if (element.optionPanel) {
+          optionPanels[widgetComponentName] = {
+            name: widgetComponentName,
+            tagName: widgetComponentName[0].toLowerCase() + widgetComponentName.slice(1, widgetComponentName.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`),
+            path: 'src/' + widgetOptionPanelPath + '.vue'
+          }
+        }
+      })
+      window.$pageBuilderWidgetComponents = components
+      window.$pageBuilderWidgetOptionPanels = optionPanels
+    }
+
+    registerWidgets(widgetExpanded)
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped lang="scss">
+.page-builder {
+  position: relative;
+
+  &.editable {
+    border: dashed 2px $primary;
+    padding-top: 40px;
+  }
+
+  .btn-toggle-edit-page-builder {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    z-index: 99999;
+  }
+}
+</style>

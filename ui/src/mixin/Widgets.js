@@ -75,25 +75,22 @@ const mixinWidget = {
   props: {
     data: {
       type: Object,
-      default() {
-        return {}
-      }
+      default: null
+    },
+    editable: {
+      type: Boolean,
+      default: false
     },
     options: {
       type: Object,
       default() {
         return {}
       }
-    },
-    containerFullHeight: {
-      type: String,
-      default: () => {
-        return '100vh'
-      }
     }
   },
   data() {
     return {
+      optionPanelDialog: false,
       defaultOptions: {}
     }
   },
@@ -109,14 +106,11 @@ const mixinWidget = {
       if (this.defaultOptions.verticalAlign === 'center') {
         this.defaultOptions.className += ' vertical-align-center'
       }
-      return this.defaultOptions.className
-    },
-    style() {
-      // if fullHeight option is true, then using containerFullHeight (which is come from PageBuilder the parent)
-      if (this.defaultOptions.fullHeight) {
-        this.defaultOptions.style.minHeight = this.containerFullHeight
+
+      if (this.editable) {
+        this.defaultOptions.className += ' editable'
       }
-      return this.defaultOptions.style
+      return this.defaultOptions.className
     }
   },
   methods: {
