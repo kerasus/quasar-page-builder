@@ -2,7 +2,9 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab >
       <div class="option-panel-container">
-        col ...
+        <q-input v-model="localOptions.colNumber"
+                 label="col number"
+        />
       </div>
     </template>
   </option-panel-tabs>

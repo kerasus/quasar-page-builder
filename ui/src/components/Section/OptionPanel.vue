@@ -25,8 +25,16 @@ import mixinOptionPanel from '../../mixin/OptionPanel'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs'
 
 export default defineComponent({
-  name: "SectionOptionPanel",
+  name: 'SectionOptionPanel',
   components: {OptionPanelTabs},
-  mixins: [mixinOptionPanel]
+  mixins: [mixinOptionPanel],
+  data: () =>{
+    return {
+      defaultOption: {
+        fullHeight: false,
+        verticalAlign: 'center',
+      }
+    }
+  },
 })
 </script>

@@ -1,4 +1,17 @@
 const OptionPanel = {
+    data: () =>{
+        return {
+            defaultOption: {}
+        }
+    },
+    watch: {
+        localOptions: {
+            handler(newValue) {
+                this.updateLocalOptions(newValue)
+            },
+            deep: true
+        }
+    },
     props: {
         data: {
             type: Object,
@@ -14,14 +27,21 @@ const OptionPanel = {
     computed: {
         localOptions: {
             get() {
-                return this.options
+                return Object.assign(this.defaultOption, this.options)
             },
             set(newValue) {
-                this.$emit('update:options', newValue)
+                this.updateLocalOptions(newValue)
             }
         }
     },
     methods: {
+        removeNullKeys () {
+
+        },
+        updateLocalOptions (newValue) {
+            const newVal = newValue ? newValue : this.localOptions
+            this.$emit('update:options', newValue)
+        },
         passOptions () {
             const data = {
                 options: this.localOptions,

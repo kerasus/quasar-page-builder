@@ -64,7 +64,7 @@
 import { mixinWidget } from 'ui'
 
 export default {
-  name: 'Test-component-1widget',
+  name: 'Test-component1-widget',
   mixins: [mixinWidget]
 }
 </script>

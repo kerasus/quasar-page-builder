@@ -3,7 +3,7 @@
        :class="className"
        :style="pageBuilderOptions.style"
   >
-    <editor-box v-if="editable"
+    <editor-box v-if="pageBuilderEditable"
                 label="page-builder"
                 :show-delete="false"
                 :show-duplicate="false"
@@ -14,7 +14,7 @@
                           v-model:data="section.data"
                           v-model:options="section.options"
                           :get-data="getData"
-                          :editable="editable"
+                          :editable="pageBuilderEditable"
                           @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
     />
     <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
@@ -27,8 +27,8 @@
     />
     <q-btn v-if="preview"
            color="primary"
-           :icon="editable ? 'preview' : 'data_array'"
-           @click="$emit('toggleEdit')"
+           :icon="pageBuilderEditable ? 'preview' : 'data_array'"
+           @click="toggleEdit"
            class="btn-toggle-edit-page-builder"
     />
   </div>
@@ -53,6 +53,14 @@ export default {
   },
   emits: ['toggleEdit'],
   computed: {
+    pageBuilderEditable: {
+      get() {
+        return this.editable
+      },
+      set(newValue) {
+        this.$emit('update:editable', newValue)
+      }
+    },
     pageBuilderSections: {
       get() {
         return this.sections
@@ -92,15 +100,6 @@ export default {
   },
   data() {
     return {
-      sampleEmptySection: {
-        data: {}
-      },
-      sampleEmptyRow: {
-        cols: []
-      },
-      sampleEmptyCol: {
-        widgets: []
-      },
       optionPanelDialog: false,
       selectedNode: {
         event: null,
@@ -109,12 +108,6 @@ export default {
           options: {}
         }
       }
-    }
-  },
-  created() {
-    this.defaultOptions = Object.assign(this.defaultOptions, this.options)
-    if (this.$props.editable) {
-      this.initialSection()
     }
   },
   methods: {
@@ -166,7 +159,11 @@ export default {
     },
     onPageBuilderEdit(event) {
       if (event === 'add') {
-        this.pageBuilderSections.push(this.sampleEmptySection)
+        this.pageBuilderSections.push({
+          data: {
+            rows: []
+          }
+        })
         return
       }
       this.selectedNode.event = event
@@ -186,11 +183,16 @@ export default {
       this.actionOnSelectedNode((parent, node, index) => {
         if (selectedNode.event === 'add') {
           if (selectedNode.name === 'section') {
-            node.data.rows.push(this.sampleEmptyRow)
+            node.data.rows.push({
+              cols: []
+            })
           } else if (selectedNode.name === 'row') {
-            node.cols.push(this.sampleEmptyCol)
+            node.cols.push({
+              widgets: []
+            })
+          } else if (selectedNode.name === 'col') {
+            this.optionPanelDialog = true
           }
-          this.optionPanelDialog = true
         } else if (selectedNode.event === 'edit') {
           this.selectedNode.widget = node
           this.optionPanelDialog = true
@@ -215,18 +217,8 @@ export default {
         return
       }
     },
-    initialSection() {
-      if (this.pageBuilderSections.length !== 0) {
-        return
-      }
-      this.selectedNode.name = 'section'
-      this.selectedNode.event = 'initial'
-      this.optionPanelDialog = true
-    },
-  },
-  watch: {
-    editable() {
-      this.initialSection()
+    toggleEdit () {
+      this.$emit('toggleEdit')
     }
   },
   setup() {

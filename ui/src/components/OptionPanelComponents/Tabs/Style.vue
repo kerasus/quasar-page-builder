@@ -12,6 +12,7 @@
               <div class="col-12">
                 <q-input v-model="localStyles.backgroundImage"
                          label="backgroundImage"
+                         @update:model-value="updateLocalOptions(localOptions)"
                 />
               </div>
               <div class="col-md-3">
@@ -147,8 +148,11 @@
 </template>
 
 <script>
+// import mixinOptionPanel from '../../../mixin/OptionPanel'
+
 export default {
   name: 'StyleTabComponent',
+  // mixins: [mixinOptionPanel],
   props: {
     styles: {
       type: Object,
@@ -167,7 +171,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-</style>

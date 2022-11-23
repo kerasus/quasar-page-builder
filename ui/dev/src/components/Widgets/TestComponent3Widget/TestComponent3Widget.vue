@@ -1,6 +1,6 @@
 <template>
   <div>
-    Test-component-2
+    Test-component-3
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 // import { mixinWidget } from 'ui'
 
 export default {
-  name: 'Test-component2-widget',
+  name: 'Test-component3-widget',
   // mixins: [mixinWidget]
 }
 </script>
