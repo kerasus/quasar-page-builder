@@ -2,18 +2,23 @@
   <option-panel-tabs v-model:options="localOptions">
     <template #main-tab >
       <div class="option-panel-container">
-        <q-checkbox v-model="localOptions.fullHeight"
-                    label="fullHeight"
-        />
-        <q-select v-model="localOptions.verticalAlign"
-                  label="verticalAlign"
-                  :options="['center', 'right', 'left']"
-        />
-<!--        <q-btn label="ذخیره"-->
-<!--               color="primary"-->
-<!--               class="q-mt-md"-->
-<!--               @click="passOptions"-->
-<!--        />-->
+        <div class="row">
+          <div class="col-md-4">
+            <q-checkbox v-model="localOptions.fullHeight"
+                        label="fullHeight"
+            />
+          </div>
+          <div class="col-md-4">
+            <q-select v-if="!!localOptions.fullHeight"
+                      v-model="localOptions.verticalAlign"
+                      label="verticalAlign"
+                      :options="['center', 'end', 'start']"
+            />
+          </div>
+          <div class="col-md-4">
+            input for fullHeight amount
+          </div>
+        </div>
       </div>
     </template>
   </option-panel-tabs>
@@ -30,9 +35,9 @@ export default defineComponent({
   mixins: [mixinOptionPanel],
   data: () =>{
     return {
-      defaultOption: {
+      defaultOptions: {
         fullHeight: false,
-        verticalAlign: 'center',
+        verticalAlign: null,
       }
     }
   },

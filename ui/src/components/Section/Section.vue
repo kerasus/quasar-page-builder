@@ -1,6 +1,6 @@
 <template>
   <div class="page-builder-section"
-       :class="className"
+       :class="sectionClassName"
        :id="sectionOptions.id"
        :style="sectionOptions.style"
   >
@@ -11,10 +11,10 @@
     <q-resize-observer @resize="Resize"/>
     <page-builder-row v-for="(row, rowIndex) in data.rows"
                       :key="rowIndex"
+                      v-model:cols="row.cols"
                       v-model:options="row.options"
                       :get-data="getData"
                       :editable="editable"
-                      v-model:cols="row.cols"
                       @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})"
     />
   </div>
@@ -39,7 +39,7 @@ export default {
       }
     }
   },
-  emits: ['onOptionAction'],
+  emits: ['onOptionAction', 'update:options'],
   data() {
     return {
       defaultBackground: null,
@@ -48,6 +48,8 @@ export default {
       form: {},
       elementFormDialog: false,
       defaultOptions: {
+        fullHeight: false,
+        className: '',
         background: [],
         style: {}
       },
@@ -63,22 +65,39 @@ export default {
   computed: {
     sectionOptions: {
       get() {
-        return Object.assign(this.defaultOptions, this.options);
+        return Object.assign(this.defaultOptions, this.options)
       },
       set(newValue) {
         this.$emit('update:options', newValue)
       }
     },
+    sectionClassName () {
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-center',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
+      )
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-start',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
+      )
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-end',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
+      )
+
+      return this.sectionOptions.className
+    },
     containerFullHeight: {
       get() {
-        if (!this.options?.fullHeight) {
+        if (!this.sectionOptions?.fullHeight) {
           return false
         }
-        if (this.options.fullHeight === true) {
+        if (this.sectionOptions.fullHeight === true) {
           return '100vh'
         }
 
-        return this.options.fullHeight
+        return this.sectionOptions.fullHeight
       },
       set(newValue) {
         this.sectionOptions.fullHeight = newValue
@@ -182,14 +201,6 @@ export default {
 <style scoped lang="scss">
 .page-builder-section {
   position: relative;
-  //:deep(.widget-editor-box) {
-  //  display: none;
-  //}
-  //&:hover {
-  //  :deep(.widget-editor-box) {
-  //    display: block;
-  //  }
-  //}
   &.editable {
     border: dashed 2px $primary;
     padding-top: 40px;
@@ -204,13 +215,15 @@ export default {
     flex-flow: column;
     justify-content: center;
   }
-
-  //.row {
-  //  width: 100%;
-  //}
-  //display: flex;
-  //flex-flow: column;
-  /*justify-content: center;*/
-  //align-items: center;
+  &.vertical-align-end {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-end;
+  }
+  &.vertical-align-start {
+    display: flex;
+    flex-flow: column;
+    justify-content: flex-start;
+  }
 }
 </style>

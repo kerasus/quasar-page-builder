@@ -1,6 +1,6 @@
 <template>
   <div class="page-builder"
-       :class="className"
+       :class="pageBuilderClassName"
        :style="pageBuilderOptions.style"
   >
     <editor-box v-if="pageBuilderEditable"
@@ -51,7 +51,7 @@ export default {
     OptionPanelDialog,
     PageBuilderSection
   },
-  emits: ['toggleEdit'],
+  emits: ['toggleEdit', 'update:options'],
   computed: {
     pageBuilderEditable: {
       get() {
@@ -71,12 +71,17 @@ export default {
     },
     pageBuilderOptions: {
       get() {
-        return this.options
+        return Object.assign(this.defaultOptions, this.options);
       },
       set(newValue) {
         this.$emit('update:options', newValue)
       }
     },
+    pageBuilderClassName() {
+      this.pageBuilderOptions.className = this.getUpdateClassNamesWithKey(this.pageBuilderOptions.className, 'editable', this.editable)
+
+      return this.pageBuilderOptions.className
+    }
   },
   props: {
     sections: {
@@ -214,7 +219,6 @@ export default {
         this.actionOnSelectedNode((parent, node, index) => {
           node.options = widget.options
         })
-        return
       }
     },
     toggleEdit () {

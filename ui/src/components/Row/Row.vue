@@ -1,7 +1,7 @@
 <template>
   <div class="page-builder-row"
-       :class="{'boxed': options?.boxed?.value, 'editable': editable, 'boxedInFullWidthStatus': boxedInFullWidthStatus}"
-       :style="options?.style"
+       :class="rowClassName"
+       :style="rowOptions?.style"
   >
     <div class="row"
          :id="defaultOptions.id"
@@ -34,7 +34,52 @@ export default {
     PageBuilderCol,
     EditorBox,
   },
-  emits: ['onOptionAction'],
+  emits: ['onOptionAction', 'update:options'],
+  data() {
+    return {
+      deviceWidth: 1920,
+      boxedInFullWidthStatus: false,
+      form: {},
+      action: '',
+      eventCol: {},
+      elementFormDialog: false,
+      defaultOptions: {
+        className: '',
+        height: 'auto',
+        boxed: false,
+        boxedWidth: 1200,
+        style: {}
+      }
+    }
+  },
+  watch: {
+    rowOptions: {
+      handler() {
+        this.updateClassName()
+        this.updateBoxedStyle()
+      },
+      deep: true
+    },
+    editable () {
+      this.updateClassName()
+    },
+    boxedInFullWidthStatus () {
+      this.updateClassName()
+    }
+  },
+  computed: {
+    rowOptions: {
+      get() {
+        return Object.assign(this.defaultOptions, this.options);
+      },
+      set(newValue) {
+        this.$emit('update:options', newValue)
+      }
+    },
+    rowClassName () {
+      return this.rowOptions.className
+    },
+  },
   props: {
     cols: {
       type: Object,
@@ -53,28 +98,20 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      deviceWidth: 1920,
-      boxedInFullWidthStatus: false,
-      form: {},
-      action: '',
-      eventCol: {},
-      elementFormDialog: false,
-      defaultOptions: {
-        height: 'auto',
-        boxedWidth: 1200
-      }
-    }
-  },
   created() {
+    this.updateClassName()
     this.updateBoxedStyle()
     window.addEventListener('resize', () => {
       this.updateBoxedStyle()
     })
   },
   methods: {
-    updateBoxedStyle() {
+    updateClassName () {
+      this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'editable', this.editable)
+      this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'boxed', this.rowOptions.boxed)
+      this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
+    },
+    updateBoxedStyle () {
       this.deviceWidth = window.innerWidth
       if (!this.defaultOptions.boxed) {
         return
@@ -83,9 +120,6 @@ export default {
       this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
       this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
       this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth
-    },
-    onResize() {
-      this.updateBoxedStyle()
     },
     onSubmitElement(widget) {
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info

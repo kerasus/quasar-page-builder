@@ -1,6 +1,6 @@
 <template>
   <div class="page-builder-col"
-       :class="classes"
+       :class="colClassName"
        :style="options?.style"
   >
     <editor-box v-if="editable"
@@ -14,6 +14,7 @@
                       :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'"
       >
         <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
+                             v-model:options="widget.options"
                              :get-data="getData"
                              :editable="editable"
                              @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
@@ -21,6 +22,7 @@
       </q-intersection>
       <page-builder-widget v-else
                            v-model:widget="computedWidget[widgetIndex]"
+                           v-model:options="widget.options"
                            :get-data="getData"
                            :editable="editable"
                            @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
@@ -39,22 +41,25 @@ import PageBuilderWidget from '../Widget/Widget.vue'
 export default {
   name: 'PageBuilderCol',
   mixins: [mixinWidget],
-  emits: ['onOptionAction'],
+  emits: ['onOptionAction', 'update:options'],
   components: {
     EditorBox,
     PageBuilderWidget,
   },
   computed: {
-    classes () {
-      const classes = [this.colNumber]
-      if (this.options?.className) {
-        classes.push(this.options.className)
-      }
-      if (this.editable) {
-        classes.push('editable')
-      }
+    colClassName () {
+      const colNumber = this.colNumber ? this.colNumber : ''
+      this.colOptions.className = this.getUpdateClassNamesWithKey(this.colOptions.className, 'editable', this.editable)
 
-      return classes.join(' ')
+      return this.colOptions.className + ' ' + colNumber
+    },
+    colOptions: {
+      get() {
+        return Object.assign(this.defaultOptions, this.options)
+      },
+      set(newValue) {
+        this.$emit('update:options', newValue)
+      }
     },
     colNumber () {
       return this.options?.colNumber === undefined ? 'col' : this.options?.colNumber
@@ -72,11 +77,6 @@ export default {
       default: () => {
       }
     },
-    options: {
-      type: Object,
-      default: () => {
-      }
-    }
   },
   setup(props, {emit}) {
     const $q = useQuasar()
@@ -139,45 +139,6 @@ export default {
       elementFormDialog.value = false
     }
 
-
-    const setWidget1 = (event, widgetItem) => {
-      const widgetExpanded = $q.$QPageBuilderWidgetList
-      action.value = event
-      const targetWidget = widgetExpanded.find(x => x.name === _snake2Pascal(widgetItem.widget.name))
-      eventWidget.value = {
-        widgetIndex: widgetItem.widgetIndex,
-        widget: widgetItem.widget,
-        optionPanel: targetWidget?.optionPanel,
-        optionPanelName: targetWidget?.optionPanelName
-      }
-      if (event === 'add') {
-        elementFormDialog.value = true
-      } else if (event === 'edit') {
-        if (eventWidget.value.widget.options !== undefined) {
-          form.value = eventWidget.value.widget.options
-        }
-        form.value.type = 'widget'
-        if (eventWidget.value.optionPanel !== undefined) {
-          form.value.optionPanel = eventWidget.value.optionPanel
-          form.value.optionPanelName = eventWidget.value.optionPanelName
-        }
-        elementFormDialog.value = true
-      } else if (event === 'delete') {
-        computedWidget.value.splice(eventWidget.value.widgetIndex, 1)
-      } else if (event === 'duplicate') {
-        computedWidget.value.push(eventWidget.value.widget)
-      }
-    }
-
-    function _snake2Pascal(str) {
-      str += '';
-      str = str.split('-');
-      for (var i = 0; i < str.length; i++) {
-        str[i] = str[i].slice(0, 1).toUpperCase() + str[i].slice(1, str[i].length);
-      }
-      return str.join('');
-    }
-
     return {
       action,
       form,
@@ -198,13 +159,5 @@ export default {
     border: dashed 2px $primary;
     padding-top: 40px;
   }
-  //:deep(.widget-editor-box) {
-  //  display: none;
-  //}
-  //&:hover {
-  //  :deep(.widget-editor-box) {
-  //    display: block;
-  //  }
-  //}
 }
 </style>

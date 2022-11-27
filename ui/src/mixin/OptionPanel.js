@@ -1,7 +1,7 @@
 const OptionPanel = {
     data: () =>{
         return {
-            defaultOption: {}
+            defaultOptions: {}
         }
     },
     watch: {
@@ -27,7 +27,7 @@ const OptionPanel = {
     computed: {
         localOptions: {
             get() {
-                return Object.assign(this.defaultOption, this.options)
+                return Object.assign(this.defaultOptions, this.options)
             },
             set(newValue) {
                 this.updateLocalOptions(newValue)
@@ -40,14 +40,7 @@ const OptionPanel = {
         },
         updateLocalOptions (newValue) {
             const newVal = newValue ? newValue : this.localOptions
-            this.$emit('update:options', newValue)
-        },
-        passOptions () {
-            const data = {
-                options: this.localOptions,
-                data: this.data
-            }
-            this.$emit('submit', data)
+            this.$emit('update:options', newVal)
         }
     }
 }

@@ -93,7 +93,7 @@ export default defineComponent({
       }
     }
   },
-  emits: ['closeDialog', 'addWidget'],
+  emits: ['closeDialog', 'addWidget', 'update:widgetOptions', 'update:show'],
   methods: {
     onSelectWidget (data) {
       this.$emit('addWidget', data)
