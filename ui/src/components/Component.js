@@ -2,12 +2,12 @@ import { h } from 'vue'
 import { QBadge } from 'quasar'
 
 export default {
-  name: 'QPageBuilder',
+  name: 'QPageBuilder1',
 
   setup () {
     return () => h(QBadge, {
-      class: 'QPageBuilder',
-      label: 'QPageBuilder'
+      class: 'QPageBuilder1',
+      label: 'QPageBuilder1'
     })
   }
 }

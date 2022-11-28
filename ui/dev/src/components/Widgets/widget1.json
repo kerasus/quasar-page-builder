@@ -18,20 +18,8 @@
       "type": "widget"
     },
     {
-      "path": "components/Widgets/TestComponent3Widget",
-      "name": "TestComponent3Widget",
-      "self_type": "folder",
-      "type": "widget"
-    },
-    {
       "path": "/home/alaa/projects/page-builder/ui/dev/src/components/Widgets/widget.json",
       "name": "widget",
-      "self_type": "file",
-      "file_type": "json"
-    },
-    {
-      "path": "/home/alaa/projects/page-builder/ui/dev/src/components/Widgets/widget1.json",
-      "name": "widget1",
       "self_type": "file",
       "file_type": "json"
     }

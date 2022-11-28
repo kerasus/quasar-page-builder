@@ -1,5 +1,7 @@
-import QPageBuilder from './components/PageBuilder'
+import QPageBuilder from './components/QPageBuilder.vue'
 import mixinWidget from './mixin/Widgets'
+import mixinOptionPanel from './mixin/OptionPanel'
+import OptionPanelTabs from './components/OptionPanelComponents/OptionPanelTabs.vue'
 import extractWidgets from './assets/extract.widgets'
 
 const version = __UI_VERSION__
@@ -13,7 +15,8 @@ export {
   version,
   QPageBuilder,
   mixinWidget,
+  mixinOptionPanel,
+  OptionPanelTabs,
   extractWidgets,
-
   install
 }
