@@ -1,6 +1,6 @@
 {
-  "name": "quasar-app-extension-q-page-builder",
-  "version": "0.0.1",
+  "name": "quasar-ui-q-page-builder",
+  "version": "0.0.2",
   "author": "kerasus <aliesmaeeli20@gmail.com>",
   "description": "q-page-builder",
   "license": "MIT",
@@ -23,6 +23,11 @@
   },
   "bugs": "https://github.com/kerasus/quasar-page-builder/issues",
   "homepage": "https://github.com/kerasus/quasar-page-builder",
+  "dependencies": {
+    "rollup-plugin-vue": "^6.0.0",
+    "@vue/compiler-sfc": "^3.1.4",
+    "path": "^0.12.7"
+  },
   "devDependencies": {
     "@quasar/app-webpack": "^3.0.0",
     "@quasar/extras": "^1.0.0",
@@ -57,8 +62,5 @@
     "last 4 ChromeAndroid versions",
     "last 4 FirefoxAndroid versions",
     "last 4 iOS versions"
-  ],
-  "dependencies": {
-    "path": "^0.12.7"
-  }
+  ]
 }
