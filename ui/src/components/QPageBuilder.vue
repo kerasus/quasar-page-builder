@@ -1,6 +1,5 @@
 <template>
-  <div class="page-builder"
-       :class="pageBuilderClassName"
+  <div :class="pageBuilderClassName"
        :style="pageBuilderOptions.style"
   >
     <editor-box v-if="pageBuilderEditable"
@@ -44,7 +43,7 @@ import GetWidgetsData from '../mixin/GetWidgetsData'
 import PageBuilderSection from './Section/Section.vue'
 
 export default {
-  name: 'PageBuilder',
+  name: 'QPageBuilder',
   mixins: [mixinWidget],
   components: {
     EditorBox,
@@ -78,9 +77,8 @@ export default {
       }
     },
     pageBuilderClassName() {
-      this.pageBuilderOptions.className = this.getUpdateClassNamesWithKey(this.pageBuilderOptions.className, 'editable', this.editable)
 
-      return this.pageBuilderOptions.className
+      return 'page-builder ' + this.pageBuilderOptions.className
     }
   },
   props: {
@@ -116,6 +114,9 @@ export default {
     }
   },
   methods: {
+    updateClassName () {
+      this.pageBuilderOptions.className = this.getUpdateClassNamesWithKey(this.pageBuilderOptions.className, 'editable', this.editable)
+    },
     getData(url) {
       return GetWidgetsData.getData(url)
     },
@@ -224,6 +225,20 @@ export default {
     toggleEdit () {
       this.$emit('toggleEdit')
     }
+  },
+  watch: {
+    pageBuilderOptions: {
+      handler() {
+        this.updateClassName()
+      },
+      deep: true
+    },
+    editable () {
+      this.updateClassName()
+    }
+  },
+  created() {
+    this.updateClassName()
   },
   setup() {
     const $q = useQuasar()
