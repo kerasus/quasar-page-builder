@@ -2,7 +2,7 @@
   "name": "quasar-ui-q-page-builder",
   "version": "0.0.2",
   "author": "kerasus <aliesmaeeli20@gmail.com>",
-  "description": "q-page-builder",
+  "description": "QPgeBuilder",
   "license": "MIT",
   "module": "dist/index.esm.js",
   "main": "dist/index.common.js",
@@ -24,8 +24,11 @@
   "bugs": "https://github.com/kerasus/quasar-page-builder/issues",
   "homepage": "https://github.com/kerasus/quasar-page-builder",
   "dependencies": {
-    "rollup-plugin-vue": "^6.0.0",
     "@vue/compiler-sfc": "^3.1.4",
+    "moment": "^2.29.2",
+    "moment-range": "^4.0.2",
+    "rollup-plugin-vue": "^6.0.0",
+    "sortablejs": "^1.10.2",
     "path": "^0.12.7"
   },
   "devDependencies": {
@@ -43,7 +46,7 @@
     "fs-extra": "^8.1.0",
     "open": "^7.3.0",
     "postcss": "^8.1.9",
-    "quasar": "^2.0.0",
+    "quasar": "^2.6.6",
     "rimraf": "^3.0.0",
     "rollup": "^2.45.0",
     "rtlcss": "^2.6.1",
