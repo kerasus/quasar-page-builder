@@ -1,3 +1,4 @@
+const vuePlugin = require('rollup-plugin-vue')
 const path = require('path')
 const fs = require('fs')
 const fse = require('fs-extra')
@@ -24,6 +25,7 @@ const rollupPlugins = [
     extensions: ['.js'],
     preferBuiltins: false
   }),
+  vuePlugin(),
   json(),
   buble({
     objectAssign: 'Object.assign'
@@ -98,7 +100,7 @@ function pathResolve (_path) {
 function addAssets (builds, type, injectName) {
   const
     files = fs.readdirSync(pathResolve('../../ui/src/components/' + type)),
-    plugins = [ buble(/* bubleConfig */) ],
+    plugins = [ buble(bubleConfig) ],
     outputDir = pathResolve(`../dist/${type}`)
 
     fse.mkdirp(outputDir)
