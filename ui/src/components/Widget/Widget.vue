@@ -9,7 +9,10 @@
     <component :is="widget.name"
                :data="widget.data"
                :options="widget.options"
+<<<<<<< HEAD
                :get-data="getData"
+=======
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
                :editable="editable"
                @onOptionAction="onOptionAction"
     />
@@ -38,11 +41,14 @@ export default {
         return {}
       }
     },
+<<<<<<< HEAD
     getData: {
       type: Function,
       default: () => {
       }
     },
+=======
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
     editable: {
       type: Boolean,
       default: false
@@ -90,6 +96,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+<<<<<<< HEAD
+=======
+@import 'quasar/src/css/variables.sass';
+
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
 .page-builder-widget {
   position: relative;
   &.editable {

@@ -3,7 +3,11 @@
 
 const path = require('path')
 const webpack = require('webpack')
+<<<<<<< HEAD
 const { generateWidgetList } = require('./widgetListGetter/index')
+=======
+const { generateWidgetList } = require('./src/widgetListGetter/index')
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
 
 module.exports = function (ctx) {
   return {

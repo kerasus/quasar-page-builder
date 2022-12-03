@@ -1,18 +1,32 @@
 {
   "name": "quasar-app-extension-q-page-builder",
+<<<<<<< HEAD
   "version": "0.0.2",
   "description": "page builder for quasar",
+=======
+  "version": "0.0.4",
+  "description": "A Quasar App Extension",
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
   "author": "kerasus <aliesmaeeli20@gmail.com>",
   "license": "MIT",
   "main": "src/index.js",
   "repository": {
     "type": "git",
+<<<<<<< HEAD
     "url": "https://github.com/kerasus/quasar-page-builder.git"
   },
   "bugs": "https://github.com/kerasus/quasar-page-builder/issues",
   "homepage": "https://github.com/kerasus/quasar-page-builder",
   "dependencies": {
     "quasar-ui-q-page-builder": "^0.0.2"
+=======
+    "url": ""
+  },
+  "bugs": "",
+  "homepage": "",
+  "dependencies": {
+    "quasar-ui-q-page-builder": "^0.0.4"
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
   },
   "engines": {
     "node": ">= 8.9.0",

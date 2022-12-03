@@ -1,7 +1,11 @@
 <template>
   <div class="page-builder-col"
        :class="colClassName"
+<<<<<<< HEAD
        :style="options?.style"
+=======
+       :style="colOptions.style"
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
   >
     <editor-box v-if="editable"
                 :label="'column'"
@@ -15,7 +19,10 @@
       >
         <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
                              v-model:options="widget.options"
+<<<<<<< HEAD
                              :get-data="getData"
+=======
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
                              :editable="editable"
                              @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
         />
@@ -23,7 +30,10 @@
       <page-builder-widget v-else
                            v-model:widget="computedWidget[widgetIndex]"
                            v-model:options="widget.options"
+<<<<<<< HEAD
                            :get-data="getData"
+=======
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
                            :editable="editable"
                            @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
       />
@@ -62,7 +72,20 @@ export default {
       }
     },
     colNumber () {
+<<<<<<< HEAD
       return this.options?.colNumber === undefined ? 'col' : this.options?.colNumber
+=======
+      return this.colOptions.colNumber
+    }
+  },
+  data() {
+    return {
+      defaultOptions: {
+        colNumber: 'col',
+        style: {},
+        className: '',
+      }
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
     }
   },
   props: {
@@ -71,12 +94,16 @@ export default {
       default: () => {
         return {}
       }
+<<<<<<< HEAD
     },
     getData: {
       type: Function,
       default: () => {
       }
     },
+=======
+    }
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
   },
   setup(props, {emit}) {
     const $q = useQuasar()
@@ -153,6 +180,11 @@ export default {
 </script>
 
 <style scoped lang="scss">
+<<<<<<< HEAD
+=======
+@import 'quasar/src/css/variables.sass';
+
+>>>>>>> f5d31bb604d339a737480794fde17936362721c2
 .page-builder-col {
   position: relative;
   &.editable {
