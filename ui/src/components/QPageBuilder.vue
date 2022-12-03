@@ -12,7 +12,6 @@
                           :key="sectionIndex"
                           v-model:data="section.data"
                           v-model:options="section.options"
-                          :get-data="getData"
                           :editable="pageBuilderEditable"
                           @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
     />
@@ -39,7 +38,6 @@ import {defineAsyncComponent} from 'vue'
 import mixinWidget from '../mixin/Widgets.js'
 import OptionPanelDialog from './OptionPanelDialog.vue'
 import EditorBox from '../components/EditorBox.vue'
-import GetWidgetsData from '../mixin/GetWidgetsData.js'
 import PageBuilderSection from './Section/Section.vue'
 
 export default {
@@ -116,9 +114,6 @@ export default {
   methods: {
     updateClassName () {
       this.pageBuilderOptions.className = this.getUpdateClassNamesWithKey(this.pageBuilderOptions.className, 'editable', this.editable)
-    },
-    getData(url) {
-      return GetWidgetsData.getData(url)
     },
     getWidgetNameFromTagName(tagName) {
       let regex = /-./gms;
@@ -274,6 +269,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import 'quasar/src/css/variables.sass';
+
 .page-builder {
   position: relative;
 

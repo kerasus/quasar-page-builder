@@ -1,7 +1,7 @@
 <template>
   <div class="page-builder-col"
        :class="colClassName"
-       :style="options?.style"
+       :style="colOptions.style"
   >
     <editor-box v-if="editable"
                 :label="'column'"
@@ -15,7 +15,6 @@
       >
         <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
                              v-model:options="widget.options"
-                             :get-data="getData"
                              :editable="editable"
                              @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
         />
@@ -23,7 +22,6 @@
       <page-builder-widget v-else
                            v-model:widget="computedWidget[widgetIndex]"
                            v-model:options="widget.options"
-                           :get-data="getData"
                            :editable="editable"
                            @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
       />
@@ -62,7 +60,16 @@ export default {
       }
     },
     colNumber () {
-      return this.options?.colNumber === undefined ? 'col' : this.options?.colNumber
+      return this.colOptions.colNumber
+    }
+  },
+  data() {
+    return {
+      defaultOptions: {
+        colNumber: 'col',
+        style: {},
+        className: '',
+      }
     }
   },
   props: {
@@ -71,12 +78,7 @@ export default {
       default: () => {
         return {}
       }
-    },
-    getData: {
-      type: Function,
-      default: () => {
-      }
-    },
+    }
   },
   setup(props, {emit}) {
     const $q = useQuasar()
@@ -153,6 +155,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import 'quasar/src/css/variables.sass';
+
 .page-builder-col {
   position: relative;
   &.editable {

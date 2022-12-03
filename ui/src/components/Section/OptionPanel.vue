@@ -26,8 +26,8 @@
 
 <script>
 import {defineComponent} from 'vue'
-import mixinOptionPanel from '../../mixin/OptionPanel'
-import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs'
+import mixinOptionPanel from '../../mixin/OptionPanel.js'
+import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
 
 export default defineComponent({
   name: 'SectionOptionPanel',

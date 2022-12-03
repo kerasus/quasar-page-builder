@@ -13,7 +13,6 @@
                       :key="rowIndex"
                       v-model:cols="row.cols"
                       v-model:options="row.options"
-                      :get-data="getData"
                       :editable="editable"
                       @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})"
     />
@@ -31,13 +30,6 @@ export default {
   components: {
     EditorBox,
     PageBuilderRow,
-  },
-  props: {
-    getData: {
-      type: Function,
-      default: () => {
-      }
-    }
   },
   emits: ['onOptionAction', 'update:options'],
   data() {
@@ -90,7 +82,8 @@ export default {
     },
     containerFullHeight: {
       get() {
-        if (!this.sectionOptions?.fullHeight) {
+        // if (!this.sectionOptions?.fullHeight) {
+        if (!this.sectionOptions || !this.sectionOptions.fullHeight) {
           return false
         }
         if (this.sectionOptions.fullHeight === true) {
@@ -199,6 +192,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import 'quasar/src/css/variables.sass';
+
 .page-builder-section {
   position: relative;
   &.editable {

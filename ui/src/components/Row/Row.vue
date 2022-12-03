@@ -1,7 +1,7 @@
 <template>
   <div class="page-builder-row"
        :class="rowClassName"
-       :style="rowOptions?.style"
+       :style="rowOptions.style"
   >
     <div class="row"
          :id="defaultOptions.id"
@@ -14,7 +14,6 @@
                         :key="'colIndex'+colIndex"
                         v-model:options="col.options"
                         v-model:widgets="col.widgets"
-                        :get-data="getData"
                         :editable="editable"
                         @onOptionAction="onOptionAction($event, {widget: col, widgetIndex: colIndex, name: 'col'})"
       />
@@ -25,7 +24,7 @@
 <script>
 import EditorBox from '../EditorBox.vue'
 import PageBuilderCol from '../Col/Col.vue'
-import mixinWidget from '../../mixin/Widgets'
+import mixinWidget from '../../mixin/Widgets.js'
 
 export default {
   name: 'PageBuilderRow',
@@ -85,11 +84,6 @@ export default {
       type: Object,
       default: () => {
         return {}
-      }
-    },
-    getData: {
-      type: Function,
-      default: () => {
       }
     },
     options: {
@@ -166,16 +160,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import 'quasar/src/css/variables.sass';
+
 .page-builder-row {
   position: relative;
-  //:deep(.widget-editor-box) {
-  //  display: none;
-  //}
-  //&:hover {
-  //  :deep(.widget-editor-box) {
-  //    display: block;
-  //  }
-  //}
   &.editable {
     border: dashed 2px $primary;
     padding-top: 40px;

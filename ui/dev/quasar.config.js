@@ -3,6 +3,7 @@
 
 const path = require('path')
 const webpack = require('webpack')
+const { generateWidgetList } = require('./src/widgetListGetter/index')
 
 module.exports = function (ctx) {
   return {
@@ -56,6 +57,9 @@ module.exports = function (ctx) {
           .use(webpack.DefinePlugin, [{
             __UI_VERSION__: `'${require('../package.json').version}'`
           }])
+      },
+      beforeDev({ quasarConf }) {
+        generateWidgetList('./src/components/Widgets')
       }
     },
 
