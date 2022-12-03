@@ -108,6 +108,8 @@ export default {
     updateBoxedStyle () {
       this.deviceWidth = window.innerWidth
       if (!this.defaultOptions.boxed) {
+        this.defaultOptions.style.width = null
+        this.defaultOptions.style.maxWidth = null
         return
       }
 

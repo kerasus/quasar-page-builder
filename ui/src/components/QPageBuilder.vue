@@ -159,7 +159,7 @@ export default {
       if (!selectedNode || !selectedNode.widget || !selectedNode.widget.options) {
         selectedNode.widget.options = {}
       }
-      this.selectedNode.widget.options = {}
+      this.selectedNode.widget.options = selectedNode.widget.options
       // this.selectedNode.widget.options = selectedNode?.widget?.options ? selectedNode.widget.options : {}
     },
     onPageBuilderEdit(event) {
