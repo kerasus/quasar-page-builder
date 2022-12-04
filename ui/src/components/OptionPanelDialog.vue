@@ -1,6 +1,5 @@
 <template>
   <q-dialog v-model="showValue"
-            full-width
             @before-show="setTab"
   >
     <q-card class="element-form-dialog-card">

@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import StyleTabComponent from './Tabs/Style.vue'
+import StyleTabComponent from './Tabs/Style/Style.vue'
 
 export default {
   name: 'OptionPanelTabs',
