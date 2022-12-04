@@ -3,7 +3,7 @@
     <div v-for="item in widgetExpanded"
          :key="item"
          @click="$emit('selectWidget', item)"
-         class="col text-center">
+         class="col-12 text-center">
       <q-btn outline rounded icon="widgets" color="primary" :label="item.name" />
     </div>
   </div>
