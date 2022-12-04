@@ -204,7 +204,7 @@ export default {
         } else if (selectedNode.event === 'delete') {
           parent.splice(index, 1)
         } else if (selectedNode.event === 'duplicate') {
-          parent.splice(index, 0, node)
+          parent.splice(index, 0, JSON.parse(JSON.stringify(node)))
         }
       })
     },
