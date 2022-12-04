@@ -90,11 +90,7 @@ export default {
                                     }
                                   ]
                                 }
-                              ],
-                              options: {
-                                style: {},
-                                className: 'boxed'
-                              }
+                              ]
                             }
                           ]
                         }
@@ -136,7 +132,7 @@ export default {
                               ],
                               options: {
                                 style: {},
-                                className: 'boxed target'
+                                className: 'target'
                               }
                             }
                           ]
@@ -150,7 +146,7 @@ export default {
                 ],
                 options: {
                   style: { color: 'white' },
-                  className: 'q-ma-md boxed'
+                  className: 'q-ma-md'
                 }
               },
               {
