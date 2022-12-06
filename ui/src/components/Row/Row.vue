@@ -142,7 +142,7 @@ export default {
     },
     onOptionAction (data, widgetItem) {
       const event = data.event
-      data.path.index = data.widgetIndex ? data.widgetIndex : widgetItem.widgetIndex
+      data.path.index = widgetItem.widgetIndex
       const path = {
         node: 'data.rows',
         child: data.path

@@ -16,14 +16,14 @@
         <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
                              v-model:options="widget.options"
                              :editable="editable"
-                             @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
+                             @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
         />
       </q-intersection>
       <page-builder-widget v-else
                            v-model:widget="computedWidget[widgetIndex]"
                            v-model:options="widget.options"
                            :editable="editable"
-                           @onOptionAction="onOptionAction($event, {widget, widgetIndex, name: widget.name})"
+                           @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
       />
     </template>
   </div>
@@ -105,7 +105,7 @@ export default {
     const onOptionAction = (data, widgetItem) => {
       const event = data.event
 
-      data.path.index = data.widgetIndex ? data.widgetIndex : widgetItem.widgetIndex
+      data.path.index = widgetItem.widgetIndex
       const path = {
         node: 'cols',
         child: data.path
