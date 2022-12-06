@@ -53,7 +53,7 @@ export default {
       return props.widget
     })
     const hasOptionPanel = computed(() => {
-      return !!Object.keys(window.$pageBuilderWidgetOptionPanels).find(key=>window.$pageBuilderWidgetOptionPanels[key].tagName===props.widget.name)
+      return !!Object.keys(window.$pageBuilderWidgetOptionPanels).find(key=>window.$pageBuilderWidgetOptionPanels[key].name===props.widget.name)
     })
 
     const callAction = (event) => {
