@@ -1,5 +1,4 @@
 export default function extractWidgets(json) {
-    console.log(json);
     const widgets = []
     json.children.forEach(element => {
       if (element.type === 'widget') {
