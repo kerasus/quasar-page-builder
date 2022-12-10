@@ -10,6 +10,5 @@ export default function extractWidgets(json) {
         }
       }
     })
-    console.log(widgets);
     return widgets
   }
