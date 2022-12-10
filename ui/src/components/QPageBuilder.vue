@@ -39,6 +39,7 @@ import mixinWidget from '../mixin/Widgets.js'
 import OptionPanelDialog from './OptionPanelDialog.vue'
 import EditorBox from '../components/EditorBox.vue'
 import PageBuilderSection from './Section/Section.vue'
+import slash from 'slash'
 
 export default {
   name: 'QPageBuilder',
@@ -248,8 +249,8 @@ export default {
       const optionPanels = {}
       widgetsList.forEach(element => {
         const widgetComponentName = element.name
-        const widgetComponentPath = element.path + '/' + widgetComponentName
-        const widgetOptionPanelPath = element.path + '/' + 'OptionPanel'
+        const widgetComponentPath = slash(element.path) + '/' + widgetComponentName
+        const widgetOptionPanelPath = slash(element.path) + '/' + 'OptionPanel'
         components[widgetComponentName] = defineAsyncComponent(() => import('src/' + widgetComponentPath + '.vue'))
         if (element.optionPanel) {
           optionPanels[widgetComponentName] = {

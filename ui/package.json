@@ -22,15 +22,15 @@
     "url": ""
   },
   "dependencies": {
-    "vue": "^3.2.45",
-    "@vue/compiler-sfc": "^3.2.45",
     "@quasar/extras": "^1.15.6",
-    "quasar": "^2.10.2"
+    "@vue/compiler-sfc": "^3.2.45",
+    "quasar": "^2.10.2",
+    "slash": "^5.0.0",
+    "vue": "^3.2.45"
   },
   "bugs": "",
   "homepage": "",
   "devDependencies": {
-    "rollup-plugin-vue": "^6.0.0",
     "@babel/plugin-proposal-optional-chaining": "^7.18.9",
     "@quasar/app-webpack": "^3.6.2",
     "@quasar/extras": "^1.15.6",
@@ -51,6 +51,7 @@
     "rollup": "^3.5.0",
     "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-scss": "^4.0.0",
+    "rollup-plugin-vue": "^6.0.0",
     "rtlcss": "^4.0.0",
     "sass": "^1.56.1",
     "uglify-js": "^3.17.4",
