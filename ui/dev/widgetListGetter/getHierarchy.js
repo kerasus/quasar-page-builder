@@ -11,7 +11,7 @@ const dirTree = (filename) => {
   if (stats.isDirectory()) {
     info.self_type = 'folder'
     info.children = fs.readdirSync(filename).map(function (child) {
-      return dirTree(filename + '/' + child)
+      return dirTree(filename + path.sep + child)
     })
   } else {
     // Assuming it's a file. In real life it could be a symlink or
