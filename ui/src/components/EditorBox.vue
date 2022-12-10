@@ -66,11 +66,8 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-<<<<<<< HEAD
-=======
 @import 'quasar/src/css/variables.sass';
 
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 $edit_toolbar_height: 40px;
 
 .widget-editor-box {

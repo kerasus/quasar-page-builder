@@ -12,10 +12,6 @@
                           :key="sectionIndex"
                           v-model:data="section.data"
                           v-model:options="section.options"
-<<<<<<< HEAD
-                          :get-data="getData"
-=======
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
                           :editable="pageBuilderEditable"
                           @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
     />
@@ -39,16 +35,9 @@
 <script>
 import {useQuasar} from 'quasar'
 import {defineAsyncComponent} from 'vue'
-<<<<<<< HEAD
-import mixinWidget from '../mixin/Widgets'
-import OptionPanelDialog from './OptionPanelDialog'
-import EditorBox from '../components/EditorBox.vue'
-import GetWidgetsData from '../mixin/GetWidgetsData'
-=======
 import mixinWidget from '../mixin/Widgets.js'
 import OptionPanelDialog from './OptionPanelDialog.vue'
 import EditorBox from '../components/EditorBox.vue'
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 import PageBuilderSection from './Section/Section.vue'
 
 export default {
@@ -126,12 +115,6 @@ export default {
     updateClassName () {
       this.pageBuilderOptions.className = this.getUpdateClassNamesWithKey(this.pageBuilderOptions.className, 'editable', this.editable)
     },
-<<<<<<< HEAD
-    getData(url) {
-      return GetWidgetsData.getData(url)
-    },
-=======
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
     getWidgetNameFromTagName(tagName) {
       let regex = /-./gms;
       return tagName.slice(0, 1).toUpperCase() + tagName.slice(1).replace(regex, (match) => {
@@ -173,15 +156,11 @@ export default {
       if (!this.selectedNode.widget) {
         this.selectedNode.widget = {}
       }
-<<<<<<< HEAD
-      this.selectedNode.widget.options = selectedNode?.widget?.options ? selectedNode.widget.options : {}
-=======
       if (!selectedNode || !selectedNode.widget || !selectedNode.widget.options) {
         selectedNode.widget.options = {}
       }
       this.selectedNode.widget.options = selectedNode.widget.options
       // this.selectedNode.widget.options = selectedNode?.widget?.options ? selectedNode.widget.options : {}
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
     },
     onPageBuilderEdit(event) {
       if (event === 'add') {
@@ -290,11 +269,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
-<<<<<<< HEAD
-=======
 @import 'quasar/src/css/variables.sass';
 
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 .page-builder {
   position: relative;
 

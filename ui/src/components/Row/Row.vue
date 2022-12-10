@@ -1,11 +1,7 @@
 <template>
   <div class="page-builder-row"
        :class="rowClassName"
-<<<<<<< HEAD
-       :style="rowOptions?.style"
-=======
        :style="rowOptions.style"
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
   >
     <div class="row"
          :id="defaultOptions.id"
@@ -18,10 +14,6 @@
                         :key="'colIndex'+colIndex"
                         v-model:options="col.options"
                         v-model:widgets="col.widgets"
-<<<<<<< HEAD
-                        :get-data="getData"
-=======
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
                         :editable="editable"
                         @onOptionAction="onOptionAction($event, {widget: col, widgetIndex: colIndex, name: 'col'})"
       />
@@ -32,11 +24,7 @@
 <script>
 import EditorBox from '../EditorBox.vue'
 import PageBuilderCol from '../Col/Col.vue'
-<<<<<<< HEAD
-import mixinWidget from '../../mixin/Widgets'
-=======
 import mixinWidget from '../../mixin/Widgets.js'
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 
 export default {
   name: 'PageBuilderRow',
@@ -98,14 +86,6 @@ export default {
         return {}
       }
     },
-<<<<<<< HEAD
-    getData: {
-      type: Function,
-      default: () => {
-      }
-    },
-=======
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
     options: {
       type: Object,
       default: () => {
@@ -128,11 +108,8 @@ export default {
     updateBoxedStyle () {
       this.deviceWidth = window.innerWidth
       if (!this.defaultOptions.boxed) {
-<<<<<<< HEAD
-=======
         this.defaultOptions.style.width = null
         this.defaultOptions.style.maxWidth = null
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
         return
       }
 
@@ -185,23 +162,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-<<<<<<< HEAD
-.page-builder-row {
-  position: relative;
-  //:deep(.widget-editor-box) {
-  //  display: none;
-  //}
-  //&:hover {
-  //  :deep(.widget-editor-box) {
-  //    display: block;
-  //  }
-  //}
-=======
 @import 'quasar/src/css/variables.sass';
 
 .page-builder-row {
   position: relative;
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
   &.editable {
     border: dashed 2px $primary;
     padding-top: 40px;

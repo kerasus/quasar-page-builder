@@ -21,13 +21,8 @@
 </template>
 <script>
 import {defineComponent} from 'vue'
-<<<<<<< HEAD
-import mixinOptionPanel from '../../mixin/OptionPanel'
-import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs'
-=======
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 
 export default defineComponent({
   name: 'RowOptionPanel',

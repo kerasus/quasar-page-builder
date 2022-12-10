@@ -37,19 +37,11 @@
 
 <script>
 import {useQuasar} from 'quasar'
-<<<<<<< HEAD
-import WidgetList from './WidgetList'
-import ColOptionPanel from './Col/OptionPanel'
-import RowOptionPanel from './Row/OptionPanel'
-import SectionOptionPanel from './Section/OptionPanel'
-import PageBuilderOptionPanel from './PageBuilderOptionPanel'
-=======
 import WidgetList from './WidgetList.vue'
 import ColOptionPanel from './Col/OptionPanel.vue'
 import RowOptionPanel from './Row/OptionPanel.vue'
 import SectionOptionPanel from './Section/OptionPanel.vue'
 import PageBuilderOptionPanel from './PageBuilderOptionPanel.vue'
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 import {defineComponent, defineAsyncComponent, ref} from 'vue'
 
 const components = {
@@ -125,12 +117,8 @@ export default defineComponent({
       const targetOptionPanel = widgetExpanded.find(widget => widget.name === props.widgetName)
       if (props.widgetName === 'pageBuilder' || props.widgetName === 'section' || props.widgetName === 'row' || props.widgetName === 'col') {
         optionPanel.value = props.widgetName.charAt(0).toUpperCase() + props.widgetName.slice(1) + 'OptionPanel'
-<<<<<<< HEAD
-      } else if (targetOptionPanel?.optionPanel !== undefined) {
-=======
       // } else if (targetOptionPanel?.optionPanel !== undefined) {
       } else if (targetOptionPanel && targetOptionPanel.optionPanel !== undefined) {
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
         optionPanel.value = targetOptionPanel.optionPanelName
       } else {
         optionPanel.value = null

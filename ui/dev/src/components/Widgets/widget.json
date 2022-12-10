@@ -1,9 +1,5 @@
 {
-<<<<<<< HEAD
-  "path": "/home/alaa/projects/page-builder/ui/dev/src/components/Widgets",
-=======
-  "path": "/home/alaa/Desktop/quasar-page-builder/ui/dev/src/components/Widgets",
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
+  "path": "/home/alaa/projects/quasar-page-builder/ui/dev/src/components/Widgets",
   "name": "Widgets",
   "self_type": "folder",
   "children": [
@@ -26,21 +22,18 @@
       "name": "TestComponent3Widget",
       "self_type": "folder",
       "type": "widget"
-<<<<<<< HEAD
     },
     {
-      "path": "/home/alaa/projects/page-builder/ui/dev/src/components/Widgets/widget.json",
+      "path": "/home/alaa/projects/quasar-page-builder/ui/dev/src/components/Widgets/widget.json",
       "name": "widget",
       "self_type": "file",
       "file_type": "json"
     },
     {
-      "path": "/home/alaa/projects/page-builder/ui/dev/src/components/Widgets/widget1.json",
+      "path": "/home/alaa/projects/quasar-page-builder/ui/dev/src/components/Widgets/widget1.json",
       "name": "widget1",
       "self_type": "file",
       "file_type": "json"
-=======
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
     }
   ],
   "type": "folder"
