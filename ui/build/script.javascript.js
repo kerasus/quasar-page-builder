@@ -1,11 +1,8 @@
 const vuePlugin = require('rollup-plugin-vue')
-<<<<<<< HEAD
-=======
 const scss = require('rollup-plugin-scss')
 // const commonjs = require('rollup-plugin-commonjs')
 // const commonjs = require('@rollup/plugin-commonjs')
 // const babelOptionalChaining = require('@babel/plugin-proposal-optional-chaining')
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 const path = require('path')
 const fs = require('fs')
 const fse = require('fs-extra')
@@ -33,12 +30,6 @@ const rollupPlugins = [
     preferBuiltins: false
   }),
   vuePlugin(),
-<<<<<<< HEAD
-  json(),
-  buble({
-    objectAssign: 'Object.assign'
-  })
-=======
   // babelOptionalChaining(),
   scss(),
   json(),
@@ -46,7 +37,6 @@ const rollupPlugins = [
     objectAssign: 'Object.assign'
   }),
   // commonjs()
->>>>>>> f5d31bb604d339a737480794fde17936362721c2
 ]
 
 const builds = [
