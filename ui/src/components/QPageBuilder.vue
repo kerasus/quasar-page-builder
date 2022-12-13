@@ -259,8 +259,9 @@ export default {
           }
         }
       })
-      window.$pageBuilderWidgetComponents = components
-      window.$pageBuilderWidgetOptionPanels = optionPanels
+
+      $q.$pageBuilderWidgetComponents = components
+      $q.$pageBuilderWidgetOptionPanels = optionPanels
     }
 
     registerWidgets(widgetExpanded)
