@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import {useQuasar} from 'quasar'
 import EditorBox from '../EditorBox.vue'
 import mixinWidget from '../../mixin/Widgets'
 import {defineAsyncComponent, computed} from 'vue'
@@ -44,16 +45,17 @@ export default {
   },
   mixins: [mixinWidget],
   setup(props, {emit}) {
-    if (window.$pageBuilderWidgetComponents) {
-      Object.keys(window.$pageBuilderWidgetComponents).forEach(key => {
-        components[key] = window.$pageBuilderWidgetComponents[key]
+    const $q = useQuasar()
+    if ($q.$pageBuilderWidgetComponents) {
+      Object.keys($q.$pageBuilderWidgetComponents).forEach(key => {
+        components[key] = $q.$pageBuilderWidgetComponents[key]
       })
     }
     const computedWidget = computed(() => {
       return props.widget
     })
     const hasOptionPanel = computed(() => {
-      return !!Object.keys(window.$pageBuilderWidgetOptionPanels).find(key=>window.$pageBuilderWidgetOptionPanels[key].name===props.widget.name)
+      return !!Object.keys($q.$pageBuilderWidgetOptionPanels).find(key=>$q.$pageBuilderWidgetOptionPanels[key].name===props.widget.name)
     })
 
     const callAction = (event) => {
