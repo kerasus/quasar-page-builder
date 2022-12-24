@@ -250,7 +250,11 @@ export default {
         const widgetComponentName = element.name
         const widgetComponentPath = element.path + '/' + widgetComponentName
         const widgetOptionPanelPath = element.path + '/' + 'OptionPanel'
-        components[widgetComponentName] = defineAsyncComponent(() => import('src/' + widgetComponentPath + '.vue'))
+        try {
+          components[widgetComponentName] = defineAsyncComponent(() => import('src/' + widgetComponentPath + '.vue'))
+        } catch (error) {
+          components[widgetComponentName] = defineAsyncComponent(() => import(element.absPath + '.vue'))
+        }
         if (element.optionPanel) {
           optionPanels[widgetComponentName] = {
             name: widgetComponentName,
