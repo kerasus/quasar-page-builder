@@ -6,7 +6,7 @@ const setJson = (obj) => {
   // eslint-disable-next-line no-prototype-builtins
   if (obj.hasOwnProperty('children')) {
     if (obj.children.find((x) => x.name === obj.name && x.file_type === 'vue')) {
-      const srcPath = path.resolve('src/') + '/'
+      const srcPath = path.resolve('src/') + path.sep
       obj.path = obj.path.replace(srcPath, '')
       obj.type = 'widget'
       obj.children.forEach((element) => {
@@ -16,7 +16,7 @@ const setJson = (obj) => {
           obj.info = jsonData
         }
         if (element.self_type === 'file' && element.file_type === 'vue' && element.name === 'OptionPanel') {
-          const optionPath = path.resolve('src/') + '/'
+          const optionPath = path.resolve('src/') + path.sep
           obj.optionPanel = element.path.replace(optionPath, '')
           obj.optionPanelName = obj.name + 'OptionPanel'
         }

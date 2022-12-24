@@ -94,6 +94,8 @@ export default {
   },
   created() {
     this.updateClassName()
+  },
+  mounted() {
     this.updateBoxedStyle()
     window.addEventListener('resize', () => {
       this.updateBoxedStyle()
