@@ -106,7 +106,7 @@ export default defineComponent({
         const optionPanelName = element.optionPanelName
         const optionPanelPath = element.optionPanel.replace('OptionPanel.vue', '')
         components[optionPanelName] = defineAsyncComponent(() => {
-          return import('src/' + optionPanelPath + 'OptionPanel.vue')
+          return import('../../../../src/' + optionPanelPath + 'OptionPanel.vue')
         })
       }
     })

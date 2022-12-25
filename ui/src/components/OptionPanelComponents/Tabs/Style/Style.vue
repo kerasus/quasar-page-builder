@@ -56,8 +56,8 @@
 </template>
 
 <script>
-import MarginAndPadding from "./MarginAndPadding";
-import Background from "./Background";
+import MarginAndPadding from "./MarginAndPadding.vue";
+import Background from "./Background.vue";
 export default {
   name: 'StyleTabComponent',
   components: {Background, MarginAndPadding},
