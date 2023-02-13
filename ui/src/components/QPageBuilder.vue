@@ -239,33 +239,6 @@ export default {
   created() {
     this.updateClassName()
   },
-  setup() {
-    const $q = useQuasar()
-    const widgetExpanded = $q.$QPageBuilderWidgetList
-
-    function registerWidgets(widgetsList) {
-      const components = {}
-      const optionPanels = {}
-      widgetsList.forEach(element => {
-        const widgetComponentName = element.name
-        const widgetComponentPath = element.path + '/' + widgetComponentName
-        const widgetOptionPanelPath = element.path + '/' + 'OptionPanel'
-        components[widgetComponentName] = defineAsyncComponent(() => import('../../../../src/' + widgetComponentPath + '.vue'))
-        if (element.optionPanel) {
-          optionPanels[widgetComponentName] = {
-            name: widgetComponentName,
-            tagName: widgetComponentName[0].toLowerCase() + widgetComponentName.slice(1, widgetComponentName.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`),
-            path: '../../../../src/' + widgetOptionPanelPath + '.vue'
-          }
-        }
-      })
-
-      $q.$pageBuilderWidgetComponents = components
-      $q.$pageBuilderWidgetOptionPanels = optionPanels
-    }
-
-    registerWidgets(widgetExpanded)
-  }
 }
 </script>
 

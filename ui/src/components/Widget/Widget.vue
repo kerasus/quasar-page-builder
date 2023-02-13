@@ -47,13 +47,9 @@ export default {
   setup(props, {emit}) {
     const $q = useQuasar()
     if ($q.$pageBuilderWidgetComponents) {
-      Object.keys($q.$pageBuilderWidgetComponents).forEach(key => {
-        components[key] = $q.$pageBuilderWidgetComponents[key]
-      })
+      Object.assign(components, $q.$pageBuilderWidgetComponents)
     }
-    const computedWidget = computed(() => {
-      return props.widget
-    })
+
     const hasOptionPanel = computed(() => {
       return !!Object.keys($q.$pageBuilderWidgetOptionPanels).find(key=>$q.$pageBuilderWidgetOptionPanels[key].name===props.widget.name)
     })
@@ -76,7 +72,6 @@ export default {
 
 
     return {
-      computedWidget,
       onOptionAction,
       hasOptionPanel,
       callAction
