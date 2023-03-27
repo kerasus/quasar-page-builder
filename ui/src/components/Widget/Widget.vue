@@ -9,8 +9,7 @@
     <component :is="widget.name"
                :data="widget.data"
                :options="widget.options"
-               :editable="editable"
-               @onOptionAction="onOptionAction" />
+               :editable="editable" />
   </div>
 </template>
 

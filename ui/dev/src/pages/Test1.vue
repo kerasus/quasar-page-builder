@@ -40,7 +40,32 @@ export default {
                         options: {
                         }
                       }
-                    ]
+                    ],
+                    options: {
+                      colNumber: 'col-md-6'
+                    }
+                  },
+                  {
+                    widgets: [
+                      {
+                        name: 'TestComponent2Widget',
+                        options: {
+                        }
+                      },
+                      {
+                        name: 'TestComponent1Widget',
+                        options: {
+                        }
+                      },
+                      {
+                        name: 'TestComponent3Widget',
+                        options: {
+                        }
+                      }
+                    ],
+                    options: {
+                      colNumber: 'col-md-6'
+                    }
                   }
                 ],
                 options: {

@@ -12,13 +12,23 @@
         <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
                              v-model:options="widget.options"
                              :editable="editable"
-                             @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})" />
+                             :draggable="editable"
+                             @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
+                             @dragstart="onDragstart($event, widget, widgetIndex)"
+                             @dragover="onDragOver"
+                             @dragleave="onDragLeave"
+                             @drop="onDrop($event, widgetIndex)" />
       </q-intersection>
       <page-builder-widget v-else
                            v-model:widget="computedWidget[widgetIndex]"
                            v-model:options="widget.options"
                            :editable="editable"
-                           @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})" />
+                           :draggable="editable"
+                           @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
+                           @dragstart="onDragstart($event, widget, widgetIndex)"
+                           @dragover="onDragOver"
+                           @dragleave="onDragLeave"
+                           @drop="onDrop($event, widgetIndex)" />
     </template>
   </div>
 </template>
@@ -53,6 +63,7 @@ export default {
       set: (value) => emit('update:widget', value)
     })
     const eventWidget = ref({})
+    const localDragable = ref(null)
     const action = ref('')
     const elementFormDialog = ref(false)
     const form = ref({})
@@ -107,7 +118,63 @@ export default {
       elementFormDialog.value = false
     }
 
+    const onDragstart = (event, widget, widgetIndex) => {
+      if (!props.editable) {
+        return
+      }
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
+      localDragable.value = event
+      // console.log('onDragstart', event.dataTransfer.getData('value'))
+    }
+
+    const onDragOver = (event) => {
+      if (!props.editable) {
+        return
+      }
+      event.preventDefault()
+      // console.log('onDragOver', event.dataTransfer.getData('value'))
+    }
+
+    const onDragLeave = (event) => {
+      // if (!props.editable) {
+      //
+      // }
+      // console.log('onDragLeave', event.dataTransfer.getData('value'))
+    }
+
+    const onDrop = (event, newIndex) => {
+      if (!props.editable) {
+        return
+      }
+      const valueStringfied = event.dataTransfer.getData('value')
+      const value = valueStringfied ? JSON.parse(valueStringfied) : null
+      const widget = value.widget
+      const widgetOldIndex = value.widgetIndex
+      const widgetNewIndex = newIndex
+      if (localDragable.value) {
+        updatePosition(computedWidget.value, widgetOldIndex, widgetNewIndex)
+      } else {
+        addToIndex(computedWidget.value, widget, widgetNewIndex)
+      }
+
+      localDragable.value = null
+    }
+
+    const updatePosition = (list, oldIndex, newIndex) => {
+      list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+    }
+
+    const addToIndex = (list, newItem, index) => {
+      list.splice(index, 0, newItem)
+    }
+
     return {
+      onDrop,
+      onDragOver,
+      onDragLeave,
+      onDragstart,
+
       action,
       form,
       computedWidget,
