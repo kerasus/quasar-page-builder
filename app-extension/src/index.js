@@ -6,15 +6,27 @@
  * API: https://github.com/quasarframework/quasar/blob/master/app/lib/app-extension/IndexAPI.js
  */
 
+// import { generateWidgetList } from 'quasar-ui-q-page-builder'
+// const { generateWidgetList } = require('./src/widgetListGetter/index')
+// const { generateWidgetList } = require('quasar-ui-q-page-builder')
+
 function extendConf (conf) {
+  // https://quasar.dev/app-extensions/development-guide/index-api#registering-boot-and-css-files
   // register our boot file
-  conf.boot.push('~quasar-app-extension-q-page-builder/src/boot/register.js')
+  // conf.boot.push('~quasar-app-extension-q-page-builder/src/boot/register.js')
 
   // make sure app extension files & ui package gets transpiled
   conf.build.transpileDependencies.push(/quasar-app-extension-q-page-builder[\\/]src/)
 
   // make sure the stylesheet goes through webpack to avoid SSR issues
   conf.css.push('~quasar-ui-q-page-builder/src/index.sass')
+
+  // conf.build.beforeDev = function () {
+  //   generateWidgetList('./src/components/Widgets')
+  // }
+  // conf.build.beforeBuild = function () {
+  //   generateWidgetList('./src/components/Widgets')
+  // }
 }
 
 module.exports = function (api) {

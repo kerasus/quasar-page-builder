@@ -1,12 +1,13 @@
 {
   "name": "quasar-ui-q-page-builder",
-  "version": "0.1.0",
+  "version": "0.1.13",
   "author": "kerasus <aliesmaeeli20@gmail.com>",
   "description": "QPageBuilder",
   "license": "MIT",
   "module": "dist/index.esm.js",
   "main": "dist/index.common.js",
   "scripts": {
+    "lint": "eslint --fix --ext .js,.vue ./",
     "dev": "cd dev && yarn dev && cd ..",
     "dev:umd": "yarn build && node build/script.open-umd.js",
     "dev:ssr": "cd dev && yarn 'dev:ssr' && cd ..",
@@ -22,10 +23,12 @@
     "url": ""
   },
   "dependencies": {
-    "@quasar/extras": "^1.15.6",
-    "@vue/compiler-sfc": "^3.2.45",
-    "quasar": "^2.10.2",
-    "vue": "^3.2.45"
+    "@quasar/extras": "^1.15.11",
+    "@vue/compiler-sfc": "^3.2.47",
+    "fs": "^0.0.1-security",
+    "path": "^0.12.7",
+    "quasar": "^2.11.9",
+    "vue": "^3.2.47"
   },
   "bugs": "",
   "homepage": "",
@@ -57,6 +60,11 @@
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
     "zlib": "^1.0.5"
+  },
+  "browser": {
+    "fs": false,
+    "path": false,
+    "os": false
   },
   "browserslist": [
     "last 4 Chrome versions",

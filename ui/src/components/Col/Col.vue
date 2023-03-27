@@ -1,77 +1,42 @@
 <template>
   <div class="page-builder-col"
        :class="colClassName"
-       :style="colOptions.style"
-  >
+       :style="colOptions.style">
     <editor-box v-if="editable"
                 :label="'column'"
-                @callAction="callAction"
-    />
+                @callAction="callAction" />
     <template v-for="(widget, widgetIndex) in widgets"
-              :key="widgetIndex"
-    >
+              :key="widgetIndex">
       <q-intersection v-if="widget && widget.options && widget.options.intersection"
-                      :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'"
-      >
+                      :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'">
         <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
                              v-model:options="widget.options"
                              :editable="editable"
-                             @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
-        />
+                             @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})" />
       </q-intersection>
       <page-builder-widget v-else
                            v-model:widget="computedWidget[widgetIndex]"
                            v-model:options="widget.options"
                            :editable="editable"
-                           @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
-      />
+                           @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})" />
     </template>
   </div>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
-import {computed, ref} from 'vue'
+import { useQuasar } from 'quasar'
+import { computed, ref } from 'vue'
 import EditorBox from '../EditorBox.vue'
 import mixinWidget from '../../mixin/Widgets'
 import PageBuilderWidget from '../Widget/Widget.vue'
 
 export default {
   name: 'PageBuilderCol',
-  mixins: [mixinWidget],
-  emits: ['onOptionAction', 'update:options'],
   components: {
     EditorBox,
-    PageBuilderWidget,
+    PageBuilderWidget
   },
-  computed: {
-    colClassName () {
-      const colNumber = this.colNumber ? this.colNumber : ''
-      this.colOptions.className = this.getUpdateClassNamesWithKey(this.colOptions.className, 'editable', this.editable)
-
-      return this.colOptions.className + ' ' + colNumber
-    },
-    colOptions: {
-      get() {
-        return Object.assign(this.defaultOptions, this.options)
-      },
-      set(newValue) {
-        this.$emit('update:options', newValue)
-      }
-    },
-    colNumber () {
-      return this.colOptions.colNumber
-    }
-  },
-  data() {
-    return {
-      defaultOptions: {
-        colNumber: 'col',
-        style: {},
-        className: '',
-      }
-    }
-  },
+  mixins: [mixinWidget],
   props: {
     widgets: {
       type: Object,
@@ -80,7 +45,8 @@ export default {
       }
     }
   },
-  setup(props, {emit}) {
+  emits: ['onOptionAction', 'update:options'],
+  setup(props, { emit }) {
     const $q = useQuasar()
     const computedWidget = computed({
       get: () => props.widgets,
@@ -92,7 +58,7 @@ export default {
     const form = ref({})
     const callAction = (event) => {
       const path = {
-        node: 'cols',
+        node: 'cols'
       }
       const data = {
         event,
@@ -149,6 +115,49 @@ export default {
       callAction,
       onSubmitElement,
       onOptionAction
+    }
+  },
+  data() {
+    return {
+      defaultOptions: {
+        colNumber: 'col',
+        style: {},
+        className: ''
+      }
+    }
+  },
+  computed: {
+    colClassName () {
+      const colNumber = this.colNumber ? this.colNumber : ''
+
+      return this.colOptions.className + ' ' + colNumber
+    },
+    optionsClassName () {
+      return this.colOptions.className
+    },
+    colOptions: {
+      get() {
+        return Object.assign(this.defaultOptions, this.options)
+      },
+      set(newValue) {
+        this.$emit('update:options', newValue)
+      }
+    },
+    colNumber () {
+      return this.colOptions.colNumber
+    }
+  },
+  watch: {
+    editable() {
+      this.computeOptionsClassName()
+    },
+    optionsClassName() {
+      this.computeOptionsClassName()
+    }
+  },
+  methods: {
+    computeOptionsClassName () {
+      this.colOptions.className = this.getUpdateClassNamesWithKey(this.colOptions.className, 'editable', this.editable)
     }
   }
 }

@@ -1,22 +1,18 @@
 <template>
   <div class="page-builder-row"
        :class="rowClassName"
-       :style="rowOptions.style"
-  >
-    <div class="row"
-         :id="defaultOptions.id"
-    >
+       :style="rowOptions.style">
+    <div :id="defaultOptions.id"
+         class="row">
       <editor-box v-if="editable"
                   :label="'row'"
-                  @callAction="callAction"
-      />
+                  @callAction="callAction" />
       <page-builder-col v-for="(col, colIndex) in cols"
                         :key="'colIndex'+colIndex"
                         v-model:options="col.options"
                         v-model:widgets="col.widgets"
                         :editable="editable"
-                        @onOptionAction="onOptionAction($event, {widget: col, widgetIndex: colIndex, name: 'col'})"
-      />
+                        @onOptionAction="onOptionAction($event, {widget: col, widgetIndex: colIndex, name: 'col'})" />
     </div>
   </div>
 </template>
@@ -28,10 +24,23 @@ import mixinWidget from '../../mixin/Widgets.js'
 
 export default {
   name: 'PageBuilderRow',
-  mixins: [mixinWidget],
   components: {
     PageBuilderCol,
-    EditorBox,
+    EditorBox
+  },
+  mixins: [mixinWidget],
+  props: {
+    cols: {
+      type: Object,
+      default: () => {
+        return {}
+      }
+    },
+    options: {
+      type: Object,
+      default: () => {
+      }
+    }
   },
   emits: ['onOptionAction', 'update:options'],
   data() {
@@ -51,6 +60,19 @@ export default {
       }
     }
   },
+  computed: {
+    rowOptions: {
+      get() {
+        return Object.assign(this.defaultOptions, this.options)
+      },
+      set(newValue) {
+        this.$emit('update:options', newValue)
+      }
+    },
+    rowClassName () {
+      return this.rowOptions.className
+    }
+  },
   watch: {
     rowOptions: {
       handler() {
@@ -64,32 +86,6 @@ export default {
     },
     boxedInFullWidthStatus () {
       this.updateClassName()
-    }
-  },
-  computed: {
-    rowOptions: {
-      get() {
-        return Object.assign(this.defaultOptions, this.options);
-      },
-      set(newValue) {
-        this.$emit('update:options', newValue)
-      }
-    },
-    rowClassName () {
-      return this.rowOptions.className
-    },
-  },
-  props: {
-    cols: {
-      type: Object,
-      default: () => {
-        return {}
-      }
-    },
-    options: {
-      type: Object,
-      default: () => {
-      }
     }
   },
   created() {
@@ -133,7 +129,7 @@ export default {
     },
     callAction(event) {
       const path = {
-        node: 'data.rows',
+        node: 'data.rows'
       }
       const data = {
         event,

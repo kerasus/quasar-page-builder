@@ -8,7 +8,7 @@
 // import { mixinWidget } from 'ui'
 
 export default {
-  name: 'Test-component3-widget',
+  name: 'Test-component3-widget'
   // mixins: [mixinWidget]
 }
 </script>

@@ -1,7 +1,6 @@
 <template>
   <q-dialog v-model="showValue"
-            @before-show="setTab"
-  >
+            @before-show="setTab">
     <q-card class="element-form-dialog-card">
       <q-card-section>
         <div class="header">
@@ -16,32 +15,29 @@
           <div class="close">
             <q-btn color="primary"
                    icon="close"
-                   @click="close"
-            />
+                   @click="close" />
           </div>
         </div>
       </q-card-section>
       <q-card-section>
-        <component v-if="actionType==='edit' && optionPanel"
-                   :is="optionPanel"
-                   v-model:options="localWidgetOptions"
-        />
+        <component :is="optionPanel"
+                   v-if="actionType==='edit' && optionPanel"
+                   v-model:options="localWidgetOptions" />
         <widget-list v-if="actionType==='add' && widgetName==='col'"
-                     @selectWidget="onSelectWidget"
-        />
+                     @selectWidget="onSelectWidget" />
       </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
+import { useQuasar } from 'quasar'
 import WidgetList from './WidgetList.vue'
 import ColOptionPanel from './Col/OptionPanel.vue'
 import RowOptionPanel from './Row/OptionPanel.vue'
 import SectionOptionPanel from './Section/OptionPanel.vue'
 import PageBuilderOptionPanel from './PageBuilderOptionPanel.vue'
-import {defineComponent, defineAsyncComponent, ref} from 'vue'
+import { defineComponent, defineAsyncComponent, ref } from 'vue'
 
 const components = {
   WidgetList,
@@ -74,49 +70,20 @@ export default defineComponent({
       }
     }
   },
-  computed: {
-    showValue: {
-      get() {
-        return this.show
-      },
-      set(newValue) {
-        this.$emit('update:show', newValue)
-      }
-    },
-    localWidgetOptions: {
-      get() {
-        return this.widgetOptions
-      },
-      set(newValue) {
-        this.$emit('update:widgetOptions', newValue)
-      }
-    }
-  },
   emits: ['closeDialog', 'addWidget', 'update:widgetOptions', 'update:show'],
-  methods: {
-    onSelectWidget (data) {
-      this.$emit('addWidget', data)
-    }
-  },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const $q = useQuasar()
+    if ($q.$pageBuilderWidgetOptionPanels) {
+      Object.assign(components, $q.$pageBuilderWidgetOptionPanels)
+    }
+
     const widgetExpanded = $q.$QPageBuilderWidgetList
-    widgetExpanded.forEach(element => {
-      if (element.optionPanel !== undefined) {
-        const optionPanelName = element.optionPanelName
-        const optionPanelPath = element.optionPanel.replace('OptionPanel.vue', '')
-        components[optionPanelName] = defineAsyncComponent(() => {
-          return import('../../../../src/' + optionPanelPath + 'OptionPanel.vue')
-        })
-      }
-    })
 
     const optionPanel = ref('')
     const loadDynamicComponentForEditPanel = () => {
       const targetOptionPanel = widgetExpanded.find(widget => widget.name === props.widgetName)
       if (props.widgetName === 'pageBuilder' || props.widgetName === 'section' || props.widgetName === 'row' || props.widgetName === 'col') {
         optionPanel.value = props.widgetName.charAt(0).toUpperCase() + props.widgetName.slice(1) + 'OptionPanel'
-      // } else if (targetOptionPanel?.optionPanel !== undefined) {
       } else if (targetOptionPanel && targetOptionPanel.optionPanel !== undefined) {
         optionPanel.value = targetOptionPanel.optionPanelName
       } else {
@@ -139,6 +106,29 @@ export default defineComponent({
       loadDynamicComponentForEditPanel,
       close,
       setTab
+    }
+  },
+  computed: {
+    showValue: {
+      get() {
+        return this.show
+      },
+      set(newValue) {
+        this.$emit('update:show', newValue)
+      }
+    },
+    localWidgetOptions: {
+      get() {
+        return this.widgetOptions
+      },
+      set(newValue) {
+        this.$emit('update:widgetOptions', newValue)
+      }
+    }
+  },
+  methods: {
+    onSelectWidget (data) {
+      this.$emit('addWidget', data)
     }
   }
 })

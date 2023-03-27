@@ -4,25 +4,28 @@
             dense
             active-color="primary"
             indicator-color="primary"
-            align="justify"
-    >
-      <q-tab name="main" label="main"/>
-      <q-tab name="style" label="style"/>
-      <q-tab name="other" label="other"/>
+            align="justify">
+      <q-tab name="main"
+             label="main" />
+      <q-tab name="style"
+             label="style" />
+      <q-tab name="other"
+             label="other" />
     </q-tabs>
 
-    <q-separator/>
+    <q-separator />
 
-    <q-tab-panels v-model="tab" animated>
+    <q-tab-panels v-model="tab"
+                  animated>
       <q-tab-panel name="main">
         <q-input v-model="localOptions.className"
-                 label="className"
-        />
-        <slot name="main-tab" :options="localOptions"/>
+                 label="className" />
+        <slot name="main-tab"
+              :options="localOptions" />
       </q-tab-panel>
 
       <q-tab-panel name="style">
-        <style-tab-component v-model:styles="localOptions.style"/>
+        <style-tab-component v-model:styles="localOptions.style" />
       </q-tab-panel>
 
       <q-tab-panel name="other">
@@ -40,7 +43,7 @@ import StyleTabComponent from './Tabs/Style/Style.vue'
 
 export default {
   name: 'OptionPanelTabs',
-  components: {StyleTabComponent},
+  components: { StyleTabComponent },
   props: {
     data: {
       type: Object,
@@ -53,6 +56,11 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      tab: 'main'
+    }
+  },
   computed: {
     localOptions: {
       get() {
@@ -61,11 +69,6 @@ export default {
       set(newValue) {
         this.$emit('update:options', newValue)
       }
-    }
-  },
-  data() {
-    return {
-      tab: 'main'
     }
   },
   methods: {

@@ -5,14 +5,12 @@
         <div class="row">
           <div class="col-md-3">
             <q-checkbox v-model="localOptions.boxed"
-                        label="boxed"
-            />
+                        label="boxed" />
           </div>
           <div class="col-md-9">
             <q-input v-if="!!localOptions.boxed"
                      v-model="localOptions.boxedWidth"
-                     label="boxedWidth"
-            />
+                     label="boxedWidth" />
           </div>
         </div>
       </div>
@@ -20,14 +18,14 @@
   </option-panel-tabs>
 </template>
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
 
 export default defineComponent({
   name: 'RowOptionPanel',
+  components: { OptionPanelTabs },
   mixins: [mixinOptionPanel],
-  components: {OptionPanelTabs},
   data() {
     return {
       defaultOptions: {
@@ -38,6 +36,6 @@ export default defineComponent({
         style: {}
       }
     }
-  },
+  }
 })
 </script>

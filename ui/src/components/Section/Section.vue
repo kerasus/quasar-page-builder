@@ -1,21 +1,17 @@
 <template>
-  <div class="page-builder-section"
+  <div :id="sectionOptions.id"
        :class="sectionClassName"
-       :id="sectionOptions.id"
-       :style="sectionOptions.style"
-  >
+       :style="sectionOptions.style">
     <editor-box v-if="editable"
                 :label="'section'"
-                @callAction="callAction"
-    />
-    <q-resize-observer @resize="Resize"/>
+                @callAction="callAction" />
+    <q-resize-observer @resize="Resize" />
     <page-builder-row v-for="(row, rowIndex) in data.rows"
                       :key="rowIndex"
                       v-model:cols="row.cols"
                       v-model:options="row.options"
                       :editable="editable"
-                      @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})"
-    />
+                      @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})" />
   </div>
 </template>
 
@@ -26,11 +22,11 @@ import mixinWidget from '../../mixin/Widgets'
 
 export default {
   name: 'PageBuilderSection',
-  mixins: [mixinWidget],
   components: {
     EditorBox,
-    PageBuilderRow,
+    PageBuilderRow
   },
+  mixins: [mixinWidget],
   emits: ['onOptionAction', 'update:options'],
   data() {
     return {
@@ -51,9 +47,6 @@ export default {
       }
     }
   },
-  created() {
-    this.setFullHeight()
-  },
   computed: {
     sectionOptions: {
       get() {
@@ -64,21 +57,16 @@ export default {
       }
     },
     sectionClassName () {
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-          this.sectionOptions.className, 'vertical-align-center',
-          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
-      )
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-          this.sectionOptions.className, 'vertical-align-start',
-          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
-      )
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-          this.sectionOptions.className, 'vertical-align-end',
-          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
-      )
-
+      return 'page-builder-section ' + this.sectionOptions.className
+    },
+    optionsClassName () {
       return this.sectionOptions.className
+    },
+    optionsFullHeight () {
+      return this.sectionOptions.fullHeight
+    },
+    optionsVerticalAlign () {
+      return this.sectionOptions.verticalAlign
     },
     containerFullHeight: {
       get() {
@@ -104,6 +92,18 @@ export default {
     }
   },
   watch: {
+    editable() {
+      this.computeOptionsClassName()
+    },
+    optionsClassName() {
+      this.computeOptionsClassName()
+    },
+    optionsFullHeight() {
+      this.computeOptionsClassName()
+    },
+    optionsVerticalAlign() {
+      this.computeOptionsClassName()
+    },
     windowWidth() {
       this.setFullHeight()
     },
@@ -114,7 +114,25 @@ export default {
       this.setFullHeight()
     }
   },
+  created() {
+    this.setFullHeight()
+  },
   methods: {
+    computeOptionsClassName () {
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+        this.sectionOptions.className, 'vertical-align-center',
+        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
+      )
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+        this.sectionOptions.className, 'vertical-align-start',
+        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
+      )
+      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+        this.sectionOptions.className, 'vertical-align-end',
+        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
+      )
+    },
     Resize(newVal) {
       this.windowSize.x = newVal.width
       this.windowSize.y = newVal.height
@@ -130,7 +148,7 @@ export default {
     },
     callAction(event) {
       const path = {
-        node: 'widgets',
+        node: 'widgets'
       }
       const data = {
         event,

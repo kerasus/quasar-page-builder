@@ -2,15 +2,19 @@
   <div class="widgets-container row q-col-gutter-md">
     <div v-for="item in widgetExpanded"
          :key="item"
-         @click="$emit('selectWidget', item)"
-         class="col-12 text-center">
-      <q-btn outline rounded icon="widgets" color="primary" :label="item.name" />
+         class="col-12 text-center"
+         @click="$emit('selectWidget', item)">
+      <q-btn outline
+             rounded
+             icon="widgets"
+             color="primary"
+             :label="item.name" />
     </div>
   </div>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
+import { useQuasar } from 'quasar'
 import { defineComponent } from 'vue'
 
 export default defineComponent({

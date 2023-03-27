@@ -1,41 +1,41 @@
 <template>
-  <div :class="{['position-'+position]: true}" class="widget-editor-box">
+  <div :class="{['position-'+position]: true}"
+       class="widget-editor-box">
     <q-btn-group outline
                  class="edit-toolbar">
       <q-btn v-if="showDelete"
              outline
-             @click="$emit('callAction', 'delete')"
              color="white"
-             icon="delete"/>
+             icon="delete"
+             @click="$emit('callAction', 'delete')" />
       <q-btn v-if="showAdd"
              outline
              color="white"
              icon="add"
-             @click="$emit('callAction', 'add')"/>
+             @click="$emit('callAction', 'add')" />
       <q-btn v-if="showDuplicate"
              outline
-             @click="$emit('callAction', 'duplicate')"
              color="white"
-             icon="content_copy"/>
+             icon="content_copy"
+             @click="$emit('callAction', 'duplicate')" />
       <q-btn v-if="showEdit"
              outline
-             @click="$emit('callAction', 'edit')"
              color="white"
-             icon="edit"/>
+             icon="edit"
+             @click="$emit('callAction', 'edit')" />
       <q-btn v-if="label"
              outline
              color="white"
-             :label="label"/>
+             :label="label" />
     </q-btn-group>
   </div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'EditorBox',
-  emits: ['callAction'],
   props: {
     label: {
       type: String,
@@ -60,8 +60,9 @@ export default defineComponent({
     showDuplicate: {
       type: Boolean,
       default: true
-    },
+    }
   },
+  emits: ['callAction']
 })
 </script>
 

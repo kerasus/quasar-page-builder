@@ -1,40 +1,33 @@
 <template>
   <div :class="pageBuilderClassName"
-       :style="pageBuilderOptions.style"
-  >
+       :style="pageBuilderOptions.style">
     <editor-box v-if="pageBuilderEditable"
                 label="page-builder"
                 :show-delete="false"
                 :show-duplicate="false"
-                @callAction="onPageBuilderEdit"
-    />
+                @callAction="onPageBuilderEdit" />
     <page-builder-section v-for="(section, sectionIndex) in pageBuilderSections"
                           :key="sectionIndex"
                           v-model:data="section.data"
                           v-model:options="section.options"
                           :editable="pageBuilderEditable"
-                          @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
-    />
+                          @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})" />
     <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
                          :show="optionPanelDialog"
                          :action-type="selectedNode.event"
                          :widget-name="selectedNode.name"
                          @closeDialog="optionPanelDialog = false"
                          @submit="onSubmitElement"
-                         @addWidget="onAddWidget"
-    />
+                         @addWidget="onAddWidget" />
     <q-btn v-if="preview"
            color="primary"
            :icon="pageBuilderEditable ? 'preview' : 'data_array'"
-           @click="toggleEdit"
            class="btn-toggle-edit-page-builder"
-    />
+           @click="toggleEdit" />
   </div>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
-import {defineAsyncComponent} from 'vue'
 import mixinWidget from '../mixin/Widgets.js'
 import OptionPanelDialog from './OptionPanelDialog.vue'
 import EditorBox from '../components/EditorBox.vue'
@@ -42,43 +35,12 @@ import PageBuilderSection from './Section/Section.vue'
 
 export default {
   name: 'QPageBuilder',
-  mixins: [mixinWidget],
   components: {
     EditorBox,
     OptionPanelDialog,
     PageBuilderSection
   },
-  emits: ['toggleEdit', 'update:options'],
-  computed: {
-    pageBuilderEditable: {
-      get() {
-        return this.editable
-      },
-      set(newValue) {
-        this.$emit('update:editable', newValue)
-      }
-    },
-    pageBuilderSections: {
-      get() {
-        return this.sections
-      },
-      set(newValue) {
-        this.$emit('update:sections', newValue)
-      }
-    },
-    pageBuilderOptions: {
-      get() {
-        return Object.assign(this.defaultOptions, this.options);
-      },
-      set(newValue) {
-        this.$emit('update:options', newValue)
-      }
-    },
-    pageBuilderClassName() {
-
-      return 'page-builder ' + this.pageBuilderOptions.className
-    }
-  },
+  mixins: [mixinWidget],
   props: {
     sections: {
       type: Array,
@@ -99,6 +61,7 @@ export default {
       default: false
     }
   },
+  emits: ['toggleEdit', 'update:options'],
   data() {
     return {
       optionPanelDialog: false,
@@ -111,12 +74,55 @@ export default {
       }
     }
   },
+  computed: {
+    pageBuilderEditable: {
+      get() {
+        return this.editable
+      },
+      set(newValue) {
+        this.$emit('update:editable', newValue)
+      }
+    },
+    pageBuilderSections: {
+      get() {
+        return this.sections
+      },
+      set(newValue) {
+        this.$emit('update:sections', newValue)
+      }
+    },
+    pageBuilderOptions: {
+      get() {
+        return Object.assign(this.defaultOptions, this.options)
+      },
+      set(newValue) {
+        this.$emit('update:options', newValue)
+      }
+    },
+    pageBuilderClassName() {
+      return 'page-builder ' + this.pageBuilderOptions.className
+    }
+  },
+  watch: {
+    pageBuilderOptions: {
+      handler() {
+        this.updateClassName()
+      },
+      deep: true
+    },
+    editable () {
+      this.updateClassName()
+    }
+  },
+  created() {
+    this.updateClassName()
+  },
   methods: {
     updateClassName () {
       this.pageBuilderOptions.className = this.getUpdateClassNamesWithKey(this.pageBuilderOptions.className, 'editable', this.editable)
     },
     getWidgetNameFromTagName(tagName) {
-      let regex = /-./gms;
+      const regex = /-./gms
       return tagName.slice(0, 1).toUpperCase() + tagName.slice(1).replace(regex, (match) => {
         return match.replace('-', '').toUpperCase()
       })
@@ -179,7 +185,7 @@ export default {
     },
     onAddWidget (widget) {
       this.actionOnSelectedNode((parent, node, index) => {
-        node.widgets.push({name: widget.name[0].toLowerCase() + widget.name.slice(1, widget.name.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)})
+        node.widgets.push({ name: widget.name[0].toLowerCase() + widget.name.slice(1, widget.name.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`) })
       })
     },
     onOptionAction(selectedNode, selectedSection) {
@@ -212,7 +218,7 @@ export default {
       this.actionOnNode(this.selectedNode, callback)
     },
     actionOnNode(node, callback) {
-      this.getNodeByPath(node.path, {widgets: this.pageBuilderSections}, callback)
+      this.getNodeByPath(node.path, { widgets: this.pageBuilderSections }, callback)
     },
     onSubmitElement(widget) {
       if (this.selectedNode.event === 'edit') {
@@ -224,21 +230,7 @@ export default {
     toggleEdit () {
       this.$emit('toggleEdit')
     }
-  },
-  watch: {
-    pageBuilderOptions: {
-      handler() {
-        this.updateClassName()
-      },
-      deep: true
-    },
-    editable () {
-      this.updateClassName()
-    }
-  },
-  created() {
-    this.updateClassName()
-  },
+  }
 }
 </script>
 

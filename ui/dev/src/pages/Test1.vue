@@ -1,12 +1,12 @@
 <template>
   <q-page padding>
-    <q-page-builder
-      v-model:sections="sections"
-      v-model::options="pageConfig"
-      :preview="true"
-      :editable="editable"
-      @toggleEdit="toggleEdit"
-    />
+    <q-btn style="position: absolute; top: 0; left: 0; z-index: 2;"
+           @click="editable = !editable">
+      edit
+    </q-btn>
+    <q-page-builder v-model:sections="sections"
+                    v-model:options="pageConfig"
+                    :editable="editable" />
   </q-page>
 </template>
 
@@ -16,11 +16,7 @@ export default {
   data() {
     return {
       editable: false,
-      pageConfig: {
-        padding: {
-          a: 'md'
-        }
-      },
+      pageConfig: {},
       sections: [
         {
           data: {
@@ -29,368 +25,37 @@ export default {
                 cols: [
                   {
                     widgets: [
-                      {name: 'test-component1-widget'},
-                      {name: 'test-component2-widget'}
-                    ]
-                  },
-                  {
-                    widgets: [
-                      {name: 'test-component2-widget'},
-                      {name: 'test-component1-widget'}
-                    ]
-                  }
-                ]
-              },
-            ]
-          },
-          options: {
-            style: {
-              backgroundImage: 'url("https://nodes.alaatv.com/upload/images/slideShow/1666601246_8921.jpg")',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundAttachment: 'fixed'
-            },
-            className: '123',
-            fullHeight: true,
-            verticalAlign: 'center'
-          }
-        },
-        {
-          data: {
-            rows: [
-              {
-                cols: [
-                  {
-                    widgets: [
                       {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget',
-                                      options: {
-                                        style: { color: 'yellow !important' },
-                                        className: 'q-ma-lg'
-                                      }
-                                    }
-                                  ],
-                                  options: {
-                                    style: { border: '1px blue solid' }
-                                  }
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                        name: 'TestComponent1Widget',
+                        options: {
                         }
-                      }
-                    ],
-                    options: {
-                      style: { color: 'blue !important' }
-                    }
-                  },
-                  {
-                    widgets: [
+                      },
                       {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget',
-                                      options: {
-                                        style: { color: 'yellow !important' },
-                                        className: 'q-ma-lg'
-                                      }
-                                    }
-                                  ],
-                                  options: {
-                                    style: { border: '1px blue solid' }
-                                  }
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ],
-                              options: {
-                                style: {},
-                                className: 'target'
-                              }
-                            }
-                          ]
+                        name: 'TestComponent2Widget',
+                        options: {
                         }
-                      }
-                    ],
-                    options: {
-                      style: { color: 'blue !important' }
-                    }
-                  }
-                ],
-                options: {
-                  style: { color: 'white' },
-                  className: 'q-ma-md'
-                }
-              },
-              {
-                cols: [
-                  {
-                    widgets: [
+                      },
                       {
-                        name: 'test-component1-widget'
-                      }
-                    ]
-                  },
-                  {
-                    widgets: [
-                      {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget'
-                                    }
-                                  ]
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
+                        name: 'TestComponent3Widget',
+                        options: {
                         }
                       }
                     ]
                   }
                 ],
                 options: {
-                  boxed: true
+                  boxed: true,
+                  boxedWidth: 1362
                 }
               }
             ]
           },
           options: {
-            style: {
-              backgroundImage:
-                'url("https://nodes.alaatv.com/upload/images/slideShow/1666601246_8921.jpg")',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundAttachment: 'fixed'
-            },
-            className: '',
-            fullHeight: true,
-            verticalAlign: 'center'
-          }
-        },
-        {
-          data: {
-            rows: [
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget'
-                                    }
-                                  ]
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'test-component1-widget'
-                      }
-                    ]
-                  },
-                  {
-                    widgets: [
-                      {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget'
-                                    }
-                                  ]
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          options: {
-            style: {
-              backgroundImage:
-                'url("https://nodes.alaatv.com/upload/images/slideShow/1642417634_2227.jpg?w=1845&h=720")',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundAttachment: 'fixed'
-            },
-            fullHeight: true,
-            verticalAlign: 'center'
-          }
-        },
-        {
-          data: {
-            rows: [
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget'
-                                    }
-                                  ]
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                ]
-              },
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'test-component1-widget'
-                      }
-                    ]
-                  },
-                  {
-                    widgets: [
-                      {
-                        name: 'page-builder-section',
-                        data: {
-                          rows: [
-                            {
-                              cols: [
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component1-widget'
-                                    }
-                                  ]
-                                },
-                                {
-                                  widgets: [
-                                    {
-                                      name: 'test-component2-widget'
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        }
-                      }
-                    ]
-                  }
-                ]
-              }
-            ]
-          },
-          options: {
-            style: {
-              backgroundImage:
-                'url("https://nodes.alaatv.com/upload/images/slideShow/1642417634_2227.jpg?w=1845&h=720")',
-              backgroundPosition: 'center',
-              backgroundSize: 'cover',
-              backgroundRepeat: 'no-repeat',
-              backgroundAttachment: 'fixed'
-            },
             fullHeight: true,
             verticalAlign: 'center'
           }
         }
-      ],
+      ]
     }
   },
   methods: {
