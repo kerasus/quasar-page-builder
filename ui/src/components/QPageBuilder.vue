@@ -11,7 +11,9 @@
                           v-model:data="section.data"
                           v-model:options="section.options"
                           :editable="pageBuilderEditable"
-                          @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})" />
+                          :drag-status="localDragStatus"
+                          @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
+                          @onDrag="onDrag" />
     <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
                          :show="optionPanelDialog"
                          :action-type="selectedNode.event"
@@ -64,6 +66,7 @@ export default {
   emits: ['toggleEdit', 'update:options'],
   data() {
     return {
+      localDragStatus: null,
       optionPanelDialog: false,
       selectedNode: {
         event: null,
@@ -187,6 +190,9 @@ export default {
       this.actionOnSelectedNode((parent, node, index) => {
         node.widgets.push({ name: widget.name[0].toLowerCase() + widget.name.slice(1, widget.name.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`) })
       })
+    },
+    onDrag (dragStatus) {
+      this.localDragStatus = dragStatus
     },
     onOptionAction(selectedNode, selectedSection) {
       this.setNodeName(selectedNode)

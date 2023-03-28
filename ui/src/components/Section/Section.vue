@@ -11,7 +11,9 @@
                       v-model:cols="row.cols"
                       v-model:options="row.options"
                       :editable="editable"
-                      @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})" />
+                      :drag-status="dragStatus"
+                      @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})"
+                      @onDrag="onDrag" />
   </div>
 </template>
 
@@ -156,6 +158,9 @@ export default {
         path
       }
       this.$emit('onOptionAction', data)
+    },
+    onDrag (dragStatus) {
+      this.$emit('onDrag', dragStatus)
     },
     onOptionAction(data, widgetItem) {
       const event = data.event

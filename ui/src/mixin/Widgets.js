@@ -13,6 +13,10 @@ const mixinWidget = {
       default() {
         return {}
       }
+    },
+    dragStatus: {
+      type: String,
+      default: null
     }
   },
   data() {

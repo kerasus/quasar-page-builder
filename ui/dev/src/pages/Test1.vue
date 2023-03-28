@@ -26,6 +26,65 @@ export default {
                   {
                     widgets: [
                       {
+                        name: 'TestComponent2Widget'
+                      },
+                      {
+                        name: 'TestComponent1Widget'
+                      }
+                    ],
+                    options: {
+                      className: 'col-md-6 col-xs-12'
+                    }
+                  },
+                  {
+                    widgets: [
+                      {
+                        name: 'TestComponent3Widget'
+                      }
+                    ],
+                    options: {
+                      className: 'col-md-6 col-xs-12'
+                    }
+                  }
+                ],
+                options: {
+                  boxed: true
+                }
+              },
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
+                        name: 'TestComponent1Widget'
+                      },
+                      {
+                        name: 'TestComponent2Widget'
+                      },
+                      {
+                        name: 'TestComponent3Widget'
+                      },
+                      {
+                        name: 'TestComponent1Widget'
+                      }
+                    ]
+                  }
+                ],
+                options: {
+                  boxed: true
+                }
+              }
+            ]
+          }
+        },
+        {
+          data: {
+            rows: [
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
                         name: 'TestComponent1Widget',
                         options: {
                         }
