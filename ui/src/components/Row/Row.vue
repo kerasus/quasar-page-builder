@@ -105,7 +105,7 @@ export default {
       this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
     },
     updateBoxedStyle () {
-      this.deviceWidth = window.innerWidth
+      this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
       if (!this.defaultOptions.boxed) {
         this.defaultOptions.style.width = null
         this.defaultOptions.style.maxWidth = null
