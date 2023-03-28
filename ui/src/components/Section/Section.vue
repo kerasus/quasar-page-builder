@@ -94,17 +94,29 @@ export default {
     }
   },
   watch: {
-    editable() {
-      this.computeOptionsClassName()
+    editable: {
+      handler() {
+        this.computeOptionsClassName()
+      },
+      immediate: true
     },
-    optionsClassName() {
-      this.computeOptionsClassName()
+    optionsClassName: {
+      handler() {
+        this.computeOptionsClassName()
+      },
+      immediate: true
     },
-    optionsFullHeight() {
-      this.computeOptionsClassName()
+    optionsFullHeight: {
+      handler() {
+        this.computeOptionsClassName()
+      },
+      immediate: true
     },
-    optionsVerticalAlign() {
-      this.computeOptionsClassName()
+    optionsVerticalAlign: {
+      handler() {
+        this.computeOptionsClassName()
+      },
+      immediate: true
     },
     windowWidth() {
       this.setFullHeight()

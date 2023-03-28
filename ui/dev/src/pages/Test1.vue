@@ -26,6 +26,55 @@ export default {
                   {
                     widgets: [
                       {
+                        name: 'TestComponent4Widget'
+                      },
+                      {
+                        name: 'TestComponent4Widget'
+                      }
+                    ],
+                    options: {
+                      className: 'flex column justify-center items-center',
+                      style: {},
+                      colNumber: 'col-md-6'
+                    }
+                  },
+                  {
+                    widgets: [
+                      {
+                        name: 'TestComponent4Widget'
+                      }
+                    ],
+                    options: {
+                      className: '',
+                      style: {},
+                      colNumber: 'col-md-6'
+                    }
+                  }
+                ],
+                options: {
+                  fullHeight: true,
+                  boxed: true,
+                  boxedWidth: 1362
+                }
+              }
+            ]
+          },
+          options: {
+            fullHeight: true,
+            verticalAlign: 'center',
+            style: {
+              background: 'rgba(18,13,0,0.72)'
+            }
+          }
+        },
+        {
+          data: {
+            rows: [
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
                         name: 'TestComponent2Widget'
                       },
                       {

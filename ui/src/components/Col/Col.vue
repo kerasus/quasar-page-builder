@@ -245,8 +245,11 @@ export default {
     }
   },
   watch: {
-    editable() {
-      this.computeOptionsClassName()
+    editable: {
+      handler() {
+        this.computeOptionsClassName()
+      },
+      immediate: true
     },
     dragStatus(newValue) {
       if (newValue === 'Drop' && this.localDraggable) {
@@ -259,8 +262,11 @@ export default {
         this.localDraggable = null
       }
     },
-    optionsClassName() {
-      this.computeOptionsClassName()
+    optionsClassName: {
+      handler() {
+        this.computeOptionsClassName()
+      },
+      immediate: true
     }
   },
   methods: {
