@@ -76,20 +76,20 @@ export default {
         this.updateClassName()
         this.updateBoxedStyle()
       },
-      deep: true,
-      immediate: true
+      deep: true
+      // immediate: true
     },
     editable: {
       handler() {
         this.updateClassName()
-      },
-      immediate: true
+      }
+      // immediate: true
     },
     boxedInFullWidthStatus: {
       handler() {
         this.updateClassName()
-      },
-      immediate: true
+      }
+      // immediate: true
     }
   },
   mounted() {
