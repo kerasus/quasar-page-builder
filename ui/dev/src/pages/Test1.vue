@@ -33,7 +33,6 @@ export default {
                       }
                     ],
                     options: {
-                      className: 'flex column justify-center items-center',
                       style: {},
                       colNumber: 'col-md-6'
                     }
@@ -82,7 +81,7 @@ export default {
                       }
                     ],
                     options: {
-                      className: 'col-md-6 col-xs-12'
+                      colNumber: 'col-md-6 col-xs-12'
                     }
                   },
                   {
@@ -92,7 +91,7 @@ export default {
                       }
                     ],
                     options: {
-                      className: 'col-md-6 col-xs-12'
+                      colNumber: 'col-md-6 col-xs-12'
                     }
                   }
                 ],
