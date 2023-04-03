@@ -72,9 +72,7 @@ export default defineComponent({
 $edit_toolbar_height: 40px;
 
 .widget-editor-box {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   .edit-toolbar {
     position: relative;
     height: $edit_toolbar_height;

@@ -33,7 +33,7 @@ const mixinWidget = {
         className += finalClassString
       }
       if (!state) {
-        className = className.replace(finalClassString, ' ')
+        className = className.replaceAll(finalClassString, ' ')
       }
 
       return className

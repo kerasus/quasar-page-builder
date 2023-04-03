@@ -2,11 +2,11 @@
   <div class="page-builder-row"
        :class="rowClassName"
        :style="rowOptions.style">
+    <editor-box v-if="editable"
+                :label="'row'"
+                @callAction="callAction" />
     <div :id="defaultOptions.id"
-         class="row">
-      <editor-box v-if="editable"
-                  :label="'row'"
-                  @callAction="callAction" />
+         :class="rowElementClass">
       <page-builder-col v-for="(col, colIndex) in cols"
                         :key="'colIndex'+colIndex"
                         v-model:options="col.options"
@@ -48,11 +48,14 @@ export default {
       action: '',
       eventCol: {},
       elementFormDialog: false,
+      rowElementClass: 'row',
       defaultOptions: {
         className: '',
         height: 'auto',
         boxed: false,
         boxedWidth: 1200,
+        gutterXSize: 'md',
+        gutterYSize: 'md',
         style: {}
       }
     }
@@ -92,6 +95,9 @@ export default {
       // immediate: true
     }
   },
+  created() {
+    this.updateClassName()
+  },
   mounted() {
     this.updateBoxedStyle()
     window.addEventListener('resize', () => {
@@ -100,9 +106,16 @@ export default {
   },
   methods: {
     updateClassName () {
-      this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'editable', this.editable)
-      this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'boxed', this.rowOptions.boxed)
-      this.rowOptions.className = this.getUpdateClassNamesWithKey(this.rowOptions.className, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
+      let newClassName = this.rowOptions.className
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed', this.rowOptions.boxed)
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
+      this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
+      this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterYSize, 'y'), this.rowOptions.gutterYSize)
+      this.rowOptions.className = newClassName
+    },
+    getGutterSize (size, type) {
+      return 'q-col-gutter-' + type + '-' + size
     },
     updateBoxedStyle () {
       this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
@@ -170,7 +183,6 @@ export default {
   position: relative;
   &.editable {
     border: dashed 2px $primary;
-    padding-top: 40px;
   }
   &.boxed {
     max-width: 1200px;

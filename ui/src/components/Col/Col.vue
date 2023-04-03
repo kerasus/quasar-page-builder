@@ -5,14 +5,55 @@
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
-    <editor-box v-if="editable"
-                :label="'column'"
-                @callAction="callAction" />
-    <template v-for="(widget, widgetIndex) in widgets"
-              :key="widgetIndex">
-      <q-intersection v-if="widget && widget.options && widget.options.intersection"
-                      :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'">
-        <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
+    <template v-if="editable">
+      <div class="editable-wrapper">
+        <editor-box v-if="editable"
+                    :label="'column'"
+                    @callAction="callAction" />
+        <template v-for="(widget, widgetIndex) in widgets"
+                  :key="widgetIndex">
+          <q-intersection v-if="widget && widget.options && widget.options.intersection"
+                          :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'">
+            <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
+                                 v-model:options="widget.options"
+                                 :editable="editable"
+                                 :draggable="editable"
+                                 @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
+                                 @dragstart="onDragStart($event, widget, widgetIndex)"
+                                 @dragover="onDragOver"
+                                 @dragleave="onDragLeave"
+                                 @drop="onDrop($event, widgetIndex)" />
+          </q-intersection>
+          <page-builder-widget v-else
+                               v-model:widget="computedWidget[widgetIndex]"
+                               v-model:options="widget.options"
+                               :editable="editable"
+                               :draggable="editable"
+                               @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
+                               @dragstart="onDragStart($event, widget, widgetIndex)"
+                               @dragover="onDragOver"
+                               @dragleave="onDragLeave"
+                               @drop="onDrop($event, widgetIndex)" />
+        </template>
+      </div>
+    </template>
+    <template v-else>
+      <template v-for="(widget, widgetIndex) in widgets"
+                :key="widgetIndex">
+        <q-intersection v-if="widget && widget.options && widget.options.intersection"
+                        :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'">
+          <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
+                               v-model:options="widget.options"
+                               :editable="editable"
+                               :draggable="editable"
+                               @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
+                               @dragstart="onDragStart($event, widget, widgetIndex)"
+                               @dragover="onDragOver"
+                               @dragleave="onDragLeave"
+                               @drop="onDrop($event, widgetIndex)" />
+        </q-intersection>
+        <page-builder-widget v-else
+                             v-model:widget="computedWidget[widgetIndex]"
                              v-model:options="widget.options"
                              :editable="editable"
                              :draggable="editable"
@@ -21,17 +62,7 @@
                              @dragover="onDragOver"
                              @dragleave="onDragLeave"
                              @drop="onDrop($event, widgetIndex)" />
-      </q-intersection>
-      <page-builder-widget v-else
-                           v-model:widget="computedWidget[widgetIndex]"
-                           v-model:options="widget.options"
-                           :editable="editable"
-                           :draggable="editable"
-                           @onOptionAction="onOptionAction($event, {widget, widgetIndex: widgetIndex, name: widget.name})"
-                           @dragstart="onDragStart($event, widget, widgetIndex)"
-                           @dragover="onDragOver"
-                           @dragleave="onDragLeave"
-                           @drop="onDrop($event, widgetIndex)" />
+      </template>
     </template>
   </div>
 </template>
@@ -283,8 +314,9 @@ export default {
 .page-builder-col {
   position: relative;
   &.editable {
-    border: dashed 2px $primary;
-    padding-top: 40px;
+    .editable-wrapper {
+      border: dashed 2px $primary;
+    }
   }
 }
 </style>

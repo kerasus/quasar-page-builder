@@ -233,7 +233,6 @@ export default {
   position: relative;
   &.editable {
     border: dashed 2px $primary;
-    padding-top: 40px;
   }
 
   &.full-height-section {
