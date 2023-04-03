@@ -54,8 +54,8 @@ export default {
         height: 'auto',
         boxed: false,
         boxedWidth: 1200,
-        gutterXSize: 'md',
-        gutterYSize: 'md',
+        gutterXSize: null,
+        gutterYSize: null,
         style: {}
       }
     }
