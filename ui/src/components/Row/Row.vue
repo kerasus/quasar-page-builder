@@ -110,8 +110,14 @@ export default {
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed', this.rowOptions.boxed)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
-      this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
-      this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterYSize, 'y'), this.rowOptions.gutterYSize)
+      this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-(x|y)-(xs|sm|md|lg|xl)/gi, '')
+      if (this.rowOptions.gutterXSize) {
+        this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
+      }
+      if (this.rowOptions.gutterYSize) {
+        this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterYSize, 'y'), this.rowOptions.gutterYSize)
+      }
+
       this.rowOptions.className = newClassName
     },
     getGutterSize (size, type) {

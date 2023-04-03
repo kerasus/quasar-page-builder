@@ -66,6 +66,7 @@ export default defineComponent({
     useGutter (newValue) {
       this.localOptions.gutterXSize = newValue ? 'md' : null
       this.localOptions.gutterYSize = newValue ? 'md' : null
+      this.updateLocalOptions(this.localOptions)
     }
   }
 })
