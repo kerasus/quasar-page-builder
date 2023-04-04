@@ -36,11 +36,86 @@ export default {
       eventRow: {},
       action: '',
       form: {},
+      backgrounds: {
+        xs: {
+          size: null,
+          color: null,
+          image: null,
+          repeat: null,
+          position: null,
+          attachment: null
+        },
+        sm: {
+          size: null,
+          color: null,
+          image: null,
+          repeat: null,
+          position: null,
+          attachment: null
+        },
+        md: {
+          size: null,
+          color: null,
+          image: null,
+          repeat: null,
+          position: null,
+          attachment: null
+        },
+        lg: {
+          size: null,
+          color: null,
+          image: null,
+          repeat: null,
+          position: null,
+          attachment: null
+        }
+      },
       elementFormDialog: false,
       defaultOptions: {
         fullHeight: false,
         className: '',
-        background: [],
+        backgrounds: {
+          xs: {
+            size: null,
+            color: null,
+            image: null,
+            repeat: null,
+            position: null,
+            attachment: null
+          },
+          sm: {
+            size: null,
+            color: null,
+            image: null,
+            repeat: null,
+            position: null,
+            attachment: null
+          },
+          md: {
+            size: null,
+            color: null,
+            image: null,
+            repeat: null,
+            position: null,
+            attachment: null
+          },
+          lg: {
+            size: null,
+            color: null,
+            image: null,
+            repeat: null,
+            position: null,
+            attachment: null
+          },
+          xl: {
+            size: null,
+            color: null,
+            image: null,
+            repeat: null,
+            position: null,
+            attachment: null
+          }
+        },
         style: {}
       },
       windowSize: {
@@ -228,6 +303,61 @@ export default {
 
 <style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
+$backgrounds: (
+  xs: (
+      size: v-bind('defaultOptions.backgrounds.xs.size'),
+      color: v-bind('defaultOptions.backgrounds.xs.color'),
+      image: v-bind('defaultOptions.backgrounds.xs.image'),
+      repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
+      position: v-bind('defaultOptions.backgrounds.xs.position'),
+      attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
+  ),
+  sm: (
+      size: v-bind('defaultOptions.backgrounds.sm.size'),
+      color: v-bind('defaultOptions.backgrounds.sm.color'),
+      image: v-bind('defaultOptions.backgrounds.sm.image'),
+      repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
+      position: v-bind('defaultOptions.backgrounds.sm.position'),
+      attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
+  ),
+  md: (
+      size: v-bind('defaultOptions.backgrounds.md.size'),
+      color: v-bind('defaultOptions.backgrounds.md.color'),
+      image: v-bind('defaultOptions.backgrounds.md.image'),
+      repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
+      position: v-bind('defaultOptions.backgrounds.md.position'),
+      attachment: v-bind('defaultOptions.backgrounds.md.attachment')
+  ),
+  lg: (
+      size: v-bind('defaultOptions.backgrounds.lg.size'),
+      color: v-bind('defaultOptions.backgrounds.lg.color'),
+      image: v-bind('defaultOptions.backgrounds.lg.image'),
+      repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
+      position: v-bind('defaultOptions.backgrounds.lg.position'),
+      attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
+  ),
+  xl: (
+      size: v-bind('defaultOptions.backgrounds.xl.size'),
+      color: v-bind('defaultOptions.backgrounds.xl.color'),
+      image: v-bind('defaultOptions.backgrounds.xl.image'),
+      repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
+      position: v-bind('defaultOptions.backgrounds.xl.position'),
+      attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
+  )
+);
+
+@mixin media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment) {
+  @media (min-width: $min-width) {
+    & {
+      background-size: $size;
+      background-color: $color;
+      background-image: $image;
+      background-repeat: $repeat;
+      background-position: $position;
+      background-attachment: $attachment;
+    }
+  }
+}
 
 .page-builder-section {
   position: relative;
@@ -253,6 +383,17 @@ export default {
     display: flex;
     flex-flow: column;
     justify-content: flex-start;
+  }
+
+  @each $name, $min-width in $sizes {
+    $background: map_get($backgrounds, $name);
+    $size: map_get($background, 'size');
+    $color: map_get($background, 'color');
+    $image: map_get($background, 'image');
+    $repeat: map_get($background, 'repeat');
+    $position: map_get($background, 'position');
+    $attachment: map_get($background, 'attachment');
+    @include media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment);
   }
 }
 </style>

@@ -60,10 +60,7 @@ export default {
           },
           options: {
             fullHeight: true,
-            verticalAlign: 'center',
-            style: {
-              background: 'rgba(18,13,0,0.72)'
-            }
+            verticalAlign: 'center'
           }
         },
         {

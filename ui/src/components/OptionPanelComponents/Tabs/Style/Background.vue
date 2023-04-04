@@ -1,11 +1,51 @@
 <template>
   <div class="row q-col-gutter-md">
     <div class="col-md-6">
-      backgroundColor
-      <q-color v-model="localValue.backgroundColor"
-               label="backgroundColor"
-               :default-value="'rgba(34,255,0,0.72)'"
-               format-model="rgba" />
+      <div class="row">
+        <div class="col-12">
+          <q-input v-model="localValue.backgroundColor"
+                   label="backgroundColor">
+            <template v-slot:append>
+              <q-icon name="colorize"
+                      class="cursor-pointer">
+                <q-popup-proxy cover
+                               transition-show="scale"
+                               transition-hide="scale">
+                  <q-color v-model="localValue.backgroundColor"
+                           label="backgroundColor"
+                           :default-value="'rgba(34,255,0,0.72)'"
+                           format-model="rgba" />
+                </q-popup-proxy>
+              </q-icon>
+            </template>
+          </q-input>
+        </div>
+        <div class="col-md-12">
+          <q-select v-model="localValue.backgroundRepeat"
+                    label="backgroundRepeat"
+                    :options="[
+                      'no-repeat',
+                      'repeat',
+                      'repeat-x',
+                      'repeat-y',
+                      'space',
+                      'round',
+                      'initial',
+                      'inherit'
+                    ]" />
+        </div>
+        <div class="col-md-12">
+          <q-select v-model="localValue.backgroundAttachment"
+                    label="backgroundAttachment"
+                    :options="[
+                      'scroll',
+                      'fixed',
+                      'local',
+                      'initial',
+                      'inherit'
+                    ]" />
+        </div>
+      </div>
     </div>
     <div class="col-md-6">
       <div class="row">
@@ -39,31 +79,6 @@
                       'revert',
                       'revert-layer',
                       'unset'
-                    ]" />
-        </div>
-        <div class="col-md-12">
-          <q-select v-model="localValue.backgroundRepeat"
-                    label="backgroundRepeat"
-                    :options="[
-                      'no-repeat',
-                      'repeat',
-                      'repeat-x',
-                      'repeat-y',
-                      'space',
-                      'round',
-                      'initial',
-                      'inherit'
-                    ]" />
-        </div>
-        <div class="col-md-12">
-          <q-select v-model="localValue.backgroundAttachment"
-                    label="backgroundAttachment"
-                    :options="[
-                      'scroll',
-                      'fixed',
-                      'local',
-                      'initial',
-                      'inherit'
                     ]" />
         </div>
       </div>
