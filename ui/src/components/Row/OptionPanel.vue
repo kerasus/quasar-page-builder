@@ -34,6 +34,20 @@
                      label="boxedWidth" />
           </div>
         </div>
+        <div class="row">
+          <div class="col-md-3">
+            <q-checkbox v-model="isAbsolute"
+                        label="Absolute" />
+          </div>
+          <div class="col-md-9 q-mt-sm">
+            <q-option-group v-if="isAbsolute"
+                            v-model="defaultOptions.absolute"
+                            :options="absoluteOptions"
+                            color="primary"
+                            inline
+                            dense />
+          </div>
+        </div>
       </div>
     </template>
   </option-panel-tabs>
@@ -51,6 +65,25 @@ export default defineComponent({
     return {
       useGutter: true,
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
+      isAbsolute: false,
+      absoluteOptions: [
+        {
+          label: 'top',
+          value: 'top'
+        },
+        {
+          label: 'right',
+          value: 'right'
+        },
+        {
+          label: 'bottom',
+          value: 'bottom'
+        },
+        {
+          label: 'left',
+          value: 'left'
+        }
+      ],
       defaultOptions: {
         className: '',
         height: 'auto',
@@ -58,11 +91,19 @@ export default defineComponent({
         boxedWidth: 1200,
         gutterXSize: 'md',
         gutterYSize: 'md',
+        absolute: 'none',
         style: {}
       }
     }
   },
   watch: {
+    isAbsolute (newValue) {
+      if (!newValue) {
+        this.localOptions.absolute = 'none'
+      } else {
+        this.localOptions.absolute = 'top'
+      }
+    },
     useGutter (newValue) {
       this.localOptions.gutterXSize = newValue ? 'md' : null
       this.localOptions.gutterYSize = newValue ? 'md' : null

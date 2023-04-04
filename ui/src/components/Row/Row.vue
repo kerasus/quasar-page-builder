@@ -56,6 +56,7 @@ export default {
         boxedWidth: 1200,
         gutterXSize: null,
         gutterYSize: null,
+        absolute: 'none',
         style: {}
       }
     }
@@ -110,6 +111,10 @@ export default {
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed', this.rowOptions.boxed)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-top', this.rowOptions.absolute === 'top')
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-right', this.rowOptions.absolute === 'right')
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-bottom', this.rowOptions.absolute === 'bottom')
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-left', this.rowOptions.absolute === 'left')
       this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-(x|y)-(xs|sm|md|lg|xl)/gi, '')
       if (this.rowOptions.gutterXSize) {
         this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
@@ -201,6 +206,33 @@ export default {
       padding-left: 15px;
       max-width: 100% !important;
       width: 100% !important;
+    }
+  }
+  &.absolute-row {
+    position: absolute;
+    &.absolute-top {
+      bottom: 0;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+    }
+    &.absolute-bottom {
+      bottom: 0;
+      width: 100%;
+      max-width: 100%;
+      min-width: 100%;
+    }
+    &.absolute-right {
+      left: 0;
+      height: 100%;
+      max-height: 100%;
+      min-height: 100%;
+    }
+    &.absolute-left {
+      right: 0;
+      height: 100%;
+      max-height: 100%;
+      min-height: 100%;
     }
   }
 }
