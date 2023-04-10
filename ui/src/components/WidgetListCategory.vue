@@ -80,7 +80,6 @@ export default {
       return widgetCount === categoryCount
     },
     onSelectWidget (data) {
-      debugger
       this.$emit('selectWidget', data)
     },
     isCategoryItemWidget (categoryItemWidget) {
