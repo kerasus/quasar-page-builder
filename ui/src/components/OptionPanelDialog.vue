@@ -1,7 +1,8 @@
 <template>
   <q-dialog v-model="showValue"
+            class="quasar-page-builder-dialog"
             @before-show="setTab">
-    <q-card class="element-form-dialog-card">
+    <q-card class="quasar-page-builder-dialog-card">
       <q-card-section>
         <div class="header">
           <div class="title">
@@ -135,12 +136,15 @@ export default defineComponent({
 </script>
 
 <style lang="scss">
-.element-form-dialog-card {
-  width: 666px;
-  .header {
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
+.quasar-page-builder-dialog {
+  .quasar-page-builder-dialog-card {
+    width: 900px;
+    max-width: 80vw;
+    .header {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
+    }
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "quasar-ui-q-page-builder",
-  "version": "0.1.31",
+  "version": "0.1.32",
   "author": "kerasus <aliesmaeeli20@gmail.com>",
   "description": "QPageBuilder",
   "license": "MIT",
@@ -28,6 +28,7 @@
     "@quasar/extras": "^1.16.1",
     "@vue/compiler-sfc": "^3.2.47",
     "quasar": "^2.11.9",
+    "shvl": "^3.0.0",
     "vue": "^3.2.47"
   },
   "bugs": "",
