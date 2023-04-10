@@ -33,11 +33,11 @@
 <script>
 import { useQuasar } from 'quasar'
 import WidgetList from './WidgetList.vue'
+import { defineComponent, ref } from 'vue'
 import ColOptionPanel from './Col/OptionPanel.vue'
 import RowOptionPanel from './Row/OptionPanel.vue'
 import SectionOptionPanel from './Section/OptionPanel.vue'
 import PageBuilderOptionPanel from './PageBuilderOptionPanel.vue'
-import { defineComponent, defineAsyncComponent, ref } from 'vue'
 
 const components = {
   WidgetList,

@@ -188,7 +188,11 @@ export default {
     },
     onAddWidget (widget) {
       this.actionOnSelectedNode((parent, node, index) => {
-        node.widgets.push({ name: widget.name[0].toLowerCase() + widget.name.slice(1, widget.name.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`) })
+        // const widgetName = widget.name[0].toLowerCase() + widget.name.slice(1, widget.name.length).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`)
+        const widgetName = widget.name
+        node.widgets.push({
+          name: widgetName
+        })
       })
     },
     onDrag (dragStatus) {
