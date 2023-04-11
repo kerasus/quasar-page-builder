@@ -1,31 +1,41 @@
 <template>
   <div :class="pageBuilderClassName"
        :style="pageBuilderOptions.style">
-    <editor-box v-if="pageBuilderEditable"
-                label="page-builder"
-                :show-delete="false"
-                :show-duplicate="false"
-                @callAction="onPageBuilderEdit" />
-    <page-builder-section v-for="(section, sectionIndex) in pageBuilderSections"
-                          :key="sectionIndex"
-                          v-model:data="section.data"
-                          v-model:options="section.options"
-                          :editable="pageBuilderEditable"
-                          :drag-status="localDragStatus"
-                          @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
-                          @onDrag="onDrag" />
-    <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
-                         :show="optionPanelDialog"
-                         :action-type="selectedNode.event"
-                         :widget-name="selectedNode.name"
-                         @closeDialog="optionPanelDialog = false"
-                         @submit="onSubmitElement"
-                         @addWidget="onAddWidget" />
-    <q-btn v-if="preview"
-           color="primary"
-           :icon="pageBuilderEditable ? 'preview' : 'data_array'"
-           class="btn-toggle-edit-page-builder"
-           @click="toggleEdit" />
+    <template v-if="!loading">
+      <editor-box v-if="pageBuilderEditable"
+                  label="page-builder"
+                  :show-delete="false"
+                  :show-duplicate="false"
+                  @callAction="onPageBuilderEdit" />
+      <page-builder-section v-for="(section, sectionIndex) in pageBuilderSections"
+                            :key="sectionIndex"
+                            v-model:data="section.data"
+                            v-model:options="section.options"
+                            :editable="pageBuilderEditable"
+                            :drag-status="localDragStatus"
+                            @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
+                            @onDrag="onDrag" />
+      <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
+                           :show="optionPanelDialog"
+                           :action-type="selectedNode.event"
+                           :widget-name="selectedNode.name"
+                           @closeDialog="optionPanelDialog = false"
+                           @submit="onSubmitElement"
+                           @addWidget="onAddWidget" />
+      <q-btn v-if="preview"
+             color="primary"
+             :icon="pageBuilderEditable ? 'preview' : 'data_array'"
+             class="btn-toggle-edit-page-builder"
+             @click="toggleEdit" />
+    </template>
+    <template v-else>
+      <slot name="loading">
+        <div class="PageBuilderLoading">
+          <q-spinner-grid color="primary"
+                          size="3em" />
+        </div>
+      </slot>
+    </template>
   </div>
 </template>
 
@@ -53,6 +63,10 @@ export default {
       default: () => {
         return {}
       }
+    },
+    loading: {
+      type: Boolean,
+      default: false
     },
     editable: {
       type: Boolean,
@@ -261,5 +275,12 @@ export default {
     bottom: 20px;
     z-index: 99999;
   }
+}
+.PageBuilderLoading {
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>
