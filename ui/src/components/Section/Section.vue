@@ -351,7 +351,7 @@ $backgrounds: (
     & {
       background-size: $size;
       background-color: $color;
-      background-image: url($image);
+      background-image: $image;
       background-repeat: $repeat;
       background-position: $position;
       background-attachment: $attachment;
