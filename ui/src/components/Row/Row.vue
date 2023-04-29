@@ -187,7 +187,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
 
 .page-builder-row {
@@ -199,13 +199,11 @@ export default {
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
-    width: 1200px;
-
+    width: 100% !important;
     &.boxedInFullWidthStatus {
       padding-right: 15px;
       padding-left: 15px;
       max-width: 100% !important;
-      width: 100% !important;
     }
   }
   &.absolute-row {
