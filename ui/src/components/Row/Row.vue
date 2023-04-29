@@ -57,10 +57,7 @@ export default {
         gutterXSize: null,
         gutterYSize: null,
         absolute: 'none',
-        style: {
-          width: null,
-          maxWidth: null
-        }
+        style: {}
       }
     }
   },
@@ -92,18 +89,28 @@ export default {
       }
       // immediate: true
     },
+    boxedInFullWidthStatus: {
+      handler() {
+        this.updateClassName()
+      }
+      // immediate: true
+    }
   },
   created() {
     this.updateClassName()
   },
   mounted() {
     this.updateBoxedStyle()
+    window.addEventListener('resize', () => {
+      this.updateBoxedStyle()
+    })
   },
   methods: {
     updateClassName () {
       let newClassName = this.rowOptions.className
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed', this.rowOptions.boxed)
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-top', this.rowOptions.absolute === 'top')
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-right', this.rowOptions.absolute === 'right')
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-bottom', this.rowOptions.absolute === 'bottom')
@@ -131,6 +138,7 @@ export default {
 
       this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
       this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
+      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth
     },
     onSubmitElement(widget) {
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
@@ -179,9 +187,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
-$maxWidth: v-bind('defaultOptions.style.maxWidth');
 
 .page-builder-row {
   position: relative;
@@ -192,18 +199,12 @@ $maxWidth: v-bind('defaultOptions.style.maxWidth');
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
-    width: 1200px;
-    @mixin media-query-background($maxWidth) {
-      @media (max-width: $maxWidth) {
-        &.boxedInFullWidthStatus {
-          padding-right: 15px;
-          padding-left: 15px;
-          max-width: 100% !important;
-          width: 100% !important;
-        }
-      }
+    width: 100% !important;
+    &.boxedInFullWidthStatus {
+      padding-right: 15px;
+      padding-left: 15px;
+      max-width: 100% !important;
     }
-
   }
   &.absolute-row {
     position: absolute;
