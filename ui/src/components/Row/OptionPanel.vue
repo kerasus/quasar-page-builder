@@ -33,6 +33,11 @@
                      v-model="localOptions.boxedWidth"
                      label="boxedWidth" />
           </div>
+          <div class="col-md-3" />
+          <div class="col-md-9">
+            <q-input v-model="localOptions.boxedInFullWidthPadding"
+                     label="boxedInFullWidthPadding" />
+          </div>
         </div>
         <div class="row">
           <div class="col-md-3">
@@ -92,6 +97,7 @@ export default defineComponent({
         gutterXSize: 'md',
         gutterYSize: 'md',
         absolute: 'none',
+        boxedInFullWidthPadding: '30px',
         style: {}
       }
     }
