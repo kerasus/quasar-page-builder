@@ -57,6 +57,7 @@ export default {
         gutterXSize: null,
         gutterYSize: null,
         absolute: 'none',
+        paddingOfBoxedInFullWidth: '30px',
         style: {}
       }
     }
@@ -138,7 +139,14 @@ export default {
 
       this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
       this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
-      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth
+      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth + this.getPaddingOfBoxedInFullWidth()
+    },
+    getPaddingOfBoxedInFullWidth() {
+      if (this.rowOptions.paddingOfBoxedInFullWidth && typeof this.rowOptions.paddingOfBoxedInFullWidth === 'string') {
+        return Number(this.rowOptions.paddingOfBoxedInFullWidth.split('px')[0])
+      } else {
+        return 0
+      }
     },
     onSubmitElement(widget) {
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
@@ -201,8 +209,7 @@ export default {
     margin-left: auto;
     width: 100% !important;
     &.boxedInFullWidthStatus {
-      padding-right: 15px;
-      padding-left: 15px;
+      padding: 0 v-bind('rowOptions.paddingOfBoxedInFullWidth');
       max-width: 100% !important;
     }
   }
