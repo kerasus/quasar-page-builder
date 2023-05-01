@@ -139,7 +139,14 @@ export default {
 
       this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
       this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
-      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth + Number(this.rowOptions.paddingOfBoxedInFullWidth.split('px')[0])
+      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth + this.getPaddingOfBoxedInFullWidth()
+    },
+    getPaddingOfBoxedInFullWidth() {
+      if (this.rowOptions.paddingOfBoxedInFullWidth && typeof this.rowOptions.paddingOfBoxedInFullWidth === 'string') {
+        return Number(this.rowOptions.paddingOfBoxedInFullWidth.split('px')[0])
+      } else {
+        return 0
+      }
     },
     onSubmitElement(widget) {
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
