@@ -35,8 +35,8 @@
           </div>
           <div class="col-md-3" />
           <div class="col-md-9">
-            <q-input v-model="localOptions.boxedInFullWidthPadding"
-                     hint="use when box is in full width state"
+            <q-input v-model="localOptions.paddingOfBoxedInFullWidth"
+                     hint="use when box is in full width state (always use with units like px)"
                      label="PaddingOfBoxedState" />
           </div>
         </div>
@@ -98,7 +98,7 @@ export default defineComponent({
         gutterXSize: 'md',
         gutterYSize: 'md',
         absolute: 'none',
-        boxedInFullWidthPadding: '30px',
+        paddingOfBoxedInFullWidth: '30px',
         style: {}
       }
     }
