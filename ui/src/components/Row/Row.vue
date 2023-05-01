@@ -77,7 +77,7 @@ export default {
   },
   watch: {
     rowOptions: {
-      handler(newVal) {
+      handler() {
         this.updateClassName()
         this.updateBoxedStyle()
       },
@@ -93,7 +93,7 @@ export default {
     boxedInFullWidthStatus: {
       handler() {
         this.updateClassName()
-      },
+      }
       // immediate: true
     }
   },
