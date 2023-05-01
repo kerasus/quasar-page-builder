@@ -78,8 +78,6 @@ export default {
   watch: {
     rowOptions: {
       handler(newVal) {
-        console.log(newVal)
-        console.log(this.options)
         this.updateClassName()
         this.updateBoxedStyle()
       },
@@ -127,7 +125,6 @@ export default {
       }
 
       this.rowOptions.className = newClassName
-      console.log(this.rowOptions.className)
     },
     getGutterSize (size, type) {
       return 'q-col-gutter-' + type + '-' + size
