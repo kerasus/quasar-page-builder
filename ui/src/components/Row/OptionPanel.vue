@@ -36,7 +36,8 @@
           <div class="col-md-3" />
           <div class="col-md-9">
             <q-input v-model="localOptions.boxedInFullWidthPadding"
-                     label="boxedInFullWidthPadding" />
+                     hint="use when box is in full width state"
+                     label="PaddingOfBoxedState" />
           </div>
         </div>
         <div class="row">

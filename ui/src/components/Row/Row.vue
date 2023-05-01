@@ -57,7 +57,7 @@ export default {
         gutterXSize: null,
         gutterYSize: null,
         absolute: 'none',
-        boxedInFullWidthPadding: '30px',
+        paddingOfBoxedInFullWidthState: '30px',
         style: {}
       }
     }
@@ -140,7 +140,7 @@ export default {
 
       this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
       this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
-      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth + Number(this.defaultOptions.boxedInFullWidthPadding.split('px')[0])
+      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth + Number(this.defaultOptions.paddingOfBoxedInFullWidthState.split('px')[0])
     },
     onSubmitElement(widget) {
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
@@ -191,7 +191,7 @@ export default {
 
 <style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
-$boxedInFullWidthPadding: v-bind('defaultOptions.boxedInFullWidthPadding');
+$paddingOfBoxedInFullWidthState: v-bind('defaultOptions.paddingOfBoxedInFullWidthState');
 
 .page-builder-row {
   position: relative;
@@ -204,7 +204,7 @@ $boxedInFullWidthPadding: v-bind('defaultOptions.boxedInFullWidthPadding');
     margin-left: auto;
     width: 100% !important;
     &.boxedInFullWidthStatus {
-      padding: 0 $boxedInFullWidthPadding;
+      padding: 0 $paddingOfBoxedInFullWidthState;
       max-width: 100% !important;
     }
   }
