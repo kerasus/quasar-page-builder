@@ -96,7 +96,7 @@ export default {
       handler() {
         this.updateClassName()
       },
-      immediate: true
+      // immediate: true
     }
   },
   created() {
