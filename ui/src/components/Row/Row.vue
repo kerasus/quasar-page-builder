@@ -5,7 +5,7 @@
     <editor-box v-if="editable"
                 :label="'row'"
                 @callAction="callAction" />
-    <div :id="defaultOptions.id"
+    <div :id="rowOptions.id"
          :class="rowElementClass">
       <page-builder-col v-for="(col, colIndex) in cols"
                         :key="'colIndex'+colIndex"
@@ -57,6 +57,7 @@ export default {
         gutterXSize: null,
         gutterYSize: null,
         absolute: 'none',
+        paddingOfBoxedInFullWidth: '30px',
         style: {}
       }
     }
@@ -130,15 +131,23 @@ export default {
     },
     updateBoxedStyle () {
       this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
-      if (!this.defaultOptions.boxed) {
-        this.defaultOptions.style.width = null
-        this.defaultOptions.style.maxWidth = null
+      if (!this.rowOptions.boxed) {
+        this.rowOptions.style.width = null
+        this.rowOptions.style.maxWidth = null
         return
       }
 
-      this.defaultOptions.style.maxWidth = this.defaultOptions.boxedWidth + 'px'
-      this.defaultOptions.style.width = this.defaultOptions.boxedWidth + 'px'
-      this.boxedInFullWidthStatus = this.deviceWidth <= this.defaultOptions.boxedWidth
+      this.rowOptions.style.maxWidth = this.rowOptions.boxedWidth + 'px'
+      this.rowOptions.style.width = this.rowOptions.boxedWidth + 'px'
+      this.boxedInFullWidthStatus = this.deviceWidth <= (Number(this.rowOptions.boxedWidth) + this.getPaddingOfBoxedInFullWidth())
+    },
+    getPaddingOfBoxedInFullWidth() {
+      const padding = this.rowOptions.paddingOfBoxedInFullWidth.split('px')
+      if (padding && padding.length > 0) {
+        return Number(padding[0])
+      } else {
+        return 0
+      }
     },
     onSubmitElement(widget) {
       const widgetData = widget.item.type === 'widget' ? widget.item : widget.item.info
@@ -187,7 +196,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
 
 .page-builder-row {
@@ -199,13 +208,10 @@ export default {
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
-    width: 1200px;
-
+    width: 100%;
     &.boxedInFullWidthStatus {
-      padding-right: 15px;
-      padding-left: 15px;
+      padding: 0 v-bind('rowOptions.paddingOfBoxedInFullWidth');
       max-width: 100% !important;
-      width: 100% !important;
     }
   }
   &.absolute-row {

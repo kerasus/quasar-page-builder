@@ -26,6 +26,27 @@ export default {
                   {
                     widgets: [
                       {
+                        name: 'ButtonWidget',
+                        options: {
+                        }
+                      }
+                    ],
+                    options: {
+                      colNumber: 'col-md-12'
+                    }
+                  }
+                ],
+                options: {
+                  fullHeight: true,
+                  boxed: true,
+                  boxedWidth: 1200
+                }
+              },
+              {
+                cols: [
+                  {
+                    widgets: [
+                      {
                         name: 'TestComponent4Widget'
                       },
                       {
@@ -53,7 +74,7 @@ export default {
                 options: {
                   fullHeight: true,
                   boxed: true,
-                  boxedWidth: 1362
+                  boxedWidth: 1200
                 }
               }
             ]
