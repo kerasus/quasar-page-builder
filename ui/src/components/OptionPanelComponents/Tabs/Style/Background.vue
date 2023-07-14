@@ -97,6 +97,7 @@ import { useQuasar } from 'quasar'
 const components = {}
 export default {
   name: 'Background',
+  components,
   props: {
     value: {
       default: () => {
