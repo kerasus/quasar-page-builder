@@ -50,8 +50,13 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-12">
-          <q-input v-model="localValue.backgroundImage"
-                   label="backgroundImage" />
+          <slot name="backgroundImageSrcInput">
+            <BackgroundImageSrcInput v-if="hasBackgroundImageSrcInputComponent()"
+                                     v-model:value="localValue.backgroundImage" />
+            <q-input v-else
+                     v-model="localValue.backgroundImage"
+                     label="backgroundImage" />
+          </slot>
         </div>
         <div class="col-md-12">
           <q-select v-model="localValue.backgroundPosition"
@@ -87,6 +92,9 @@
 </template>
 
 <script>
+import { useQuasar } from 'quasar'
+
+const components = {}
 export default {
   name: 'Background',
   props: {
@@ -95,6 +103,20 @@ export default {
         return {}
       },
       type: Object
+    }
+  },
+  setup () {
+    const $q = useQuasar()
+    if ($q.$pageBuilderWidgetOptionPanelImageUploader) {
+      components.BackgroundImageSrcInput = $q.$pageBuilderWidgetOptionPanelImageUploader
+    }
+
+    const hasBackgroundImageSrcInputComponent = () => {
+      return !!$q.$pageBuilderWidgetOptionPanelImageUploader
+    }
+
+    return {
+      hasBackgroundImageSrcInputComponent
     }
   },
   computed: {

@@ -6,7 +6,11 @@
                         label="background">
         <q-card>
           <q-card-section>
-            <background v-model:value="localStyles" />
+            <background v-model:value="localStyles">
+              <template #backgroundImageSrcInput>
+                <slot name="backgroundImageSrcInput" />
+              </template>
+            </background>
           </q-card-section>
         </q-card>
       </q-expansion-item>

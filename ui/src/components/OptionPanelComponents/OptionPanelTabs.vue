@@ -25,7 +25,11 @@
       </q-tab-panel>
 
       <q-tab-panel name="style">
-        <style-tab-component v-model:styles="localOptions.style" />
+        <style-tab-component v-model:styles="localOptions.style">
+          <template #backgroundImageSrcInput>
+            <slot name="backgroundImageSrcInput" />
+          </template>
+        </style-tab-component>
       </q-tab-panel>
 
       <q-tab-panel name="other">
