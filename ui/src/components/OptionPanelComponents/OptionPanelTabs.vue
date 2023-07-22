@@ -9,8 +9,8 @@
              label="main" />
       <q-tab name="style"
              label="style" />
-      <q-tab name="other"
-             label="other" />
+      <q-tab name="HoverEffects"
+             label="HoverEffects" />
     </q-tabs>
 
     <q-separator />
@@ -28,22 +28,23 @@
         <style-tab-component v-model:styles="localOptions.style" />
       </q-tab-panel>
 
-      <q-tab-panel name="other">
-        <slot name="other-tab">
-          <div class="text-h6">other</div>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit.
-        </slot>
+      <q-tab-panel name="HoverEffects">
+        <hover-effects v-model:value="localOptions" />
       </q-tab-panel>
     </q-tab-panels>
   </q-card>
 </template>
 
 <script>
+import HoverEffects from './Tabs/HoverEffects.vue'
 import StyleTabComponent from './Tabs/Style/Style.vue'
 
 export default {
   name: 'OptionPanelTabs',
-  components: { StyleTabComponent },
+  components: {
+    HoverEffects,
+    StyleTabComponent
+  },
   props: {
     data: {
       type: Object,

@@ -26,7 +26,7 @@ export default {
                   {
                     widgets: [
                       {
-                        name: 'TestComponent4Widget'
+                        name: 'TestComponent1Widget'
                       },
                       {
                         name: 'TestComponent4Widget'

@@ -46,11 +46,15 @@
 </template>
 
 <script>
-import MarginAndPadding from './MarginAndPadding.vue'
 import Background from './Background.vue'
+import MarginAndPadding from './MarginAndPadding.vue'
+
 export default {
   name: 'StyleTabComponent',
-  components: { Background, MarginAndPadding },
+  components: {
+    Background,
+    MarginAndPadding
+  },
   props: {
     styles: {
       type: Object,
