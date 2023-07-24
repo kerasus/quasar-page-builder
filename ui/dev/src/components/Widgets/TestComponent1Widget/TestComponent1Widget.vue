@@ -74,6 +74,7 @@ export default {
     return {
       defaultOptions: {
         style: {},
+        boxShadows: [],
         cssHoverEffects: {
           transition: {
             time: 0
@@ -90,11 +91,22 @@ export default {
         }
       }
     }
+  },
+  computed: {
+    shadows () {
+      const shadows = []
+      this.localOptions.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+$shadows: v-bind('shadows');
 $skewX: v-bind('localOptions.cssHoverEffects.transform.skewX');
 $skewY: v-bind('localOptions.cssHoverEffects.transform.skewY');
 $rotate: v-bind('localOptions.cssHoverEffects.transform.rotate');
@@ -106,6 +118,9 @@ $transitionTime: v-bind('localOptions.cssHoverEffects.transition.time');
 
 .Test-component1-widget {
   border: solid 1px red;
+  box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
   &:hover {
     transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
     transition: all calc(#{$transitionTime} * 1s);
