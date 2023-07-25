@@ -57,7 +57,18 @@
                 :max="300"
                 :step="1" />
       <div>
+        <q-separator class="q-my-md" />
+        <div>
+          shadow
+        </div>
         <box-shadows v-model:box-shadows="localCssHoverEffects.boxShadows" />
+      </div>
+      <div>
+        <q-separator class="q-my-md" />
+        <div>
+          border
+        </div>
+        <border-style v-model:border-style="localCssHoverEffects.borderStyle" />
       </div>
     </div>
   </div>
@@ -65,10 +76,11 @@
 
 <script>
 import BoxShadows from './BoxShadows/BoxShadows.vue'
+import BorderStyle from './BorderStyle/BorderStyle.vue'
 
 export default {
   name: 'HoverEffects',
-  components: { BoxShadows },
+  components: { BorderStyle, BoxShadows },
   props: {
     cssHoverEffects: {
       default: () => {
@@ -81,6 +93,10 @@ export default {
     return {
       defaultCssHoverEffects: {
         boxShadows: [],
+        borderStyle: {
+          borderCssString: '',
+          borderRadiusCssString: ''
+        },
         transition: {
           time: 0
         },

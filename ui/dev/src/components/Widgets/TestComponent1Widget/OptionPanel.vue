@@ -34,6 +34,10 @@ export default defineComponent({
         },
         cssHoverEffects: {
           boxShadows: [],
+          borderStyle: {
+            borderCssString: '',
+            borderRadiusCssString: ''
+          },
           transition: {
             time: 0
           },

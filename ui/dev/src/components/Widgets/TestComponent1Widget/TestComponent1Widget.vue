@@ -81,6 +81,10 @@ export default {
         },
         cssHoverEffects: {
           boxShadows: [],
+          borderStyle: {
+            borderCssString: '',
+            borderRadiusCssString: ''
+          },
           transition: {
             time: 0
           },
@@ -123,6 +127,9 @@ $shadows: v-bind('shadows');
 $hoverShadows: v-bind('hoverShadows');
 $border: v-bind('localOptions.borderStyle.borderCssString');
 $borderRadius: v-bind('localOptions.borderStyle.borderRadiusCssString');
+$hoverBorder: v-bind('localOptions.cssHoverEffects.borderStyle.borderCssString');
+$hoverBorderRadius: v-bind('localOptions.cssHoverEffects.borderStyle.borderRadiusCssString');
+$skewX: v-bind('localOptions.cssHoverEffects.borderStyle.borderCssString');
 $skewX: v-bind('localOptions.cssHoverEffects.transform.skewX');
 $skewY: v-bind('localOptions.cssHoverEffects.transform.skewY');
 $rotate: v-bind('localOptions.cssHoverEffects.transform.rotate');
@@ -146,6 +153,10 @@ $transitionTime: v-bind('localOptions.cssHoverEffects.transition.time');
     box-shadow: $hoverShadows;
     -webkit-box-shadow: $hoverShadows;
     -moz-box-shadow: $hoverShadows;
+    border-radius: $hoverBorderRadius;
+    -webkit-border-radius: $hoverBorderRadius;
+    -moz-border-radius: $hoverBorderRadius;
+    border: $hoverBorder;
   }
 }
 </style>
