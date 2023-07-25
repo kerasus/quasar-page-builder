@@ -16,6 +16,9 @@
       <q-tab v-if="showBoxShadowsTab"
              name="BoxShadows"
              label="BoxShadows" />
+      <q-tab v-if="showBorderStyleTab"
+             name="Border"
+             label="Border" />
     </q-tabs>
 
     <q-separator />
@@ -48,6 +51,11 @@
         <box-shadows v-model:box-shadows="localOptions.boxShadows" />
       </q-tab-panel>
 
+      <q-tab-panel v-if="showBorderStyleTab"
+                   name="Border">
+        <border-style v-model:border-style="localOptions.borderStyle" />
+      </q-tab-panel>
+
     </q-tab-panels>
   </q-card>
 </template>
@@ -56,16 +64,22 @@
 import HoverEffects from './Tabs/HoverEffects.vue'
 import StyleTabComponent from './Tabs/Style/Style.vue'
 import BoxShadows from './Tabs/BoxShadows/BoxShadows.vue'
+import BorderStyle from './Tabs/BorderStyle/BorderStyle.vue'
 
 export default {
   name: 'OptionPanelTabs',
   components: {
+    BorderStyle,
     BoxShadows,
     HoverEffects,
     StyleTabComponent
   },
   props: {
-    showHoverEffectsTab: {
+    showStyleTab: {
+      type: Boolean,
+      default: true
+    },
+    showBorderStyleTab: {
       type: Boolean,
       default: false
     },
@@ -73,9 +87,9 @@ export default {
       type: Boolean,
       default: false
     },
-    showStyleTab: {
+    showHoverEffectsTab: {
       type: Boolean,
-      default: true
+      default: false
     },
     options: {
       type: Object,

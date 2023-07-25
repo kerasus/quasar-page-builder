@@ -77,6 +77,7 @@ export default {
         boxShadows: [],
         cssHoverEffects: {
           boxShadows: [],
+          borderStyle: {},
           transition: {
             time: 0
           },
