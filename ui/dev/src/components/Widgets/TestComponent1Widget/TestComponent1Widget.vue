@@ -75,9 +75,12 @@ export default {
       defaultOptions: {
         style: {},
         boxShadows: [],
+        borderStyle: {
+          borderCssString: '',
+          borderRadiusCssString: ''
+        },
         cssHoverEffects: {
           boxShadows: [],
-          borderStyle: {},
           transition: {
             time: 0
           },
@@ -118,6 +121,8 @@ export default {
 <style lang="scss" scoped>
 $shadows: v-bind('shadows');
 $hoverShadows: v-bind('hoverShadows');
+$border: v-bind('localOptions.borderStyle.borderCssString');
+$borderRadius: v-bind('localOptions.borderStyle.borderRadiusCssString');
 $skewX: v-bind('localOptions.cssHoverEffects.transform.skewX');
 $skewY: v-bind('localOptions.cssHoverEffects.transform.skewY');
 $rotate: v-bind('localOptions.cssHoverEffects.transform.rotate');
@@ -128,10 +133,13 @@ $translateY: v-bind('localOptions.cssHoverEffects.transform.translateY');
 $transitionTime: v-bind('localOptions.cssHoverEffects.transition.time');
 
 .Test-component1-widget {
-  border: solid 1px red;
   box-shadow: $shadows;
   -webkit-box-shadow: $shadows;
   -moz-box-shadow: $shadows;
+  border-radius: $borderRadius;
+  -webkit-border-radius: $borderRadius;
+  -moz-border-radius: $borderRadius;
+  border: $border;
   &:hover {
     transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
     transition: all calc(#{$transitionTime} * 1s);

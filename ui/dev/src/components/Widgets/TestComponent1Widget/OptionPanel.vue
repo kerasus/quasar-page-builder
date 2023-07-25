@@ -28,7 +28,10 @@ export default defineComponent({
       defaultOptions: {
         style: {},
         boxShadows: [],
-        borderStyle: {},
+        borderStyle: {
+          borderCssString: '',
+          borderRadiusCssString: ''
+        },
         cssHoverEffects: {
           boxShadows: [],
           transition: {
