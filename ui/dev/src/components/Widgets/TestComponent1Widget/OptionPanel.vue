@@ -28,6 +28,7 @@ export default defineComponent({
         style: {},
         boxShadows: [],
         cssHoverEffects: {
+          boxShadows: [],
           transition: {
             time: 0
           },

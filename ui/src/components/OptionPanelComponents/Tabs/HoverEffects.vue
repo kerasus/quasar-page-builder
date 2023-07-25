@@ -56,13 +56,19 @@
                 :min="-300"
                 :max="300"
                 :step="1" />
+      <div>
+        <box-shadows v-model:box-shadows="localCssHoverEffects.boxShadows" />
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import BoxShadows from './BoxShadows/BoxShadows.vue'
+
 export default {
   name: 'HoverEffects',
+  components: { BoxShadows },
   props: {
     cssHoverEffects: {
       default: () => {
@@ -74,6 +80,7 @@ export default {
   data: () => {
     return {
       defaultCssHoverEffects: {
+        boxShadows: [],
         transition: {
           time: 0
         },
