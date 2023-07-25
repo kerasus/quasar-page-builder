@@ -3,8 +3,18 @@
     <div class="col-md-10 col-12">
       <q-expansion-item v-for="(boxShadow, index) in localBoxShadows"
                         :key="index"
-                        expand-separator
-                        :label="'Shadow ' + index">
+                        expand-separator>
+        <template #header>
+          <div class="full-width">
+            <q-btn flat
+                   round
+                   class="q-mr-md"
+                   @click="removeShadow(index)">
+              -
+            </q-btn>
+            {{ 'Shadow ' + (index + 1) }}
+          </div>
+        </template>
         <q-card>
           <q-card-section>
             <shadow-item v-model:box-shadow="localBoxShadows[index]" />
@@ -69,6 +79,9 @@ export default {
         cssString: '',
         inset: false
       })
+    },
+    removeShadow (index) {
+      this.localBoxShadows.splice(index, 1)
     }
   }
 }
