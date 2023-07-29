@@ -41,9 +41,9 @@
 
 <script>
 import mixinWidget from '../mixin/Widgets.js'
-import OptionPanelDialog from './OptionPanelDialog.vue'
 import EditorBox from '../components/EditorBox.vue'
 import PageBuilderSection from './Section/Section.vue'
+import OptionPanelDialog from './OptionPanelDialog.vue'
 
 export default {
   name: 'QPageBuilder',

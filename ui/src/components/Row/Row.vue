@@ -1,5 +1,5 @@
 <template>
-  <div class="page-builder-row"
+  <div class="page-builder-row items-lg-stretch"
        :class="rowClassName"
        :style="rowOptions.style">
     <editor-box v-if="editable"
@@ -58,6 +58,32 @@ export default {
         gutterYSize: null,
         absolute: 'none',
         paddingOfBoxedInFullWidth: '30px',
+        alignment: {
+          justifyContent: {
+            global: null,
+            xl: null,
+            lg: null,
+            md: null,
+            sm: null,
+            xs: null
+          },
+          alignItems: {
+            global: null,
+            xl: null,
+            lg: null,
+            md: null,
+            sm: null,
+            xs: null
+          },
+          alignContent: {
+            global: null,
+            xl: null,
+            lg: null,
+            md: null,
+            sm: null,
+            xs: null
+          }
+        },
         style: {}
       }
     }
@@ -107,6 +133,22 @@ export default {
     })
   },
   methods: {
+    getAlignmentClasses () {
+      const geClassItem = (classItem) => {
+        return (classItem ? classItem + ' ' : '')
+      }
+      const getResponsiveClasses = (object) => {
+        return geClassItem(object.global) +
+            geClassItem(object.xl) +
+            geClassItem(object.lg) +
+            geClassItem(object.md) +
+            geClassItem(object.sm) +
+            geClassItem(object.xs)
+      }
+      return ' ' + getResponsiveClasses(this.rowOptions.alignment.justifyContent) +
+          getResponsiveClasses(this.rowOptions.alignment.alignItems) +
+          getResponsiveClasses(this.rowOptions.alignment.alignContent)
+    },
     updateClassName () {
       let newClassName = this.rowOptions.className
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
@@ -123,6 +165,8 @@ export default {
       if (this.rowOptions.gutterYSize) {
         this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterYSize, 'y'), this.rowOptions.gutterYSize)
       }
+
+      this.rowElementClass += this.getAlignmentClasses()
 
       this.rowOptions.className = newClassName
     },
@@ -220,13 +264,13 @@ export default {
       bottom: 0;
       width: 100%;
       max-width: 100%;
-      min-width: 100%;
+      //min-width: 100%;
     }
     &.absolute-bottom {
       bottom: 0;
       width: 100%;
       max-width: 100%;
-      min-width: 100%;
+      //min-width: 100%;
     }
     &.absolute-right {
       left: 0;
