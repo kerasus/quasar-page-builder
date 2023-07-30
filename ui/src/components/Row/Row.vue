@@ -47,6 +47,170 @@ export default {
       form: {},
       action: '',
       eventCol: {},
+      alignmentOptions: {
+        justifyContent: {
+          global: [
+            null,
+            'justify-start',
+            'justify-center',
+            'justify-end',
+            'justify-between',
+            'justify-around',
+            'justify-evenly'
+          ],
+          xl: [
+            null,
+            'justify-xl-start',
+            'justify-xl-center',
+            'justify-xl-end',
+            'justify-xl-between',
+            'justify-xl-around',
+            'justify-xl-evenly'
+          ],
+          lg: [
+            null,
+            'justify-lg-start',
+            'justify-lg-center',
+            'justify-lg-end',
+            'justify-lg-between',
+            'justify-lg-around',
+            'justify-lg-evenly'
+          ],
+          md: [
+            null,
+            'justify-md-start',
+            'justify-md-center',
+            'justify-md-end',
+            'justify-md-between',
+            'justify-md-around',
+            'justify-md-evenly'
+          ],
+          sm: [
+            null,
+            'justify-sm-start',
+            'justify-sm-center',
+            'justify-sm-end',
+            'justify-sm-between',
+            'justify-sm-around',
+            'justify-sm-evenly'
+          ],
+          xs: [
+            null,
+            'justify-xs-start',
+            'justify-xs-center',
+            'justify-xs-end',
+            'justify-xs-between',
+            'justify-xs-around',
+            'justify-xs-evenly'
+          ]
+        },
+        alignItems: {
+          global: [
+            null,
+            'items-start',
+            'items-center',
+            'items-end',
+            'items-baseline',
+            'items-stretch'
+          ],
+          xl: [
+            null,
+            'items-xl-start',
+            'items-xl-center',
+            'items-xl-end',
+            'items-xl-baseline',
+            'items-xl-stretch'
+          ],
+          lg: [
+            null,
+            'items-lg-start',
+            'items-lg-center',
+            'items-lg-end',
+            'items-lg-baseline',
+            'items-lg-stretch'
+          ],
+          md: [
+            null,
+            'items-md-start',
+            'items-md-center',
+            'items-md-end',
+            'items-md-baseline',
+            'items-md-stretch'
+          ],
+          sm: [
+            null,
+            'items-sm-start',
+            'items-sm-center',
+            'items-sm-end',
+            'items-sm-baseline',
+            'items-sm-stretch'
+          ],
+          xs: [
+            null,
+            'items-xs-start',
+            'items-xs-center',
+            'items-xs-end',
+            'items-xs-baseline',
+            'items-xs-stretch'
+          ]
+        },
+        alignContent: {
+          global: [
+            null,
+            'content-start',
+            'content-center',
+            'content-end',
+            'content-between',
+            'content-around',
+            'content-stretch'
+          ],
+          xl: [
+            null,
+            'content-xl-start',
+            'content-xl-center',
+            'content-xl-end',
+            'content-xl-between',
+            'content-xl-around',
+            'content-xl-stretch'
+          ],
+          lg: [
+            null,
+            'content-lg-start',
+            'content-lg-center',
+            'content-lg-end',
+            'content-lg-between',
+            'content-lg-around',
+            'content-lg-stretch'
+          ],
+          md: [
+            null,
+            'content-md-start',
+            'content-md-center',
+            'content-md-end',
+            'content-md-between',
+            'content-md-around',
+            'content-md-stretch'
+          ],
+          sm: [
+            null,
+            'content-sm-start',
+            'content-sm-center',
+            'content-sm-end',
+            'content-sm-between',
+            'content-sm-around',
+            'content-sm-stretch'
+          ],
+          xs: [
+            null,
+            'content-xs-start',
+            'content-xs-center',
+            'content-xs-end',
+            'content-xs-between',
+            'content-xs-around',
+            'content-xs-stretch'
+          ]
+        }
+      },
       elementFormDialog: false,
       rowElementClass: 'row',
       defaultOptions: {
@@ -149,6 +313,29 @@ export default {
           getResponsiveClasses(this.rowOptions.alignment.alignItems) +
           getResponsiveClasses(this.rowOptions.alignment.alignContent)
     },
+    getRemoveAlignmentClasses (classNames) {
+      let result = classNames
+      const removeByObject = (object) => {
+        const removeArray = (array) => {
+          array.forEach(item => {
+            if (item) {
+              result = result.replaceAll(item, '')
+            }
+          })
+        }
+        removeArray(object.global)
+        removeArray(object.xl)
+        removeArray(object.lg)
+        removeArray(object.md)
+        removeArray(object.sm)
+        removeArray(object.xs)
+      }
+      removeByObject(this.alignmentOptions.justifyContent)
+      removeByObject(this.alignmentOptions.alignItems)
+      removeByObject(this.alignmentOptions.alignContent)
+
+      return result
+    },
     updateClassName () {
       let newClassName = this.rowOptions.className
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
@@ -166,6 +353,8 @@ export default {
         this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterYSize, 'y'), this.rowOptions.gutterYSize)
       }
 
+      this.rowElementClass = this.getRemoveAlignmentClasses(this.rowElementClass)
+      this.rowElementClass = this.rowElementClass.replaceAll('  ', ' ')
       this.rowElementClass += this.getAlignmentClasses()
 
       this.rowOptions.className = newClassName
