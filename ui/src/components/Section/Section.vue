@@ -82,7 +82,6 @@ export default {
   computed: {
     responsiveShow () {
       let responsiveShow = ''
-      debugger
       Object.keys(this.sectionOptions.responsiveShow).forEach(key => {
         if (this.sectionOptions.responsiveShow[key] === false) {
           responsiveShow += key + '-hide '
