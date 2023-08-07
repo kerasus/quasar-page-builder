@@ -370,17 +370,20 @@ $backgrounds: (
   &:hover {
     transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
     transition: all calc(#{$transitionTime} * 1s);
-    @if not $hoverShadows != '' {
+    @if not $hoverShadows {
+    } @else {
       box-shadow: $hoverShadows;
       -webkit-box-shadow: $hoverShadows;
       -moz-box-shadow: $hoverShadows;
     }
     @if not $hoverBorderRadius {
+    } @else {
       border-radius: $hoverBorderRadius;
       -webkit-border-radius: $hoverBorderRadius;
       -moz-border-radius: $hoverBorderRadius;
     }
     @if not $hoverBorder {
+    } @else {
       border: $hoverBorder;
     }
   }
