@@ -1,5 +1,5 @@
 <template>
-  <div class="page-builder-row items-lg-stretch"
+  <div class="page-builder-row"
        :class="rowClassName"
        :style="rowOptions.style">
     <editor-box v-if="editable"
@@ -23,6 +23,7 @@
 import EditorBox from '../EditorBox.vue'
 import PageBuilderCol from '../Col/Col.vue'
 import mixinWidget from '../../mixin/Widgets.js'
+import defaultOptions from './DefaultOptions.js'
 
 export default {
   name: 'PageBuilderRow',
@@ -213,46 +214,37 @@ export default {
       },
       elementFormDialog: false,
       rowElementClass: 'row',
-      defaultOptions: {
-        className: '',
-        height: 'auto',
-        boxed: false,
-        boxedWidth: 1200,
-        gutterXSize: null,
-        gutterYSize: null,
-        absolute: 'none',
-        paddingOfBoxedInFullWidth: '30px',
-        alignment: {
-          justifyContent: {
-            global: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null
-          },
-          alignItems: {
-            global: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null
-          },
-          alignContent: {
-            global: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null
-          }
-        },
-        style: {}
-      }
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    responsiveShow () {
+      let responsiveShow = ''
+      debugger
+      Object.keys(this.rowOptions.responsiveShow).forEach(key => {
+        if (this.rowOptions.responsiveShow[key] === false) {
+          responsiveShow += key + '-hide '
+        }
+      })
+
+      return ' ' + responsiveShow
+    },
+    shadows () {
+      const shadows = []
+      this.rowOptions.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
+    hoverShadows () {
+      const shadows = []
+      this.rowOptions.cssHoverEffects.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
     rowOptions: {
       get() {
         return Object.assign(this.defaultOptions, this.options)
@@ -262,7 +254,7 @@ export default {
       }
     },
     rowClassName () {
-      return this.rowOptions.className
+      return this.rowOptions.className + this.responsiveShow
     }
   },
   watch: {
@@ -432,10 +424,54 @@ export default {
 <style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
 
+$shadows: v-bind('shadows');
+$hoverShadows: v-bind('hoverShadows');
+$border: v-bind('rowOptions.borderStyle.borderCssString');
+$borderRadius: v-bind('rowOptions.borderStyle.borderRadiusCssString');
+$hoverBorder: v-bind('rowOptions.cssHoverEffects.borderStyle.borderCssString');
+$hoverBorderRadius: v-bind('rowOptions.cssHoverEffects.borderStyle.borderRadiusCssString');
+$skewX: v-bind('rowOptions.cssHoverEffects.borderStyle.borderCssString');
+$skewX: v-bind('rowOptions.cssHoverEffects.transform.skewX');
+$skewY: v-bind('rowOptions.cssHoverEffects.transform.skewY');
+$rotate: v-bind('rowOptions.cssHoverEffects.transform.rotate');
+$scaleX: v-bind('rowOptions.cssHoverEffects.transform.scaleX');
+$scaleY: v-bind('rowOptions.cssHoverEffects.transform.scaleY');
+$translateX: v-bind('rowOptions.cssHoverEffects.transform.translateX');
+$translateY: v-bind('rowOptions.cssHoverEffects.transform.translateY');
+$transitionTime: v-bind('rowOptions.cssHoverEffects.transition.time');
+
 .page-builder-row {
   position: relative;
+  box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
+  border-radius: $borderRadius;
+  -webkit-border-radius: $borderRadius;
+  -moz-border-radius: $borderRadius;
+  border: $border;
+  &:hover {
+    transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    transition: all calc(#{$transitionTime} * 1s);
+    @if not $hoverShadows != '' {
+      box-shadow: $hoverShadows;
+      -webkit-box-shadow: $hoverShadows;
+      -moz-box-shadow: $hoverShadows;
+    }
+    @if not $hoverBorderRadius {
+      border-radius: $hoverBorderRadius;
+      -webkit-border-radius: $hoverBorderRadius;
+      -moz-border-radius: $hoverBorderRadius;
+    }
+    @if not $hoverBorder {
+      border: $hoverBorder;
+    }
+  }
   &.editable {
-    border: dashed 2px $primary;
+    @if not $border {
+      border: $border;
+    } @else {
+      border: dashed 2px $primary;
+    }
   }
   &.boxed {
     max-width: 1200px;

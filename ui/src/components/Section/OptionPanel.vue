@@ -1,5 +1,9 @@
 <template>
-  <option-panel-tabs v-model:options="localOptions">
+  <option-panel-tabs v-model:options="localOptions"
+                     :show-border-style-tab="true"
+                     :show-box-shadows-tab="true"
+                     :show-hover-effects-tab="true"
+                     :show-responsive-show="true">
     <template #main-tab>
       <div class="option-panel-container">
         <div class="row">
@@ -144,6 +148,7 @@
 
 <script>
 import { defineComponent } from 'vue'
+import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
 
@@ -156,52 +161,7 @@ export default defineComponent({
       useFullHeight: false,
       backgroundTab: 'md',
       backgroundTabs: ['xs', 'sm', 'md', 'lg'],
-      defaultOptions: {
-        fullHeight: false,
-        backgrounds: {
-          xs: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          sm: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          md: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          lg: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          xl: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          }
-        },
-        verticalAlign: null
-      }
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {

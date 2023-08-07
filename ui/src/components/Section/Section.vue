@@ -20,7 +20,8 @@
 <script>
 import EditorBox from '../EditorBox.vue'
 import PageBuilderRow from '../Row/Row.vue'
-import mixinWidget from '../../mixin/Widgets'
+import defaultOptions from './DefaultOptions.js'
+import mixinWidget from '../../mixin/Widgets.js'
 
 export default {
   name: 'PageBuilderSection',
@@ -71,60 +72,41 @@ export default {
         }
       },
       elementFormDialog: false,
-      defaultOptions: {
-        fullHeight: false,
-        className: '',
-        backgrounds: {
-          xs: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          sm: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          md: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          lg: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          xl: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          }
-        },
-        style: {}
-      },
       windowSize: {
         x: 0,
         y: 0
-      }
+      },
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    responsiveShow () {
+      let responsiveShow = ''
+      debugger
+      Object.keys(this.sectionOptions.responsiveShow).forEach(key => {
+        if (this.sectionOptions.responsiveShow[key] === false) {
+          responsiveShow += key + '-hide '
+        }
+      })
+
+      return ' ' + responsiveShow
+    },
+    shadows() {
+      const shadows = []
+      this.sectionOptions.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
+    hoverShadows() {
+      const shadows = []
+      this.sectionOptions.cssHoverEffects.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
     sectionOptions: {
       get() {
         return Object.assign(this.defaultOptions, this.options)
@@ -134,7 +116,7 @@ export default {
       }
     },
     sectionClassName () {
-      return 'page-builder-section ' + this.sectionOptions.className
+      return 'page-builder-section ' + this.sectionOptions.className + this.responsiveShow
     },
     optionsClassName () {
       return this.sectionOptions.className
@@ -303,6 +285,22 @@ export default {
 
 <style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
+
+$shadows: v-bind('shadows');
+$hoverShadows: v-bind('hoverShadows');
+$border: v-bind('sectionOptions.borderStyle.borderCssString');
+$borderRadius: v-bind('sectionOptions.borderStyle.borderRadiusCssString');
+$hoverBorder: v-bind('sectionOptions.cssHoverEffects.borderStyle.borderCssString');
+$hoverBorderRadius: v-bind('sectionOptions.cssHoverEffects.borderStyle.borderRadiusCssString');
+$skewX: v-bind('sectionOptions.cssHoverEffects.borderStyle.borderCssString');
+$skewX: v-bind('sectionOptions.cssHoverEffects.transform.skewX');
+$skewY: v-bind('sectionOptions.cssHoverEffects.transform.skewY');
+$rotate: v-bind('sectionOptions.cssHoverEffects.transform.rotate');
+$scaleX: v-bind('sectionOptions.cssHoverEffects.transform.scaleX');
+$scaleY: v-bind('sectionOptions.cssHoverEffects.transform.scaleY');
+$translateX: v-bind('sectionOptions.cssHoverEffects.transform.translateX');
+$translateY: v-bind('sectionOptions.cssHoverEffects.transform.translateY');
+$transitionTime: v-bind('sectionOptions.cssHoverEffects.transition.time');
 $backgrounds: (
   xs: (
       size: v-bind('defaultOptions.backgrounds.xs.size'),
@@ -361,8 +359,39 @@ $backgrounds: (
 
 .page-builder-section {
   position: relative;
+  box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
+  border-radius: $borderRadius;
+  -webkit-border-radius: $borderRadius;
+  -moz-border-radius: $borderRadius;
+  border: $border;
+
+  &:hover {
+    transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    transition: all calc(#{$transitionTime} * 1s);
+    @if not $hoverShadows != '' {
+      box-shadow: $hoverShadows;
+      -webkit-box-shadow: $hoverShadows;
+      -moz-box-shadow: $hoverShadows;
+    }
+    @if not $hoverBorderRadius {
+      border-radius: $hoverBorderRadius;
+      -webkit-border-radius: $hoverBorderRadius;
+      -moz-border-radius: $hoverBorderRadius;
+    }
+    @if not $hoverBorder {
+      border: $hoverBorder;
+    }
+  }
+
   &.editable {
     border: dashed 2px $primary;
+    @if not $border {
+      border: $border;
+    } @else {
+      border: dashed 2px $primary;
+    }
   }
 
   &.full-height-section {

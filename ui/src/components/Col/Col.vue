@@ -72,6 +72,7 @@ import { useQuasar } from 'quasar'
 import { computed, ref } from 'vue'
 import EditorBox from '../EditorBox.vue'
 import mixinWidget from '../../mixin/Widgets'
+import defaultOptions from './DefaultOptions.js'
 import PageBuilderWidget from '../Widget/Widget.vue'
 
 export default {
@@ -247,18 +248,41 @@ export default {
   },
   data() {
     return {
-      defaultOptions: {
-        colNumber: 'col',
-        style: {},
-        className: ''
-      }
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    responsiveShow () {
+      let responsiveShow = ''
+      debugger
+      Object.keys(this.colOptions.responsiveShow).forEach(key => {
+        if (this.colOptions.responsiveShow[key] === false) {
+          responsiveShow += key + '-hide '
+        }
+      })
+
+      return ' ' + responsiveShow
+    },
+    shadows() {
+      const shadows = []
+      this.colOptions.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
+    hoverShadows() {
+      const shadows = []
+      this.colOptions.cssHoverEffects.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
     colClassName () {
       const colNumber = this.colNumber ? this.colNumber : ''
 
-      return this.colOptions.className + ' ' + colNumber
+      return this.colOptions.className + ' ' + colNumber + this.responsiveShow
     },
     optionsClassName () {
       return this.colOptions.className
@@ -311,11 +335,55 @@ export default {
 <style scoped lang="scss">
 @import 'quasar/src/css/variables.sass';
 
+$shadows: v-bind('shadows');
+$hoverShadows: v-bind('hoverShadows');
+$border: v-bind('colOptions.borderStyle.borderCssString');
+$borderRadius: v-bind('colOptions.borderStyle.borderRadiusCssString');
+$hoverBorder: v-bind('colOptions.cssHoverEffects.borderStyle.borderCssString');
+$hoverBorderRadius: v-bind('colOptions.cssHoverEffects.borderStyle.borderRadiusCssString');
+$skewX: v-bind('colOptions.cssHoverEffects.borderStyle.borderCssString');
+$skewX: v-bind('colOptions.cssHoverEffects.transform.skewX');
+$skewY: v-bind('colOptions.cssHoverEffects.transform.skewY');
+$rotate: v-bind('colOptions.cssHoverEffects.transform.rotate');
+$scaleX: v-bind('colOptions.cssHoverEffects.transform.scaleX');
+$scaleY: v-bind('colOptions.cssHoverEffects.transform.scaleY');
+$translateX: v-bind('colOptions.cssHoverEffects.transform.translateX');
+$translateY: v-bind('colOptions.cssHoverEffects.transform.translateY');
+$transitionTime: v-bind('colOptions.cssHoverEffects.transition.time');
+
 .page-builder-col {
   position: relative;
+  box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
+  border-radius: $borderRadius;
+  -webkit-border-radius: $borderRadius;
+  -moz-border-radius: $borderRadius;
+  border: $border;
+  &:hover {
+    transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    transition: all calc(#{$transitionTime} * 1s);
+    @if not $hoverShadows != '' {
+      box-shadow: $hoverShadows;
+      -webkit-box-shadow: $hoverShadows;
+      -moz-box-shadow: $hoverShadows;
+    }
+    @if not $hoverBorderRadius {
+      border-radius: $hoverBorderRadius;
+      -webkit-border-radius: $hoverBorderRadius;
+      -moz-border-radius: $hoverBorderRadius;
+    }
+    @if not $hoverBorder {
+      border: $hoverBorder;
+    }
+  }
   &.editable {
     .editable-wrapper {
-      border: dashed 2px $primary;
+      @if not $border {
+        border: $border;
+      } @else {
+        border: dashed 2px $primary;
+      }
     }
   }
 }

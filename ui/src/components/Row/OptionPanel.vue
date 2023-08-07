@@ -1,5 +1,9 @@
 <template>
-  <option-panel-tabs v-model:options="localOptions">
+  <option-panel-tabs v-model:options="localOptions"
+                     :show-border-style-tab="true"
+                     :show-box-shadows-tab="true"
+                     :show-hover-effects-tab="true"
+                     :show-responsive-show="true">
     <template #main-tab>
       <div class="option-panel-container">
         <q-list>
@@ -209,8 +213,10 @@
     </template>
   </option-panel-tabs>
 </template>
+
 <script>
 import { defineComponent } from 'vue'
+import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
 
@@ -405,43 +411,7 @@ export default defineComponent({
           ]
         }
       },
-      defaultOptions: {
-        className: '',
-        height: 'auto',
-        boxed: false,
-        boxedWidth: 1200,
-        gutterXSize: 'md',
-        gutterYSize: 'md',
-        absolute: 'none',
-        paddingOfBoxedInFullWidth: '30px',
-        alignment: {
-          justifyContent: {
-            global: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null
-          },
-          alignItems: {
-            global: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null
-          },
-          alignContent: {
-            global: null,
-            xl: null,
-            lg: null,
-            md: null,
-            sm: null,
-            xs: null
-          }
-        },
-        style: {}
-      }
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   watch: {

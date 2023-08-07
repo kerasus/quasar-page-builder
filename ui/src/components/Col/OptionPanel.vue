@@ -1,5 +1,9 @@
 <template>
-  <option-panel-tabs v-model:options="localOptions">
+  <option-panel-tabs v-model:options="localOptions"
+                     :show-border-style-tab="true"
+                     :show-box-shadows-tab="true"
+                     :show-hover-effects-tab="true"
+                     :show-responsive-show="true">
     <template #main-tab>
       <div class="row">
         <div class="col-12 q-pa-md">
@@ -26,8 +30,10 @@
     </template>
   </option-panel-tabs>
 </template>
+
 <script>
 import { defineComponent } from 'vue'
+import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
 
@@ -38,7 +44,8 @@ export default defineComponent({
   data: () => {
     return {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
-      sizeValue: {}
+      sizeValue: {},
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   created () {

@@ -13,6 +13,9 @@
       <q-tab v-if="showHoverEffectsTab"
              name="HoverEffects"
              label="HoverEffects" />
+      <q-tab v-if="showResponsiveShow"
+             name="ResponsiveShow"
+             label="ResponsiveShow" />
       <q-tab v-if="showBoxShadowsTab"
              name="BoxShadows"
              label="BoxShadows" />
@@ -46,6 +49,11 @@
         <hover-effects v-model:css-hover-effects="localOptions.cssHoverEffects" />
       </q-tab-panel>
 
+      <q-tab-panel v-if="showResponsiveShow"
+                   name="ResponsiveShow">
+        <responsive-show v-model:responsive-show="localOptions.responsiveShow" />
+      </q-tab-panel>
+
       <q-tab-panel v-if="showBoxShadowsTab"
                    name="BoxShadows">
         <box-shadows v-model:box-shadows="localOptions.boxShadows" />
@@ -62,6 +70,7 @@
 
 <script>
 import HoverEffects from './Tabs/HoverEffects.vue'
+import ResponsiveShow from './Tabs/ResponsiveShow.vue'
 import StyleTabComponent from './Tabs/Style/Style.vue'
 import BoxShadows from './Tabs/BoxShadows/BoxShadows.vue'
 import BorderStyle from './Tabs/BorderStyle/BorderStyle.vue'
@@ -72,6 +81,7 @@ export default {
     BorderStyle,
     BoxShadows,
     HoverEffects,
+    ResponsiveShow,
     StyleTabComponent
   },
   props: {
@@ -88,6 +98,10 @@ export default {
       default: false
     },
     showHoverEffectsTab: {
+      type: Boolean,
+      default: false
+    },
+    showResponsiveShow: {
       type: Boolean,
       default: false
     },
