@@ -449,7 +449,10 @@ $transitionTime: v-bind('rowOptions.cssHoverEffects.transition.time');
   -moz-border-radius: $borderRadius;
   border: $border;
   &:hover {
-    transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    @if not $rotate and not $translateX and not $translateY and not $scaleX and not $scaleY and not $skewX and not $skewY  {
+    } @else {
+      transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    }
     transition: all calc(#{$transitionTime} * 1s);
     @if not $hoverShadows {
     } @else {
