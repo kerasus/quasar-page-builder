@@ -8,6 +8,11 @@
                 :min="0"
                 :max="10"
                 :step="0.1" />
+      <q-btn class="full-width q-mb-md"
+             color="primary"
+             @click="resetTransforms">
+        reset transforms
+      </q-btn>
       <div>
         Rotate ({{ localCssHoverEffects.transform.rotate }}deg)
       </div>
@@ -120,6 +125,17 @@ export default {
       set (newValue) {
         this.$emit('update:cssHoverEffects', newValue)
       }
+    }
+  },
+  methods: {
+    resetTransforms () {
+      this.localCssHoverEffects.transform.rotate = null
+      this.localCssHoverEffects.transform.scaleX = null
+      this.localCssHoverEffects.transform.scaleY = null
+      this.localCssHoverEffects.transform.skewX = null
+      this.localCssHoverEffects.transform.skewY = null
+      this.localCssHoverEffects.transform.translateX = null
+      this.localCssHoverEffects.transform.translateY = null
     }
   }
 }

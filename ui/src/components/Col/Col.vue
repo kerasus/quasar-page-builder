@@ -360,8 +360,7 @@ $transitionTime: v-bind('colOptions.cssHoverEffects.transition.time');
   -moz-border-radius: $borderRadius;
   border: $border;
   &:hover {
-    @if $rotate == 0 and $translateX == 0 and $translateY == 0 and $scaleX == 1 and $scaleY == 1 and $skewX == 0 and $skewY == 0 {
-    } @else {
+    @if variable-exists($rotate) or variable-exists($translateX) or variable-exists($translateY) or variable-exists($scaleX) or variable-exists($scaleY) or variable-exists($skewX) or variable-exists($skewY) {
       transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
     }
 

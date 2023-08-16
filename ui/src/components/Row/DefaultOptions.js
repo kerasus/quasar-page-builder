@@ -22,13 +22,13 @@ const defaultOptions = {
       time: 0
     },
     transform: {
-      rotate: 0,
-      scaleX: 1,
-      scaleY: 1,
-      skewX: 0,
-      skewY: 0,
-      translateX: 0,
-      translateY: 0
+      rotate: null,
+      scaleX: null,
+      scaleY: null,
+      skewX: null,
+      skewY: null,
+      translateX: null,
+      translateY: null
     }
   },
   responsiveShow: {
