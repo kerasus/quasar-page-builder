@@ -208,6 +208,10 @@
               </q-card-section>
             </q-card>
           </q-expansion-item>
+          <q-expansion-item expand-separator
+                            label="ResponsiveBackGround">
+            <responsive-back-ground v-model:options="localOptions.backgrounds" />
+          </q-expansion-item>
         </q-list>
       </div>
     </template>
@@ -219,10 +223,11 @@ import { defineComponent } from 'vue'
 import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
+import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround.vue'
 
 export default defineComponent({
   name: 'RowOptionPanel',
-  components: { OptionPanelTabs },
+  components: { ResponsiveBackGround, OptionPanelTabs },
   mixins: [mixinOptionPanel],
   data() {
     return {

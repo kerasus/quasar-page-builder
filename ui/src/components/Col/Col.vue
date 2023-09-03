@@ -332,6 +332,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../Component.scss";
 @import 'quasar/src/css/variables.sass';
 
 $shadows: v-bind('shadows');
@@ -349,6 +350,48 @@ $scaleY: v-bind('colOptions.cssHoverEffects.transform.scaleY');
 $translateX: v-bind('colOptions.cssHoverEffects.transform.translateX');
 $translateY: v-bind('colOptions.cssHoverEffects.transform.translateY');
 $transitionTime: v-bind('colOptions.cssHoverEffects.transition.time');
+$backgrounds: (
+    xs: (
+        size: v-bind('defaultOptions.backgrounds.xs.size'),
+        color: v-bind('defaultOptions.backgrounds.xs.color'),
+        image: v-bind('defaultOptions.backgrounds.xs.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xs.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
+    ),
+    sm: (
+        size: v-bind('defaultOptions.backgrounds.sm.size'),
+        color: v-bind('defaultOptions.backgrounds.sm.color'),
+        image: v-bind('defaultOptions.backgrounds.sm.image'),
+        repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
+        position: v-bind('defaultOptions.backgrounds.sm.position'),
+        attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
+    ),
+    md: (
+        size: v-bind('defaultOptions.backgrounds.md.size'),
+        color: v-bind('defaultOptions.backgrounds.md.color'),
+        image: v-bind('defaultOptions.backgrounds.md.image'),
+        repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
+        position: v-bind('defaultOptions.backgrounds.md.position'),
+        attachment: v-bind('defaultOptions.backgrounds.md.attachment')
+    ),
+    lg: (
+        size: v-bind('defaultOptions.backgrounds.lg.size'),
+        color: v-bind('defaultOptions.backgrounds.lg.color'),
+        image: v-bind('defaultOptions.backgrounds.lg.image'),
+        repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
+        position: v-bind('defaultOptions.backgrounds.lg.position'),
+        attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
+    ),
+    xl: (
+        size: v-bind('defaultOptions.backgrounds.xl.size'),
+        color: v-bind('defaultOptions.backgrounds.xl.color'),
+        image: v-bind('defaultOptions.backgrounds.xl.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xl.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
+    )
+);
 
 .page-builder-col {
   position: relative;
@@ -391,5 +434,6 @@ $transitionTime: v-bind('colOptions.cssHoverEffects.transition.time');
       }
     }
   }
+  @include media-query-backgrounds($backgrounds, $sizes);
 }
 </style>

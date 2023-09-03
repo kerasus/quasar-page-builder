@@ -283,6 +283,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../Component.scss";
 @import 'quasar/src/css/variables.sass';
 
 $shadows: v-bind('shadows');
@@ -342,19 +343,6 @@ $backgrounds: (
       attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
   )
 );
-
-@mixin media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment) {
-  @media (min-width: $min-width) {
-    & {
-      background-size: $size;
-      background-color: $color;
-      background-image: $image;
-      background-repeat: $repeat;
-      background-position: $position;
-      background-attachment: $attachment;
-    }
-  }
-}
 
 .page-builder-section {
   position: relative;
@@ -418,15 +406,6 @@ $backgrounds: (
     justify-content: flex-start;
   }
 
-  @each $name, $min-width in $sizes {
-    $background: map_get($backgrounds, $name);
-    $size: map_get($background, 'size');
-    $color: map_get($background, 'color');
-    $image: map_get($background, 'image');
-    $repeat: map_get($background, 'repeat');
-    $position: map_get($background, 'position');
-    $attachment: map_get($background, 'attachment');
-    @include media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment);
-  }
+  @include media-query-backgrounds($backgrounds, $sizes);
 }
 </style>

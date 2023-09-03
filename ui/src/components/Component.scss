@@ -1,0 +1,25 @@
+@mixin media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment) {
+  @media (min-width: $min-width) {
+    & {
+      background-size: $size;
+      background-color: $color;
+      background-image: $image;
+      background-repeat: $repeat;
+      background-position: $position;
+      background-attachment: $attachment;
+    }
+  }
+}
+
+@mixin media-query-backgrounds($backgrounds, $sizes) {
+  @each $name, $min-width in $sizes {
+    $background: map_get($backgrounds, $name);
+    $size: map_get($background, 'size');
+    $color: map_get($background, 'color');
+    $image: map_get($background, 'image');
+    $repeat: map_get($background, 'repeat');
+    $position: map_get($background, 'position');
+    $attachment: map_get($background, 'attachment');
+    @include media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment);
+  }
+}

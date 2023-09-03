@@ -2,6 +2,48 @@ const defaultOptions = {
   colNumber: 'col',
   style: {},
   boxShadows: [],
+  backgrounds: {
+    xs: {
+      size: null,
+      color: null,
+      image: null,
+      repeat: null,
+      position: null,
+      attachment: null
+    },
+    sm: {
+      size: null,
+      color: null,
+      image: null,
+      repeat: null,
+      position: null,
+      attachment: null
+    },
+    md: {
+      size: null,
+      color: null,
+      image: null,
+      repeat: null,
+      position: null,
+      attachment: null
+    },
+    lg: {
+      size: null,
+      color: null,
+      image: null,
+      repeat: null,
+      position: null,
+      attachment: null
+    },
+    xl: {
+      size: null,
+      color: null,
+      image: null,
+      repeat: null,
+      position: null,
+      attachment: null
+    }
+  },
   borderStyle: {
     borderCssString: '',
     borderRadiusCssString: ''

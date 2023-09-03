@@ -34,111 +34,7 @@
             </q-banner>
           </div>
           <div class="col-12">
-            <q-tabs v-model="backgroundTab"
-                    dense
-                    class="text-grey"
-                    active-color="primary"
-                    indicator-color="primary"
-                    align="justify"
-                    narrow-indicator>
-              <q-tab v-for="backgroundKey in backgroundsKeys"
-                     :key="backgroundKey"
-                     :name="backgroundKey"
-                     :label="backgroundKey" />
-            </q-tabs>
-            <q-separator />
-            <q-tab-panels v-model="backgroundTab"
-                          animated>
-              <q-tab-panel v-for="backgroundKey in backgroundsKeys"
-                           :key="backgroundKey"
-                           :name="backgroundKey">
-                <div class="row q-col-gutter-md">
-                  <div class="col-md-6">
-                    <div class="row">
-                      <div class="col-12">
-                        <q-input v-model="defaultOptions.backgrounds[backgroundKey].color"
-                                 label="backgroundColor">
-                          <template v-slot:append>
-                            <q-icon name="colorize"
-                                    class="cursor-pointer">
-                              <q-popup-proxy cover
-                                             transition-show="scale"
-                                             transition-hide="scale">
-                                <q-color v-model="defaultOptions.backgrounds[backgroundKey].color"
-                                         label="backgroundColor"
-                                         :default-value="'rgba(34,255,0,0.72)'"
-                                         format-model="rgba" />
-                              </q-popup-proxy>
-                            </q-icon>
-                          </template>
-                        </q-input>
-                      </div>
-                      <div class="col-md-12">
-                        <q-select v-model="defaultOptions.backgrounds[backgroundKey].repeat"
-                                  label="backgroundRepeat"
-                                  :options="[
-                                    'no-repeat',
-                                    'repeat',
-                                    'repeat-x',
-                                    'repeat-y',
-                                    'space',
-                                    'round',
-                                    'initial',
-                                    'inherit'
-                                  ]" />
-                      </div>
-                      <div class="col-md-12">
-                        <q-select v-model="defaultOptions.backgrounds[backgroundKey].attachment"
-                                  label="backgroundAttachment"
-                                  :options="[
-                                    'scroll',
-                                    'fixed',
-                                    'local',
-                                    'initial',
-                                    'inherit'
-                                  ]" />
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-md-6">
-                    <div class="row">
-                      <div class="col-12">
-                        <q-input v-model="defaultOptions.backgrounds[backgroundKey].image"
-                                 label="backgroundImage" />
-                      </div>
-                      <div class="col-md-12">
-                        <q-select v-model="defaultOptions.backgrounds[backgroundKey].position"
-                                  label="backgroundPosition"
-                                  :options="[
-                                    'center center',
-                                    'center top',
-                                    'center bottom',
-                                    'left top',
-                                    'left center',
-                                    'left bottom',
-                                    'right top',
-                                    'right center',
-                                    'right bottom'
-                                  ]" />
-                      </div>
-                      <div class="col-md-12">
-                        <q-select v-model="defaultOptions.backgrounds[backgroundKey].size"
-                                  label="backgroundSize"
-                                  :options="[
-                                    'cover',
-                                    'contain',
-                                    'inherit',
-                                    'initial',
-                                    'revert',
-                                    'revert-layer',
-                                    'unset'
-                                  ]" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </q-tab-panel>
-            </q-tab-panels>
+            <responsive-back-ground v-model:options="localOptions.backgrounds" />
           </div>
         </div>
       </div>
@@ -151,22 +47,16 @@ import { defineComponent } from 'vue'
 import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
+import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround.vue'
 
 export default defineComponent({
   name: 'SectionOptionPanel',
-  components: { OptionPanelTabs },
+  components: { OptionPanelTabs, ResponsiveBackGround },
   mixins: [mixinOptionPanel],
   data: () => {
     return {
       useFullHeight: false,
-      backgroundTab: 'md',
-      backgroundTabs: ['xs', 'sm', 'md', 'lg'],
       defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
-    }
-  },
-  computed: {
-    backgroundsKeys () {
-      return Object.keys(this.defaultOptions.backgrounds)
     }
   },
   watch: {
