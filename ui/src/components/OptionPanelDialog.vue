@@ -1,6 +1,7 @@
 <template>
   <q-dialog v-model="showValue"
             class="quasar-page-builder-dialog"
+            :persistent="false"
             @before-show="setTab">
     <q-card class="quasar-page-builder-dialog-card">
       <q-card-section>
@@ -144,39 +145,6 @@ export default defineComponent({
       display: flex;
       flex-flow: row;
       justify-content: space-between;
-    }
-  }
-}
-
-.base-elements-wrapper {
-  display: flex;
-  margin: 10px 40px;
-
-  .base-elements-item {
-    width: 100px;
-    height: 85px;
-    padding: 5px;
-    margin: 10px 15px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-    border: 1px solid $secondary;
-    border-radius: 15px;
-    transition: all .4s ease;
-
-    .base-elements-name {
-      width: 100%;
-      text-align: center;
-      font-size: 10px;
-    }
-
-    &:hover {
-      background: #fefefe;
-      box-shadow: 0 4px 20px 0 #f1f2fa;
-      transform: scale(1.1);
-      transition: all .4s ease;
     }
   }
 }

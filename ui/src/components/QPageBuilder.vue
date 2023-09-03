@@ -16,7 +16,7 @@
                             @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
                             @onDrag="onDrag" />
       <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
-                           :show="optionPanelDialog"
+                           v-model:show="optionPanelDialog"
                            :action-type="selectedNode.event"
                            :widget-name="selectedNode.name"
                            @closeDialog="optionPanelDialog = false"
