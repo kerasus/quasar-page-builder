@@ -22,6 +22,9 @@
       <q-tab v-if="showBorderStyleTab"
              name="Border"
              label="Border" />
+      <q-tab v-if="showResponsiveSpacing"
+             name="ResponsiveSpacing"
+             label="ResponsiveSpacing" />
     </q-tabs>
 
     <q-separator />
@@ -64,6 +67,11 @@
         <border-style v-model:border-style="localOptions.borderStyle" />
       </q-tab-panel>
 
+      <q-tab-panel v-if="showResponsiveSpacing"
+                   name="ResponsiveSpacing">
+        <responsive-spacing v-model:spacing="localOptions.responsiveSpacing" />
+      </q-tab-panel>
+
     </q-tab-panels>
   </q-card>
 </template>
@@ -74,6 +82,7 @@ import ResponsiveShow from './Tabs/ResponsiveShow.vue'
 import StyleTabComponent from './Tabs/Style/Style.vue'
 import BoxShadows from './Tabs/BoxShadows/BoxShadows.vue'
 import BorderStyle from './Tabs/BorderStyle/BorderStyle.vue'
+import ResponsiveSpacing from './Tabs/ResponsiveSpacing/ResponsiveSpacing.vue'
 
 export default {
   name: 'OptionPanelTabs',
@@ -82,6 +91,7 @@ export default {
     BoxShadows,
     HoverEffects,
     ResponsiveShow,
+    ResponsiveSpacing,
     StyleTabComponent
   },
   props: {
@@ -90,6 +100,10 @@ export default {
       default: true
     },
     showBorderStyleTab: {
+      type: Boolean,
+      default: false
+    },
+    showResponsiveSpacing: {
       type: Boolean,
       default: false
     },

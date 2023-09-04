@@ -1,25 +1,46 @@
-@mixin media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment) {
+//  ---------------------- background ------------------------------------
+@mixin media-query-background($min-width, $background) {
   @media (min-width: $min-width) {
     & {
-      background-size: $size;
-      background-color: $color;
-      background-image: $image;
-      background-repeat: $repeat;
-      background-position: $position;
-      background-attachment: $attachment;
+        background-size: map_get($background, 'size');
+        background-color: map_get($background, 'color');
+        background-image: map_get($background, 'image');
+        background-repeat: map_get($background, 'repeat');
+        background-position: map_get($background, 'position');
+        background-attachment: map_get($background, 'attachment');
     }
   }
 }
-
 @mixin media-query-backgrounds($backgrounds, $sizes) {
   @each $name, $min-width in $sizes {
     $background: map_get($backgrounds, $name);
-    $size: map_get($background, 'size');
-    $color: map_get($background, 'color');
-    $image: map_get($background, 'image');
-    $repeat: map_get($background, 'repeat');
-    $position: map_get($background, 'position');
-    $attachment: map_get($background, 'attachment');
-    @include media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment);
+    @include media-query-background($min-width, $background);
   }
 }
+//  ---------------------- background ------------------------------------
+
+//  ---------------------- spacing ---------------------------------------
+@mixin media-query-spacing($min-width, $spacing) {
+  @media (min-width: $min-width) {
+    & {
+      // margin
+        margin-top: map_get($spacing, 'marginTop');
+        margin-left: map_get($spacing, 'marginLeft');
+        margin-right: map_get($spacing, 'marginRight');
+        margin-bottom: map_get($spacing, 'marginBottom');
+
+      //padding
+        padding-top: map_get($spacing, 'paddingTop');
+        padding-left: map_get($spacing, 'paddingLeft');
+        padding-right: map_get($spacing, 'paddingRight');
+        padding-bottom: map_get($spacing, 'paddingBottom');
+    }
+  }
+}
+@mixin media-query-spacings($spacings, $sizes) {
+  @each $name, $min-width in $sizes {
+    $spacing: map_get($spacings, $name);
+    @include media-query-spacing($min-width, $spacing);
+  }
+}
+//  ---------------------- spacing ---------------------------------------
