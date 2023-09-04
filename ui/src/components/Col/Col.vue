@@ -444,6 +444,27 @@ $responsiveSpacing: (
         paddingBottom: v-bind('defaultOptions.responsiveSpacing.xl.paddingBottom'),
     )
 );
+$responsiveOrder: (
+    xs: v-bind('defaultOptions.responsiveOrder.xs'),
+    sm: v-bind('defaultOptions.responsiveOrder.sm'),
+    md: v-bind('defaultOptions.responsiveOrder.md'),
+    lg: v-bind('defaultOptions.responsiveOrder.lg'),
+    xl: v-bind('defaultOptions.responsiveOrder.xl')
+);
+
+@mixin media-query-order($min-width, $order) {
+  @media (min-width: $min-width) {
+    & {
+      order: $order;
+    }
+  }
+}
+@mixin media-query-orders($orders, $sizes) {
+  @each $name, $min-width in $sizes {
+    $order: map_get($orders, $name);
+    @include media-query-order($min-width, $order);
+  }
+}
 
 .page-builder-col {
   position: relative;
@@ -489,5 +510,6 @@ $responsiveSpacing: (
 
   @include media-query-backgrounds($backgrounds, $sizes);
   @include media-query-spacings($responsiveSpacing, $sizes);
+  @include media-query-orders($responsiveOrder, $sizes);
 }
 </style>

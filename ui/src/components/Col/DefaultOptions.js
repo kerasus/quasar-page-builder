@@ -96,6 +96,13 @@ const defaultOptions = {
       paddingBottom: null
     }
   },
+  responsiveOrder: {
+    xs: null,
+    sm: null,
+    md: null,
+    lg: null,
+    xl: null
+  },
   borderStyle: {
     borderCssString: '',
     borderRadiusCssString: ''
