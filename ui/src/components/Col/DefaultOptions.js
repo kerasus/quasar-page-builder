@@ -44,58 +44,6 @@ const defaultOptions = {
       attachment: null
     }
   },
-  responsiveSpacing: {
-    xs: {
-      marginTop: null,
-      marginLeft: null,
-      marginRight: null,
-      marginBottom: null,
-      paddingTop: null,
-      paddingLeft: null,
-      paddingRight: null,
-      paddingBottom: null
-    },
-    sm: {
-      marginTop: null,
-      marginLeft: null,
-      marginRight: null,
-      marginBottom: null,
-      paddingTop: null,
-      paddingLeft: null,
-      paddingRight: null,
-      paddingBottom: null
-    },
-    md: {
-      marginTop: null,
-      marginLeft: null,
-      marginRight: null,
-      marginBottom: null,
-      paddingTop: null,
-      paddingLeft: null,
-      paddingRight: null,
-      paddingBottom: null
-    },
-    lg: {
-      marginTop: null,
-      marginLeft: null,
-      marginRight: null,
-      marginBottom: null,
-      paddingTop: null,
-      paddingLeft: null,
-      paddingRight: null,
-      paddingBottom: null
-    },
-    xl: {
-      marginTop: null,
-      marginLeft: null,
-      marginRight: null,
-      marginBottom: null,
-      paddingTop: null,
-      paddingLeft: null,
-      paddingRight: null,
-      paddingBottom: null
-    }
-  },
   responsiveOrder: {
     xs: null,
     sm: null,

@@ -3,7 +3,6 @@
                      :show-border-style-tab="true"
                      :show-box-shadows-tab="true"
                      :show-hover-effects-tab="true"
-                     :show-responsive-spacing="true"
                      :show-responsive-show="true">
     <template #main-tab>
       <q-expansion-item expand-separator
