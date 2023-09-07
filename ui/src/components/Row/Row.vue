@@ -1,5 +1,6 @@
 <template>
-  <div class="page-builder-row"
+  <div ref="pageBuilderRow"
+       class="page-builder-row"
        :class="rowClassName"
        :style="rowOptions.style">
     <editor-box v-if="editable"
@@ -354,7 +355,9 @@ export default {
       return 'q-col-gutter-' + type + '-' + size
     },
     updateBoxedStyle () {
-      this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
+      // this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
+      const pageBuilderRowWidth = (this.$refs.pageBuilderRow) ? this.$refs.pageBuilderRow.offsetWidth : 1920
+      // pageBuilderRow
       if (!this.rowOptions.boxed) {
         this.rowOptions.style.width = null
         this.rowOptions.style.maxWidth = null
@@ -363,7 +366,8 @@ export default {
 
       this.rowOptions.style.maxWidth = this.rowOptions.boxedWidth + 'px'
       this.rowOptions.style.width = this.rowOptions.boxedWidth + 'px'
-      this.boxedInFullWidthStatus = this.deviceWidth <= (Number(this.rowOptions.boxedWidth) + this.getPaddingOfBoxedInFullWidth())
+      // this.boxedInFullWidthStatus = this.deviceWidth <= (Number(this.rowOptions.boxedWidth) + this.getPaddingOfBoxedInFullWidth())
+      this.boxedInFullWidthStatus = pageBuilderRowWidth <= (Number(this.rowOptions.boxedWidth) + this.getPaddingOfBoxedInFullWidth())
     },
     getPaddingOfBoxedInFullWidth() {
       const padding = this.rowOptions.paddingOfBoxedInFullWidth.split('px')
