@@ -1,5 +1,6 @@
 <template>
   <div :id="sectionOptions.id"
+       class="page-builder-section"
        :class="sectionClassName"
        :style="sectionOptions.style">
     <editor-box v-if="editable"
@@ -115,7 +116,7 @@ export default {
       }
     },
     sectionClassName () {
-      return 'page-builder-section ' + this.sectionOptions.className + this.responsiveShow
+      return this.optionsClassName + this.responsiveShow
     },
     optionsClassName () {
       return this.sectionOptions.className
@@ -189,19 +190,21 @@ export default {
   },
   methods: {
     computeOptionsClassName () {
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-        this.sectionOptions.className, 'vertical-align-center',
-        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
-      )
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-        this.sectionOptions.className, 'vertical-align-start',
-        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
-      )
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-        this.sectionOptions.className, 'vertical-align-end',
-        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
-      )
+      this.$nextTick(() => {
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-center',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
+        )
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-start',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
+        )
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-end',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
+        )
+      })
     },
     Resize(newVal) {
       this.windowSize.x = newVal.width
@@ -302,46 +305,46 @@ $translateX: v-bind('sectionOptions.cssHoverEffects.transform.translateX');
 $translateY: v-bind('sectionOptions.cssHoverEffects.transform.translateY');
 $transitionTime: v-bind('sectionOptions.cssHoverEffects.transition.time');
 $backgrounds: (
-  xs: (
-      size: v-bind('defaultOptions.backgrounds.xs.size'),
-      color: v-bind('defaultOptions.backgrounds.xs.color'),
-      image: v-bind('defaultOptions.backgrounds.xs.image'),
-      repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
-      position: v-bind('defaultOptions.backgrounds.xs.position'),
-      attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
-  ),
-  sm: (
-      size: v-bind('defaultOptions.backgrounds.sm.size'),
-      color: v-bind('defaultOptions.backgrounds.sm.color'),
-      image: v-bind('defaultOptions.backgrounds.sm.image'),
-      repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
-      position: v-bind('defaultOptions.backgrounds.sm.position'),
-      attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
-  ),
-  md: (
-      size: v-bind('defaultOptions.backgrounds.md.size'),
-      color: v-bind('defaultOptions.backgrounds.md.color'),
-      image: v-bind('defaultOptions.backgrounds.md.image'),
-      repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
-      position: v-bind('defaultOptions.backgrounds.md.position'),
-      attachment: v-bind('defaultOptions.backgrounds.md.attachment')
-  ),
-  lg: (
-      size: v-bind('defaultOptions.backgrounds.lg.size'),
-      color: v-bind('defaultOptions.backgrounds.lg.color'),
-      image: v-bind('defaultOptions.backgrounds.lg.image'),
-      repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
-      position: v-bind('defaultOptions.backgrounds.lg.position'),
-      attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
-  ),
-  xl: (
-      size: v-bind('defaultOptions.backgrounds.xl.size'),
-      color: v-bind('defaultOptions.backgrounds.xl.color'),
-      image: v-bind('defaultOptions.backgrounds.xl.image'),
-      repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
-      position: v-bind('defaultOptions.backgrounds.xl.position'),
-      attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
-  )
+    xs: (
+        size: v-bind('defaultOptions.backgrounds.xs.size'),
+        color: v-bind('defaultOptions.backgrounds.xs.color'),
+        image: v-bind('defaultOptions.backgrounds.xs.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xs.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
+    ),
+    sm: (
+        size: v-bind('defaultOptions.backgrounds.sm.size'),
+        color: v-bind('defaultOptions.backgrounds.sm.color'),
+        image: v-bind('defaultOptions.backgrounds.sm.image'),
+        repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
+        position: v-bind('defaultOptions.backgrounds.sm.position'),
+        attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
+    ),
+    md: (
+        size: v-bind('defaultOptions.backgrounds.md.size'),
+        color: v-bind('defaultOptions.backgrounds.md.color'),
+        image: v-bind('defaultOptions.backgrounds.md.image'),
+        repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
+        position: v-bind('defaultOptions.backgrounds.md.position'),
+        attachment: v-bind('defaultOptions.backgrounds.md.attachment')
+    ),
+    lg: (
+        size: v-bind('defaultOptions.backgrounds.lg.size'),
+        color: v-bind('defaultOptions.backgrounds.lg.color'),
+        image: v-bind('defaultOptions.backgrounds.lg.image'),
+        repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
+        position: v-bind('defaultOptions.backgrounds.lg.position'),
+        attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
+    ),
+    xl: (
+        size: v-bind('defaultOptions.backgrounds.xl.size'),
+        color: v-bind('defaultOptions.backgrounds.xl.color'),
+        image: v-bind('defaultOptions.backgrounds.xl.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xl.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
+    )
 );
 $responsiveSpacing: (
     xs: (
