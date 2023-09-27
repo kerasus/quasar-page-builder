@@ -331,7 +331,7 @@ export default {
     updateClassName () {
       let newClassName = this.rowOptions.className
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed', this.rowOptions.boxed)
+      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed rtl-fixed-for-boxed', this.rowOptions.boxed)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-top', this.rowOptions.absolute === 'top')
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-right', this.rowOptions.absolute === 'right')
@@ -576,7 +576,7 @@ $responsiveSpacing: (
       border: dashed 2px $primary;
     }
   }
-  &.boxed {
+  &.boxed.rtl-fixed-for-boxed {
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
