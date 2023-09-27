@@ -337,7 +337,7 @@ export default {
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-right', this.rowOptions.absolute === 'right')
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-bottom', this.rowOptions.absolute === 'bottom')
       newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-left', this.rowOptions.absolute === 'left')
-      this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-(x|y)-(xs|sm|md|lg|xl)/gi, '')
+      this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-([xy])-(xs|sm|md|lg|xl)/gi, '')
       if (this.rowOptions.gutterXSize) {
         this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
       }
@@ -615,10 +615,6 @@ $responsiveSpacing: (
   }
 
   @include media-query-backgrounds($backgrounds, $sizes);
-  //&:not(.boxed) {
-  //  @include media-query-spacings($responsiveSpacing, $sizes);
-  //}
-
   @include media-query-spacings($responsiveSpacing, $sizes);
 }
 </style>
