@@ -611,8 +611,10 @@ $responsiveSpacing: (
   }
 
   @include media-query-backgrounds($backgrounds, $sizes);
-  &:not(.boxed) {
-    @include media-query-spacings($responsiveSpacing, $sizes);
-  }
+  //&:not(.boxed) {
+  //  @include media-query-spacings($responsiveSpacing, $sizes);
+  //}
+
+  @include media-query-spacings($responsiveSpacing, $sizes);
 }
 </style>
