@@ -278,7 +278,7 @@ export default {
               node.data.rows = newNodeObject.data.rows
               node.options = newNodeObject.options
             } else if (selectedNode.name === 'row') {
-              node.data.cols = newNodeObject.data.cols
+              node.cols = newNodeObject.cols
               node.options = newNodeObject.options
             } else if (selectedNode.name === 'col') {
               node.widgets = newNodeObject.widgets
