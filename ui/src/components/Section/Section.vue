@@ -228,6 +228,7 @@ export default {
         name: 'section',
         path
       }
+
       this.$emit('onOptionAction', data)
     },
     onDrag (dragStatus) {
