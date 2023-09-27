@@ -10,8 +10,11 @@
             <template v-if="actionType==='add'">
               widget list
             </template>
-            <template v-if="actionType==='edit'">
+            <template v-else-if="actionType==='edit'">
               {{ optionPanel }}
+            </template>
+            <template v-else-if="actionType==='import'">
+              import to {{ optionPanel }}
             </template>
           </div>
           <div class="close">
@@ -25,8 +28,9 @@
         <component :is="optionPanel"
                    v-if="actionType==='edit' && optionPanel"
                    v-model:options="localWidgetOptions" />
-        <widget-list v-if="actionType==='add' && widgetName==='col'"
+        <widget-list v-else-if="actionType==='add' && widgetName==='col'"
                      @selectWidget="onSelectWidget" />
+        <div v-else-if="actionType==='import'" />
       </q-card-section>
     </q-card>
   </q-dialog>
