@@ -583,6 +583,7 @@ $responsiveSpacing: (
     width: 100%;
     &.boxedInFullWidthStatus {
       padding: 0 v-bind('rowOptions.paddingOfBoxedInFullWidth');
+      @include media-query-spacings($responsiveSpacing, $sizes, true, false);
       max-width: 100% !important;
     }
   }

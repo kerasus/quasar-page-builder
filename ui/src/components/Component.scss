@@ -20,27 +20,39 @@
 //  ---------------------- background ------------------------------------
 
 //  ---------------------- spacing ---------------------------------------
-@mixin media-query-spacing($min-width, $spacing) {
+@mixin spacing-margin($spacing) {
+  // don't use shorthand style. when one of them is not defined, all of them ignored
+  margin-top: map_get($spacing, 'marginTop');
+  margin-left: map_get($spacing, 'marginLeft');
+  margin-right: map_get($spacing, 'marginRight');
+  margin-bottom: map_get($spacing, 'marginBottom');
+}
+@mixin spacing-padding($spacing) {
+  // don't use shorthand style. when one of them is not defined, all of them ignored
+  padding-top: map_get($spacing, 'paddingTop');
+  padding-left: map_get($spacing, 'paddingLeft');
+  padding-right: map_get($spacing, 'paddingRight');
+  padding-bottom: map_get($spacing, 'paddingBottom');
+}
+@mixin media-query-spacing($min-width, $spacing, $hasPadding: true, $hasMargin: true) {
   @media (min-width: $min-width) {
     & {
       // margin
-        margin-top: map_get($spacing, 'marginTop');
-        margin-left: map_get($spacing, 'marginLeft');
-        margin-right: map_get($spacing, 'marginRight');
-        margin-bottom: map_get($spacing, 'marginBottom');
+      @if $hasMargin {
+        @include spacing-margin($spacing);
+      }
 
       //padding
-        padding-top: map_get($spacing, 'paddingTop');
-        padding-left: map_get($spacing, 'paddingLeft');
-        padding-right: map_get($spacing, 'paddingRight');
-        padding-bottom: map_get($spacing, 'paddingBottom');
+      @if $hasPadding {
+        @include spacing-padding($spacing);
+      }
     }
   }
 }
-@mixin media-query-spacings($spacings, $sizes) {
+@mixin media-query-spacings($spacings, $sizes, $hasPadding: true, $hasMargin: true) {
   @each $name, $min-width in $sizes {
     $spacing: map_get($spacings, $name);
-    @include media-query-spacing($min-width, $spacing);
+    @include media-query-spacing($min-width, $spacing, $hasPadding, $hasMargin);
   }
 }
 //  ---------------------- spacing ---------------------------------------
