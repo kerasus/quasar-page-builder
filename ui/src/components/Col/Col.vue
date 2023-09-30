@@ -90,7 +90,7 @@ export default {
       }
     }
   },
-  emits: ['onOptionAction', 'update:options'],
+  emits: ['onOptionAction', 'update:options', 'onDrag'],
   setup(props, { emit }) {
     const $q = useQuasar()
     const computedWidget = computed({
@@ -157,6 +157,7 @@ export default {
       if (!props.editable) {
         return
       }
+      event.stopPropagation()
       emit('onDrag', 'DragStart')
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
@@ -197,11 +198,16 @@ export default {
       if (!props.editable) {
         return
       }
-      const valueStringfied = event.dataTransfer.getData('value')
-      const value = valueStringfied ? JSON.parse(valueStringfied) : null
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
       const widget = value.widget
       const widgetOldIndex = value.widgetIndex
       const widgetNewIndex = newIndex
+      const dragedObjectIsWidget = !!widget.name
+      if (!dragedObjectIsWidget) {
+        event.stopPropagation()
+        return
+      }
       if (localDraggable.value) {
         updatePosition(computedWidget.value, widgetOldIndex, widgetNewIndex)
       } else {

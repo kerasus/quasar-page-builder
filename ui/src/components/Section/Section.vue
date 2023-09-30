@@ -31,7 +31,7 @@ export default {
     PageBuilderRow
   },
   mixins: [mixinWidget],
-  emits: ['onOptionAction', 'update:options'],
+  emits: ['onOptionAction', 'update:options', 'onDrag'],
   data() {
     return {
       defaultBackground: null,

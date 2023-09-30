@@ -2,7 +2,10 @@
   <div ref="pageBuilderRow"
        class="page-builder-row"
        :class="rowClassName"
-       :style="rowOptions.style">
+       :style="rowOptions.style"
+       @dragover="onDragOver"
+       @dragleave="onDragLeave"
+       @drop="onDrop($event, 0, true)">
     <editor-box v-if="editable"
                 :label="'row'"
                 @callAction="callAction" />
@@ -14,8 +17,13 @@
                         v-model:widgets="col.widgets"
                         :editable="editable"
                         :drag-status="dragStatus"
+                        :draggable="editable"
                         @onOptionAction="onOptionAction($event, {widget: col, widgetIndex: colIndex, name: 'col'})"
-                        @onDrag="onDrag" />
+                        @onDrag="onDrag"
+                        @dragstart="onDragStart($event, col, colIndex)"
+                        @dragover="onDragOver"
+                        @dragleave="onDragLeave"
+                        @drop="onDrop($event, colIndex)" />
     </div>
   </div>
 </template>
@@ -41,9 +49,10 @@ export default {
       }
     }
   },
-  emits: ['onOptionAction', 'update:options'],
+  emits: ['onOptionAction', 'update:options', 'update:cols', 'onDrag'],
   data() {
     return {
+      localDraggable: null,
       deviceWidth: 1920,
       boxedInFullWidthStatus: false,
       form: {},
@@ -255,6 +264,14 @@ export default {
     },
     rowClassName () {
       return this.rowOptions.className + this.responsiveShow
+    },
+    computedCol: {
+      get () {
+        return this.cols
+      },
+      set (value) {
+        this.$emit('update:cols', value)
+      }
     }
   },
   watch: {
@@ -419,6 +436,76 @@ export default {
         widgetIndex: data.widgetIndex ? data.widgetIndex : widgetItem.widgetIndex
       }
       this.$emit('onOptionAction', emitData)
+    },
+
+    onDragStart (event, widget, widgetIndex) {
+      if (!this.editable) {
+        return
+      }
+      event.stopPropagation()
+      this.$emit('onDrag', 'DragStart')
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
+      this.localDraggable = event
+      // console.log('onDragStart', event.dataTransfer.getData('value'))
+    },
+    onDragOver (event) {
+      if (!this.editable) {
+        return
+      }
+      event.preventDefault()
+      // console.log('onDragOver', event.dataTransfer.getData('value'))
+    },
+    onDragLeave (event) {
+      // if (!props.editable) {
+      //
+      // }
+      /*
+      ev.target.style.marginTop = '2px'
+      ev.target.style.marginBottom = '2px'
+      */
+      // console.log('onDragLeave', event.dataTransfer.getData('value'))
+    },
+    // dragEnter(ev) {
+    //   /*
+    //   if (ev.clientY > ev.target.height / 2) {
+    //     ev.target.style.marginBottom = '10px'
+    //   } else {
+    //     ev.target.style.marginTop = '10px'
+    //   }
+    //   */
+    // },,
+    onDrop (event, newIndex, parent) {
+      if (!this.editable) {
+        return
+      }
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
+      const widget = value.widget
+      const widgetOldIndex = value.widgetIndex
+      const widgetNewIndex = newIndex
+      if (this.localDraggable) {
+        this.updatePosition(this.computedCol, widgetOldIndex, widgetNewIndex)
+      } else {
+        this.addToIndex(this.computedCol, widget, widgetNewIndex)
+      }
+
+      this.localDraggable = null
+      this.$emit('onDrag', 'Drop')
+      event.stopPropagation()
+    },
+    updatePosition (list, oldIndex, newIndex) {
+      list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+    },
+    addToIndex (list, newItem, index) {
+      if (list.length > index) {
+        list.splice(index, 0, newItem)
+      } else {
+        list.push(newItem)
+      }
+    },
+    removeFromIndex (list, index) {
+      list.splice(index, 1)
     }
   }
 }
