@@ -54,7 +54,7 @@ import { defineComponent } from 'vue'
 import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
-import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround.vue'
+import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround/ResponsiveBackGround.vue'
 
 export default defineComponent({
   name: 'ColOptionPanel',
