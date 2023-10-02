@@ -372,14 +372,16 @@ export default {
       return 'q-col-gutter-' + type + '-' + size
     },
     updateBoxedStyle () {
-      // this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
-      const pageBuilderRowWidth = (this.$refs.pageBuilderRow) ? this.$refs.pageBuilderRow.offsetWidth : 1920
       // pageBuilderRow
-      if (!this.rowOptions.boxed) {
+      if (!this.rowOptions.boxed || this.rowOptions.responsiveBoxedWidth) {
         this.rowOptions.style.width = null
         this.rowOptions.style.maxWidth = null
+        this.boxedInFullWidthStatus = false
         return
       }
+
+      // this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
+      const pageBuilderRowWidth = (this.$refs.pageBuilderRow) ? this.$refs.pageBuilderRow.offsetWidth : 1920
 
       this.rowOptions.style.maxWidth = this.rowOptions.boxedWidth + 'px'
       this.rowOptions.style.width = this.rowOptions.boxedWidth + 'px'
@@ -624,6 +626,40 @@ $responsiveSpacing: (
         paddingBottom: v-bind('defaultOptions.responsiveSpacing.xl.paddingBottom'),
     )
 );
+$responsiveBoxedWidths: (
+    xs: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.xs.width')
+    ),
+    sm: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.sm.width')
+    ),
+    md: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.md.width')
+    ),
+    lg: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.lg.width')
+    ),
+    xl: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.xl.width')
+    )
+);
+
+@mixin media-query-boxed-width($min-width, $responsiveBoxedWidth) {
+  @media (min-width: $min-width) {
+    & {
+      width: map_get($responsiveBoxedWidth, 'width');
+      max-width: map_get($responsiveBoxedWidth, 'width');
+      min-width: map_get($responsiveBoxedWidth, 'width');
+    }
+  }
+}
+
+@mixin media-query-boxed-widths($responsiveBoxedWidths, $sizes) {
+  @each $name, $min-width in $sizes {
+    $responsiveBoxedWidth: map_get($responsiveBoxedWidths, $name);
+    @include media-query-boxed-width($min-width, $responsiveBoxedWidth);
+  }
+}
 
 .page-builder-row {
   position: relative;
@@ -673,6 +709,8 @@ $responsiveSpacing: (
       @include media-query-spacings($responsiveSpacing, $sizes, true, false);
       max-width: 100% !important;
     }
+
+    @include media-query-boxed-widths($responsiveBoxedWidths, $sizes);
   }
   &.absolute-row {
     position: absolute;

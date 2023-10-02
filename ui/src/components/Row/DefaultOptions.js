@@ -3,6 +3,25 @@ const defaultOptions = {
   height: 'auto',
   boxed: false,
   boxedWidth: 1200,
+  paddingOfBoxedInFullWidth: '30px',
+  responsiveBoxedWidth: false,
+  responsiveBoxedWidths: {
+    xs: {
+      width: '360px'
+    },
+    sm: {
+      width: '599px'
+    },
+    md: {
+      width: '1023px'
+    },
+    lg: {
+      width: '1439px'
+    },
+    xl: {
+      width: '1919px'
+    }
+  },
   gutterXSize: null,
   gutterYSize: null,
   absolute: 'none',
@@ -100,7 +119,6 @@ const defaultOptions = {
       paddingBottom: null
     }
   },
-  paddingOfBoxedInFullWidth: '30px',
   boxShadows: [],
   borderStyle: {
     borderCssString: '',
