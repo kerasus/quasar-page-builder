@@ -263,7 +263,8 @@ export default {
       }
     },
     rowClassName () {
-      return this.rowOptions.className + this.responsiveShow
+      const responsiveBoxedWidth = this.rowOptions.responsiveBoxedWidth ? ' responsiveBoxedWidth ' : ''
+      return this.rowOptions.className + this.responsiveShow + responsiveBoxedWidth
     },
     computedCol: {
       get () {
@@ -710,7 +711,9 @@ $responsiveBoxedWidths: (
       max-width: 100% !important;
     }
 
-    @include media-query-boxed-widths($responsiveBoxedWidths, $sizes);
+    &.responsiveBoxedWidth {
+      @include media-query-boxed-widths($responsiveBoxedWidths, $sizes);
+    }
   }
   &.absolute-row {
     position: absolute;
