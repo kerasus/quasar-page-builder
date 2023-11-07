@@ -1,44 +1,71 @@
 <template>
-  <option-panel-tabs v-model:options="localOptions">
+  <option-panel-tabs v-model:options="localOptions"
+                     :show-border-style-tab="true"
+                     :show-box-shadows-tab="true"
+                     :show-hover-effects-tab="true"
+                     :show-responsive-show="true">
     <template #main-tab>
-      <div class="row">
-        <div class="col-12 q-pa-md">
-          <q-list bordered>
-            <q-item v-for="size in sizes"
-                    :key="size">
-              <q-item-section avatar>
-                {{ size }}
-              </q-item-section>
-              <q-item-section>
-                <q-slider v-model="sizeValue[size]"
-                          :min="1"
-                          :max="12"
-                          :step="1"
-                          :label-value="sizeValue[size] ? (sizeValue[size] + '/12') : 0"
-                          label
-                          color="light-green"
-                          @update:modelValue="calcColNumberClass" />
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
-      </div>
+      <q-expansion-item expand-separator
+                        label="Responsive Grid">
+        <q-list bordered>
+          <q-item v-for="size in sizes"
+                  :key="size">
+            <q-item-section avatar>
+              {{ size }}
+            </q-item-section>
+            <q-item-section>
+              <q-slider v-model="sizeValue[size]"
+                        :min="1"
+                        :max="12"
+                        :step="1"
+                        :label-value="sizeValue[size] ? (sizeValue[size] + '/12') : 0"
+                        label
+                        color="light-green"
+                        @update:modelValue="calcColNumberClass" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-expansion-item>
+      <q-expansion-item expand-separator
+                        label="Responsive Order">
+        <q-list bordered>
+          <q-item v-for="size in sizes"
+                  :key="size">
+            <q-item-section avatar>
+              {{ size }}
+            </q-item-section>
+            <q-item-section>
+              <q-input v-model="localOptions.responsiveOrder[size]"
+                       type="number" />
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </q-expansion-item>
+      <q-expansion-item expand-separator
+                        label="Responsive BackGround">
+        <responsive-back-ground v-model:options="localOptions.backgrounds" />
+      </q-expansion-item>
     </template>
   </option-panel-tabs>
 </template>
+
 <script>
 import { defineComponent } from 'vue'
+import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
+import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround/ResponsiveBackGround.vue'
 
 export default defineComponent({
   name: 'ColOptionPanel',
-  components: { OptionPanelTabs },
+  components: { ResponsiveBackGround, OptionPanelTabs },
   mixins: [mixinOptionPanel],
   data: () => {
     return {
       sizes: ['xs', 'sm', 'md', 'lg', 'xl'],
-      sizeValue: {}
+      sizeValue: {},
+      responsiveOrderTab: 'md',
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   created () {

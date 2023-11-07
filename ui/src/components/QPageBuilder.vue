@@ -16,7 +16,7 @@
                             @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
                             @onDrag="onDrag" />
       <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
-                           :show="optionPanelDialog"
+                           v-model:show="optionPanelDialog"
                            :action-type="selectedNode.event"
                            :widget-name="selectedNode.name"
                            @closeDialog="optionPanelDialog = false"
@@ -40,10 +40,11 @@
 </template>
 
 <script>
+import { copyToClipboard } from 'quasar'
 import mixinWidget from '../mixin/Widgets.js'
-import OptionPanelDialog from './OptionPanelDialog.vue'
 import EditorBox from '../components/EditorBox.vue'
 import PageBuilderSection from './Section/Section.vue'
+import OptionPanelDialog from './OptionPanelDialog.vue'
 
 export default {
   name: 'QPageBuilder',
@@ -77,7 +78,7 @@ export default {
       default: false
     }
   },
-  emits: ['toggleEdit', 'update:options'],
+  emits: ['toggleEdit', 'update:options', 'exported', 'notExported'],
   data() {
     return {
       localDragStatus: null,
@@ -194,11 +195,43 @@ export default {
         })
         return
       }
+      if (event === 'export') {
+        this.copyExportedConfig(this.pageBuilderSections)
+        return
+      }
+      if (event === 'import') {
+        const sections = prompt('data: ', '')
+        if (sections != null) {
+          this.pageBuilderSections = JSON.parse(sections)
+        }
+        return
+      }
       this.selectedNode.event = event
       this.selectedNode.name = 'pageBuilder'
       this.selectedNode.widget.name = 'pageBuilder'
       this.selectedNode.widget.options = this.pageBuilderOptions
       this.optionPanelDialog = true
+    },
+    copyExportedConfig (config) {
+      copyToClipboard(JSON.stringify(config))
+        .then(() => {
+          this.$emit('exported', config)
+          if (this.$q.notify) {
+            this.$q.notify({
+              message: 'Copied to the clipboard!',
+              type: 'positive'
+            })
+          }
+        })
+        .catch(() => {
+          this.$emit('notExported', config)
+          if (this.$q.notify) {
+            this.$q.notify({
+              type: 'negative',
+              message: 'Could not copy!'
+            })
+          }
+        })
     },
     onAddWidget (widget) {
       this.actionOnSelectedNode((parent, node, index) => {
@@ -235,6 +268,25 @@ export default {
           parent.splice(index, 1)
         } else if (selectedNode.event === 'duplicate') {
           parent.splice(index, 0, JSON.parse(JSON.stringify(node)))
+        } else if (selectedNode.event === 'export') {
+          this.copyExportedConfig(node)
+        } else if (selectedNode.event === 'import') {
+          const newNode = prompt('data: ', '')
+          if (newNode != null) {
+            const newNodeObject = JSON.parse(newNode)
+            if (selectedNode.name === 'section') {
+              node.data.rows = newNodeObject.data.rows
+              node.options = newNodeObject.options
+            } else if (selectedNode.name === 'row') {
+              node.cols = newNodeObject.cols
+              node.options = newNodeObject.options
+            } else if (selectedNode.name === 'col') {
+              node.widgets = newNodeObject.widgets
+              node.options = newNodeObject.options
+            } else {
+              node.options = newNodeObject.options
+            }
+          }
         }
       })
     },

@@ -1,5 +1,6 @@
 <template>
   <div :id="sectionOptions.id"
+       class="page-builder-section"
        :class="sectionClassName"
        :style="sectionOptions.style">
     <editor-box v-if="editable"
@@ -20,7 +21,8 @@
 <script>
 import EditorBox from '../EditorBox.vue'
 import PageBuilderRow from '../Row/Row.vue'
-import mixinWidget from '../../mixin/Widgets'
+import defaultOptions from './DefaultOptions.js'
+import mixinWidget from '../../mixin/Widgets.js'
 
 export default {
   name: 'PageBuilderSection',
@@ -29,7 +31,7 @@ export default {
     PageBuilderRow
   },
   mixins: [mixinWidget],
-  emits: ['onOptionAction', 'update:options'],
+  emits: ['onOptionAction', 'update:options', 'onDrag'],
   data() {
     return {
       defaultBackground: null,
@@ -71,60 +73,40 @@ export default {
         }
       },
       elementFormDialog: false,
-      defaultOptions: {
-        fullHeight: false,
-        className: '',
-        backgrounds: {
-          xs: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          sm: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          md: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          lg: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          },
-          xl: {
-            size: null,
-            color: null,
-            image: null,
-            repeat: null,
-            position: null,
-            attachment: null
-          }
-        },
-        style: {}
-      },
       windowSize: {
         x: 0,
         y: 0
-      }
+      },
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    responsiveShow () {
+      let responsiveShow = ''
+      Object.keys(this.sectionOptions.responsiveShow).forEach(key => {
+        if (this.sectionOptions.responsiveShow[key] === false) {
+          responsiveShow += key + '-hide '
+        }
+      })
+
+      return ' ' + responsiveShow
+    },
+    shadows() {
+      const shadows = []
+      this.sectionOptions.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
+    hoverShadows() {
+      const shadows = []
+      this.sectionOptions.cssHoverEffects.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
     sectionOptions: {
       get() {
         return Object.assign(this.defaultOptions, this.options)
@@ -134,7 +116,7 @@ export default {
       }
     },
     sectionClassName () {
-      return 'page-builder-section ' + this.sectionOptions.className
+      return this.optionsClassName + this.responsiveShow
     },
     optionsClassName () {
       return this.sectionOptions.className
@@ -208,19 +190,21 @@ export default {
   },
   methods: {
     computeOptionsClassName () {
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-        this.sectionOptions.className, 'vertical-align-center',
-        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
-      )
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-        this.sectionOptions.className, 'vertical-align-start',
-        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
-      )
-      this.sectionOptions.className = this.getUpdateClassNamesWithKey(
-        this.sectionOptions.className, 'vertical-align-end',
-        !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
-      )
+      this.$nextTick(() => {
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(this.sectionOptions.className, 'editable', this.editable)
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-center',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'center'
+        )
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-start',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'start'
+        )
+        this.sectionOptions.className = this.getUpdateClassNamesWithKey(
+          this.sectionOptions.className, 'vertical-align-end',
+          !!this.sectionOptions.fullHeight && this.sectionOptions.verticalAlign === 'end'
+        )
+      })
     },
     Resize(newVal) {
       this.windowSize.x = newVal.width
@@ -244,6 +228,7 @@ export default {
         name: 'section',
         path
       }
+
       this.$emit('onOptionAction', data)
     },
     onDrag (dragStatus) {
@@ -302,67 +287,159 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../Component.scss";
 @import 'quasar/src/css/variables.sass';
-$backgrounds: (
-  xs: (
-      size: v-bind('defaultOptions.backgrounds.xs.size'),
-      color: v-bind('defaultOptions.backgrounds.xs.color'),
-      image: v-bind('defaultOptions.backgrounds.xs.image'),
-      repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
-      position: v-bind('defaultOptions.backgrounds.xs.position'),
-      attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
-  ),
-  sm: (
-      size: v-bind('defaultOptions.backgrounds.sm.size'),
-      color: v-bind('defaultOptions.backgrounds.sm.color'),
-      image: v-bind('defaultOptions.backgrounds.sm.image'),
-      repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
-      position: v-bind('defaultOptions.backgrounds.sm.position'),
-      attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
-  ),
-  md: (
-      size: v-bind('defaultOptions.backgrounds.md.size'),
-      color: v-bind('defaultOptions.backgrounds.md.color'),
-      image: v-bind('defaultOptions.backgrounds.md.image'),
-      repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
-      position: v-bind('defaultOptions.backgrounds.md.position'),
-      attachment: v-bind('defaultOptions.backgrounds.md.attachment')
-  ),
-  lg: (
-      size: v-bind('defaultOptions.backgrounds.lg.size'),
-      color: v-bind('defaultOptions.backgrounds.lg.color'),
-      image: v-bind('defaultOptions.backgrounds.lg.image'),
-      repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
-      position: v-bind('defaultOptions.backgrounds.lg.position'),
-      attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
-  ),
-  xl: (
-      size: v-bind('defaultOptions.backgrounds.xl.size'),
-      color: v-bind('defaultOptions.backgrounds.xl.color'),
-      image: v-bind('defaultOptions.backgrounds.xl.image'),
-      repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
-      position: v-bind('defaultOptions.backgrounds.xl.position'),
-      attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
-  )
-);
 
-@mixin media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment) {
-  @media (min-width: $min-width) {
-    & {
-      background-size: $size;
-      background-color: $color;
-      background-image: $image;
-      background-repeat: $repeat;
-      background-position: $position;
-      background-attachment: $attachment;
-    }
-  }
-}
+$shadows: v-bind('shadows');
+$hoverShadows: v-bind('hoverShadows');
+$border: v-bind('sectionOptions.borderStyle.borderCssString');
+$borderRadius: v-bind('sectionOptions.borderStyle.borderRadiusCssString');
+$hoverBorder: v-bind('sectionOptions.cssHoverEffects.borderStyle.borderCssString');
+$hoverBorderRadius: v-bind('sectionOptions.cssHoverEffects.borderStyle.borderRadiusCssString');
+$skewX: v-bind('sectionOptions.cssHoverEffects.borderStyle.borderCssString');
+$skewX: v-bind('sectionOptions.cssHoverEffects.transform.skewX');
+$skewY: v-bind('sectionOptions.cssHoverEffects.transform.skewY');
+$rotate: v-bind('sectionOptions.cssHoverEffects.transform.rotate');
+$scaleX: v-bind('sectionOptions.cssHoverEffects.transform.scaleX');
+$scaleY: v-bind('sectionOptions.cssHoverEffects.transform.scaleY');
+$translateX: v-bind('sectionOptions.cssHoverEffects.transform.translateX');
+$translateY: v-bind('sectionOptions.cssHoverEffects.transform.translateY');
+$transitionTime: v-bind('sectionOptions.cssHoverEffects.transition.time');
+$backgrounds: (
+    xs: (
+        size: v-bind('defaultOptions.backgrounds.xs.size'),
+        color: v-bind('defaultOptions.backgrounds.xs.color'),
+        image: v-bind('defaultOptions.backgrounds.xs.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xs.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
+    ),
+    sm: (
+        size: v-bind('defaultOptions.backgrounds.sm.size'),
+        color: v-bind('defaultOptions.backgrounds.sm.color'),
+        image: v-bind('defaultOptions.backgrounds.sm.image'),
+        repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
+        position: v-bind('defaultOptions.backgrounds.sm.position'),
+        attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
+    ),
+    md: (
+        size: v-bind('defaultOptions.backgrounds.md.size'),
+        color: v-bind('defaultOptions.backgrounds.md.color'),
+        image: v-bind('defaultOptions.backgrounds.md.image'),
+        repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
+        position: v-bind('defaultOptions.backgrounds.md.position'),
+        attachment: v-bind('defaultOptions.backgrounds.md.attachment')
+    ),
+    lg: (
+        size: v-bind('defaultOptions.backgrounds.lg.size'),
+        color: v-bind('defaultOptions.backgrounds.lg.color'),
+        image: v-bind('defaultOptions.backgrounds.lg.image'),
+        repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
+        position: v-bind('defaultOptions.backgrounds.lg.position'),
+        attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
+    ),
+    xl: (
+        size: v-bind('defaultOptions.backgrounds.xl.size'),
+        color: v-bind('defaultOptions.backgrounds.xl.color'),
+        image: v-bind('defaultOptions.backgrounds.xl.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xl.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
+    )
+);
+$responsiveSpacing: (
+    xs: (
+        marginTop: v-bind('defaultOptions.responsiveSpacing.xs.marginTop'),
+        marginLeft: v-bind('defaultOptions.responsiveSpacing.xs.marginLeft'),
+        marginRight: v-bind('defaultOptions.responsiveSpacing.xs.marginRight'),
+        marginBottom: v-bind('defaultOptions.responsiveSpacing.xs.marginBottom'),
+        paddingTop: v-bind('defaultOptions.responsiveSpacing.xs.paddingTop'),
+        paddingLeft: v-bind('defaultOptions.responsiveSpacing.xs.paddingLeft'),
+        paddingRight: v-bind('defaultOptions.responsiveSpacing.xs.paddingRight'),
+        paddingBottom: v-bind('defaultOptions.responsiveSpacing.xs.paddingBottom'),
+    ),
+    sm: (
+        marginTop: v-bind('defaultOptions.responsiveSpacing.sm.marginTop'),
+        marginLeft: v-bind('defaultOptions.responsiveSpacing.sm.marginLeft'),
+        marginRight: v-bind('defaultOptions.responsiveSpacing.sm.marginRight'),
+        marginBottom: v-bind('defaultOptions.responsiveSpacing.sm.marginBottom'),
+        paddingTop: v-bind('defaultOptions.responsiveSpacing.sm.paddingTop'),
+        paddingLeft: v-bind('defaultOptions.responsiveSpacing.sm.paddingLeft'),
+        paddingRight: v-bind('defaultOptions.responsiveSpacing.sm.paddingRight'),
+        paddingBottom: v-bind('defaultOptions.responsiveSpacing.sm.paddingBottom'),
+    ),
+    md: (
+        marginTop: v-bind('defaultOptions.responsiveSpacing.md.marginTop'),
+        marginLeft: v-bind('defaultOptions.responsiveSpacing.md.marginLeft'),
+        marginRight: v-bind('defaultOptions.responsiveSpacing.md.marginRight'),
+        marginBottom: v-bind('defaultOptions.responsiveSpacing.md.marginBottom'),
+        paddingTop: v-bind('defaultOptions.responsiveSpacing.md.paddingTop'),
+        paddingLeft: v-bind('defaultOptions.responsiveSpacing.md.paddingLeft'),
+        paddingRight: v-bind('defaultOptions.responsiveSpacing.md.paddingRight'),
+        paddingBottom: v-bind('defaultOptions.responsiveSpacing.md.paddingBottom'),
+    ),
+    lg: (
+        marginTop: v-bind('defaultOptions.responsiveSpacing.lg.marginTop'),
+        marginLeft: v-bind('defaultOptions.responsiveSpacing.lg.marginLeft'),
+        marginRight: v-bind('defaultOptions.responsiveSpacing.lg.marginRight'),
+        marginBottom: v-bind('defaultOptions.responsiveSpacing.lg.marginBottom'),
+        paddingTop: v-bind('defaultOptions.responsiveSpacing.lg.paddingTop'),
+        paddingLeft: v-bind('defaultOptions.responsiveSpacing.lg.paddingLeft'),
+        paddingRight: v-bind('defaultOptions.responsiveSpacing.lg.paddingRight'),
+        paddingBottom: v-bind('defaultOptions.responsiveSpacing.lg.paddingBottom'),
+    ),
+    xl: (
+        marginTop: v-bind('defaultOptions.responsiveSpacing.xl.marginTop'),
+        marginLeft: v-bind('defaultOptions.responsiveSpacing.xl.marginLeft'),
+        marginRight: v-bind('defaultOptions.responsiveSpacing.xl.marginRight'),
+        marginBottom: v-bind('defaultOptions.responsiveSpacing.xl.marginBottom'),
+        paddingTop: v-bind('defaultOptions.responsiveSpacing.xl.paddingTop'),
+        paddingLeft: v-bind('defaultOptions.responsiveSpacing.xl.paddingLeft'),
+        paddingRight: v-bind('defaultOptions.responsiveSpacing.xl.paddingRight'),
+        paddingBottom: v-bind('defaultOptions.responsiveSpacing.xl.paddingBottom'),
+    )
+);
 
 .page-builder-section {
   position: relative;
+  box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
+  border-radius: $borderRadius;
+  -webkit-border-radius: $borderRadius;
+  -moz-border-radius: $borderRadius;
+  border: $border;
+
+  &:hover {
+    @if variable-exists($rotate) or variable-exists($translateX) or variable-exists($translateY) or variable-exists($scaleX) or variable-exists($scaleY) or variable-exists($skewX) or variable-exists($skewY) {
+      transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    }
+    transition: all calc(#{$transitionTime} * 1s);
+    @if not $hoverShadows {
+    } @else {
+      box-shadow: $hoverShadows;
+      -webkit-box-shadow: $hoverShadows;
+      -moz-box-shadow: $hoverShadows;
+    }
+    @if not $hoverBorderRadius {
+    } @else {
+      border-radius: $hoverBorderRadius;
+      -webkit-border-radius: $hoverBorderRadius;
+      -moz-border-radius: $hoverBorderRadius;
+    }
+    @if not $hoverBorder {
+    } @else {
+      border: $hoverBorder;
+    }
+  }
+
   &.editable {
     border: dashed 2px $primary;
+    @if not $border {
+      border: $border;
+    } @else {
+      border: dashed 2px $primary;
+    }
   }
 
   &.full-height-section {
@@ -385,15 +462,7 @@ $backgrounds: (
     justify-content: flex-start;
   }
 
-  @each $name, $min-width in $sizes {
-    $background: map_get($backgrounds, $name);
-    $size: map_get($background, 'size');
-    $color: map_get($background, 'color');
-    $image: map_get($background, 'image');
-    $repeat: map_get($background, 'repeat');
-    $position: map_get($background, 'position');
-    $attachment: map_get($background, 'attachment');
-    @include media-query-background($min-width, $size, $color, $image, $repeat, $position, $attachment);
-  }
+  @include media-query-backgrounds($backgrounds, $sizes);
+  @include media-query-spacings($responsiveSpacing, $sizes);
 }
 </style>

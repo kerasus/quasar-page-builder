@@ -3,7 +3,7 @@
     <div class="col-md-6">
       <div class="row">
         <div class="col-12">
-          <q-input v-model="localValue.backgroundColor"
+          <q-input v-model="localValue.color"
                    label="backgroundColor">
             <template v-slot:append>
               <q-icon name="colorize"
@@ -11,7 +11,7 @@
                 <q-popup-proxy cover
                                transition-show="scale"
                                transition-hide="scale">
-                  <q-color v-model="localValue.backgroundColor"
+                  <q-color v-model="localValue.color"
                            label="backgroundColor"
                            :default-value="'rgba(34,255,0,0.72)'"
                            format-model="rgba" />
@@ -21,7 +21,7 @@
           </q-input>
         </div>
         <div class="col-md-12">
-          <q-select v-model="localValue.backgroundRepeat"
+          <q-select v-model="localValue.repeat"
                     label="backgroundRepeat"
                     :options="[
                       'no-repeat',
@@ -35,7 +35,7 @@
                     ]" />
         </div>
         <div class="col-md-12">
-          <q-select v-model="localValue.backgroundAttachment"
+          <q-select v-model="localValue.attachment"
                     label="backgroundAttachment"
                     :options="[
                       'scroll',
@@ -52,14 +52,14 @@
         <div class="col-12">
           <slot name="backgroundImageSrcInput">
             <BackgroundImageSrcInput v-if="hasBackgroundImageSrcInputComponent()"
-                                     v-model:value="localValue.backgroundImage" />
+                                     v-model:value="localValue.image" />
             <q-input v-else
-                     v-model="localValue.backgroundImage"
+                     v-model="localValue.image"
                      label="backgroundImage" />
           </slot>
         </div>
         <div class="col-md-12">
-          <q-select v-model="localValue.backgroundPosition"
+          <q-select v-model="localValue.position"
                     label="backgroundPosition"
                     :options="[
                       'center center',
@@ -74,7 +74,7 @@
                     ]" />
         </div>
         <div class="col-md-12">
-          <q-select v-model="localValue.backgroundSize"
+          <q-select v-model="localValue.size"
                     label="backgroundSize"
                     :options="[
                       'cover',

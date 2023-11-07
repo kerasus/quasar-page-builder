@@ -72,6 +72,7 @@ import { useQuasar } from 'quasar'
 import { computed, ref } from 'vue'
 import EditorBox from '../EditorBox.vue'
 import mixinWidget from '../../mixin/Widgets'
+import defaultOptions from './DefaultOptions.js'
 import PageBuilderWidget from '../Widget/Widget.vue'
 
 export default {
@@ -89,7 +90,7 @@ export default {
       }
     }
   },
-  emits: ['onOptionAction', 'update:options'],
+  emits: ['onOptionAction', 'update:options', 'onDrag'],
   setup(props, { emit }) {
     const $q = useQuasar()
     const computedWidget = computed({
@@ -156,6 +157,7 @@ export default {
       if (!props.editable) {
         return
       }
+      event.stopPropagation()
       emit('onDrag', 'DragStart')
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
@@ -196,11 +198,16 @@ export default {
       if (!props.editable) {
         return
       }
-      const valueStringfied = event.dataTransfer.getData('value')
-      const value = valueStringfied ? JSON.parse(valueStringfied) : null
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
       const widget = value.widget
       const widgetOldIndex = value.widgetIndex
       const widgetNewIndex = newIndex
+      const dragedObjectIsWidget = !!widget.name
+      if (!dragedObjectIsWidget) {
+        event.stopPropagation()
+        return
+      }
       if (localDraggable.value) {
         updatePosition(computedWidget.value, widgetOldIndex, widgetNewIndex)
       } else {
@@ -247,18 +254,40 @@ export default {
   },
   data() {
     return {
-      defaultOptions: {
-        colNumber: 'col',
-        style: {},
-        className: ''
-      }
+      defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    responsiveShow () {
+      let responsiveShow = ''
+      Object.keys(this.colOptions.responsiveShow).forEach(key => {
+        if (this.colOptions.responsiveShow[key] === false) {
+          responsiveShow += key + '-hide '
+        }
+      })
+
+      return ' ' + responsiveShow
+    },
+    shadows() {
+      const shadows = []
+      this.colOptions.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
+    hoverShadows() {
+      const shadows = []
+      this.colOptions.cssHoverEffects.boxShadows.forEach(shadow => {
+        shadows.push(shadow.cssString)
+      })
+
+      return shadows.join(', ')
+    },
     colClassName () {
       const colNumber = this.colNumber ? this.colNumber : ''
 
-      return this.colOptions.className + ' ' + colNumber
+      return this.colOptions.className + ' ' + colNumber + this.responsiveShow
     },
     optionsClassName () {
       return this.colOptions.className
@@ -309,14 +338,131 @@ export default {
 </script>
 
 <style scoped lang="scss">
+@import "../Component.scss";
 @import 'quasar/src/css/variables.sass';
+
+$shadows: v-bind('shadows');
+$hoverShadows: v-bind('hoverShadows');
+$border: v-bind('colOptions.borderStyle.borderCssString');
+$borderRadius: v-bind('colOptions.borderStyle.borderRadiusCssString');
+$hoverBorder: v-bind('colOptions.cssHoverEffects.borderStyle.borderCssString');
+$hoverBorderRadius: v-bind('colOptions.cssHoverEffects.borderStyle.borderRadiusCssString');
+$skewX: v-bind('colOptions.cssHoverEffects.borderStyle.borderCssString');
+$skewX: v-bind('colOptions.cssHoverEffects.transform.skewX');
+$skewY: v-bind('colOptions.cssHoverEffects.transform.skewY');
+$rotate: v-bind('colOptions.cssHoverEffects.transform.rotate');
+$scaleX: v-bind('colOptions.cssHoverEffects.transform.scaleX');
+$scaleY: v-bind('colOptions.cssHoverEffects.transform.scaleY');
+$translateX: v-bind('colOptions.cssHoverEffects.transform.translateX');
+$translateY: v-bind('colOptions.cssHoverEffects.transform.translateY');
+$transitionTime: v-bind('colOptions.cssHoverEffects.transition.time');
+$backgrounds: (
+    xs: (
+        size: v-bind('defaultOptions.backgrounds.xs.size'),
+        color: v-bind('defaultOptions.backgrounds.xs.color'),
+        image: v-bind('defaultOptions.backgrounds.xs.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xs.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xs.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xs.attachment')
+    ),
+    sm: (
+        size: v-bind('defaultOptions.backgrounds.sm.size'),
+        color: v-bind('defaultOptions.backgrounds.sm.color'),
+        image: v-bind('defaultOptions.backgrounds.sm.image'),
+        repeat: v-bind('defaultOptions.backgrounds.sm.repeat'),
+        position: v-bind('defaultOptions.backgrounds.sm.position'),
+        attachment: v-bind('defaultOptions.backgrounds.sm.attachment')
+    ),
+    md: (
+        size: v-bind('defaultOptions.backgrounds.md.size'),
+        color: v-bind('defaultOptions.backgrounds.md.color'),
+        image: v-bind('defaultOptions.backgrounds.md.image'),
+        repeat: v-bind('defaultOptions.backgrounds.md.repeat'),
+        position: v-bind('defaultOptions.backgrounds.md.position'),
+        attachment: v-bind('defaultOptions.backgrounds.md.attachment')
+    ),
+    lg: (
+        size: v-bind('defaultOptions.backgrounds.lg.size'),
+        color: v-bind('defaultOptions.backgrounds.lg.color'),
+        image: v-bind('defaultOptions.backgrounds.lg.image'),
+        repeat: v-bind('defaultOptions.backgrounds.lg.repeat'),
+        position: v-bind('defaultOptions.backgrounds.lg.position'),
+        attachment: v-bind('defaultOptions.backgrounds.lg.attachment')
+    ),
+    xl: (
+        size: v-bind('defaultOptions.backgrounds.xl.size'),
+        color: v-bind('defaultOptions.backgrounds.xl.color'),
+        image: v-bind('defaultOptions.backgrounds.xl.image'),
+        repeat: v-bind('defaultOptions.backgrounds.xl.repeat'),
+        position: v-bind('defaultOptions.backgrounds.xl.position'),
+        attachment: v-bind('defaultOptions.backgrounds.xl.attachment')
+    )
+);
+$responsiveOrder: (
+    xs: v-bind('defaultOptions.responsiveOrder.xs'),
+    sm: v-bind('defaultOptions.responsiveOrder.sm'),
+    md: v-bind('defaultOptions.responsiveOrder.md'),
+    lg: v-bind('defaultOptions.responsiveOrder.lg'),
+    xl: v-bind('defaultOptions.responsiveOrder.xl')
+);
+
+@mixin media-query-order($min-width, $order) {
+  @media (min-width: $min-width) {
+    & {
+      order: $order;
+    }
+  }
+}
+@mixin media-query-orders($orders, $sizes) {
+  @each $name, $min-width in $sizes {
+    $order: map_get($orders, $name);
+    @include media-query-order($min-width, $order);
+  }
+}
 
 .page-builder-col {
   position: relative;
-  &.editable {
-    .editable-wrapper {
-      border: dashed 2px $primary;
+  box-shadow: $shadows;
+  -webkit-box-shadow: $shadows;
+  -moz-box-shadow: $shadows;
+  border-radius: $borderRadius;
+  -webkit-border-radius: $borderRadius;
+  -moz-border-radius: $borderRadius;
+  border: $border;
+  &:hover {
+    @if variable-exists($rotate) or variable-exists($translateX) or variable-exists($translateY) or variable-exists($scaleX) or variable-exists($scaleY) or variable-exists($skewX) or variable-exists($skewY) {
+      transform: rotate(calc(#{$rotate} * 1deg)) translate(calc(#{$translateX} * 1px), calc(#{$translateY} * 1px)) scale($scaleX, $scaleY) skew(calc(#{$skewX} * 1deg), calc(#{$skewY} * 1deg));
+    }
+
+    transition: all calc(#{$transitionTime} * 1s);
+    @if not $hoverShadows {
+    } @else {
+      box-shadow: $hoverShadows;
+      -webkit-box-shadow: $hoverShadows;
+      -moz-box-shadow: $hoverShadows;
+    }
+    @if not $hoverBorderRadius {
+    } @else {
+      border-radius: $hoverBorderRadius;
+      -webkit-border-radius: $hoverBorderRadius;
+      -moz-border-radius: $hoverBorderRadius;
+    }
+    @if not $hoverBorder {
+    } @else {
+      border: $hoverBorder;
     }
   }
+  &.editable {
+    .editable-wrapper {
+      @if not $border {
+        border: $border;
+      } @else {
+        border: dashed 2px $primary;
+      }
+    }
+  }
+
+  @include media-query-backgrounds($backgrounds, $sizes);
+  @include media-query-orders($responsiveOrder, $sizes);
 }
 </style>

@@ -26,28 +26,7 @@ export default {
                   {
                     widgets: [
                       {
-                        name: 'ButtonWidget',
-                        options: {
-                        }
-                      }
-                    ],
-                    options: {
-                      colNumber: 'col-md-12'
-                    }
-                  }
-                ],
-                options: {
-                  fullHeight: true,
-                  boxed: true,
-                  boxedWidth: 1200
-                }
-              },
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'TestComponent4Widget'
+                        name: 'TestComponent1Widget'
                       },
                       {
                         name: 'TestComponent4Widget'
@@ -74,7 +53,7 @@ export default {
                 options: {
                   fullHeight: true,
                   boxed: true,
-                  boxedWidth: 1200
+                  boxedWidth: 1362
                 }
               }
             ]
@@ -92,110 +71,17 @@ export default {
                   {
                     widgets: [
                       {
-                        name: 'TestComponent2Widget'
-                      },
-                      {
-                        name: 'TestComponent1Widget'
+                        name: 'ButtonWidget'
                       }
                     ],
                     options: {
-                      colNumber: 'col-md-6 col-xs-12'
-                    }
-                  },
-                  {
-                    widgets: [
-                      {
-                        name: 'TestComponent3Widget'
-                      }
-                    ],
-                    options: {
-                      colNumber: 'col-md-6 col-xs-12'
+                      colNumber: 'col-md-3'
                     }
                   }
                 ],
                 options: {
                   boxed: true
-                }
-              },
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'TestComponent1Widget'
-                      },
-                      {
-                        name: 'TestComponent2Widget'
-                      },
-                      {
-                        name: 'TestComponent3Widget'
-                      },
-                      {
-                        name: 'TestComponent1Widget'
-                      }
-                    ]
-                  }
-                ],
-                options: {
-                  boxed: true
-                }
-              }
-            ]
-          }
-        },
-        {
-          data: {
-            rows: [
-              {
-                cols: [
-                  {
-                    widgets: [
-                      {
-                        name: 'TestComponent1Widget',
-                        options: {
-                        }
-                      },
-                      {
-                        name: 'TestComponent2Widget',
-                        options: {
-                        }
-                      },
-                      {
-                        name: 'TestComponent3Widget',
-                        options: {
-                        }
-                      }
-                    ],
-                    options: {
-                      colNumber: 'col-md-6'
-                    }
-                  },
-                  {
-                    widgets: [
-                      {
-                        name: 'TestComponent2Widget',
-                        options: {
-                        }
-                      },
-                      {
-                        name: 'TestComponent1Widget',
-                        options: {
-                        }
-                      },
-                      {
-                        name: 'TestComponent3Widget',
-                        options: {
-                        }
-                      }
-                    ],
-                    options: {
-                      colNumber: 'col-md-6'
-                    }
-                  }
-                ],
-                options: {
-                  boxed: true,
-                  boxedWidth: 1362
+                  // absolute: 'top'
                 }
               }
             ]

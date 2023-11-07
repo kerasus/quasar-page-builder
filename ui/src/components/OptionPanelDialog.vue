@@ -1,6 +1,7 @@
 <template>
   <q-dialog v-model="showValue"
             class="quasar-page-builder-dialog"
+            :persistent="false"
             @before-show="setTab">
     <q-card class="quasar-page-builder-dialog-card">
       <q-card-section>
@@ -9,8 +10,11 @@
             <template v-if="actionType==='add'">
               widget list
             </template>
-            <template v-if="actionType==='edit'">
+            <template v-else-if="actionType==='edit'">
               {{ optionPanel }}
+            </template>
+            <template v-else-if="actionType==='import'">
+              import to {{ optionPanel }}
             </template>
           </div>
           <div class="close">
@@ -24,8 +28,9 @@
         <component :is="optionPanel"
                    v-if="actionType==='edit' && optionPanel"
                    v-model:options="localWidgetOptions" />
-        <widget-list v-if="actionType==='add' && widgetName==='col'"
+        <widget-list v-else-if="actionType==='add' && widgetName==='col'"
                      @selectWidget="onSelectWidget" />
+        <div v-else-if="actionType==='import'" />
       </q-card-section>
     </q-card>
   </q-dialog>
@@ -144,39 +149,6 @@ export default defineComponent({
       display: flex;
       flex-flow: row;
       justify-content: space-between;
-    }
-  }
-}
-
-.base-elements-wrapper {
-  display: flex;
-  margin: 10px 40px;
-
-  .base-elements-item {
-    width: 100px;
-    height: 85px;
-    padding: 5px;
-    margin: 10px 15px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-    border: 1px solid $secondary;
-    border-radius: 15px;
-    transition: all .4s ease;
-
-    .base-elements-name {
-      width: 100%;
-      text-align: center;
-      font-size: 10px;
-    }
-
-    &:hover {
-      background: #fefefe;
-      box-shadow: 0 4px 20px 0 #f1f2fa;
-      transform: scale(1.1);
-      transition: all .4s ease;
     }
   }
 }

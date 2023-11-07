@@ -1,0 +1,58 @@
+//  ---------------------- background ------------------------------------
+@mixin media-query-background($min-width, $background) {
+  @media (min-width: $min-width) {
+    & {
+        background-size: map_get($background, 'size');
+        background-color: map_get($background, 'color');
+        background-image: map_get($background, 'image');
+        background-repeat: map_get($background, 'repeat');
+        background-position: map_get($background, 'position');
+        background-attachment: map_get($background, 'attachment');
+    }
+  }
+}
+@mixin media-query-backgrounds($backgrounds, $sizes) {
+  @each $name, $min-width in $sizes {
+    $background: map_get($backgrounds, $name);
+    @include media-query-background($min-width, $background);
+  }
+}
+//  ---------------------- background ------------------------------------
+
+//  ---------------------- spacing ---------------------------------------
+@mixin spacing-margin($spacing) {
+  // don't use shorthand style. when one of them is not defined, all of them ignored
+  margin-top: map_get($spacing, 'marginTop');
+  margin-left: map_get($spacing, 'marginLeft');
+  margin-right: map_get($spacing, 'marginRight');
+  margin-bottom: map_get($spacing, 'marginBottom');
+}
+@mixin spacing-padding($spacing) {
+  // don't use shorthand style. when one of them is not defined, all of them ignored
+  padding-top: map_get($spacing, 'paddingTop');
+  padding-left: map_get($spacing, 'paddingLeft');
+  padding-right: map_get($spacing, 'paddingRight');
+  padding-bottom: map_get($spacing, 'paddingBottom');
+}
+@mixin media-query-spacing($min-width, $spacing, $hasPadding: true, $hasMargin: true) {
+  @media (min-width: $min-width) {
+    & {
+      // margin
+      @if $hasMargin {
+        @include spacing-margin($spacing);
+      }
+
+      //padding
+      @if $hasPadding {
+        @include spacing-padding($spacing);
+      }
+    }
+  }
+}
+@mixin media-query-spacings($spacings, $sizes, $hasPadding: true, $hasMargin: true) {
+  @each $name, $min-width in $sizes {
+    $spacing: map_get($spacings, $name);
+    @include media-query-spacing($min-width, $spacing, $hasPadding, $hasMargin);
+  }
+}
+//  ---------------------- spacing ---------------------------------------
