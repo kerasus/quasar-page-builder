@@ -1,47 +1,49 @@
 <template>
   <q-dialog v-model="showValue"
-            @before-show="setTab"
-  >
-    <q-card class="element-form-dialog-card">
+            class="quasar-page-builder-dialog"
+            :persistent="false"
+            @before-show="setTab">
+    <q-card class="quasar-page-builder-dialog-card">
       <q-card-section>
         <div class="header">
           <div class="title">
             <template v-if="actionType==='add'">
               widget list
             </template>
-            <template v-if="actionType==='edit'">
+            <template v-else-if="actionType==='edit'">
               {{ optionPanel }}
+            </template>
+            <template v-else-if="actionType==='import'">
+              import to {{ optionPanel }}
             </template>
           </div>
           <div class="close">
             <q-btn color="primary"
                    icon="close"
-                   @click="close"
-            />
+                   @click="close" />
           </div>
         </div>
       </q-card-section>
       <q-card-section>
-        <component v-if="actionType==='edit' && optionPanel"
-                   :is="optionPanel"
-                   v-model:options="localWidgetOptions"
-        />
-        <widget-list v-if="actionType==='add' && widgetName==='col'"
-                     @selectWidget="onSelectWidget"
-        />
+        <component :is="optionPanel"
+                   v-if="actionType==='edit' && optionPanel"
+                   v-model:options="localWidgetOptions" />
+        <widget-list v-else-if="actionType==='add' && widgetName==='col'"
+                     @selectWidget="onSelectWidget" />
+        <div v-else-if="actionType==='import'" />
       </q-card-section>
     </q-card>
   </q-dialog>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
+import { useQuasar } from 'quasar'
 import WidgetList from './WidgetList.vue'
+import { defineComponent, ref } from 'vue'
 import ColOptionPanel from './Col/OptionPanel.vue'
 import RowOptionPanel from './Row/OptionPanel.vue'
 import SectionOptionPanel from './Section/OptionPanel.vue'
 import PageBuilderOptionPanel from './PageBuilderOptionPanel.vue'
-import {defineComponent, defineAsyncComponent, ref} from 'vue'
 
 const components = {
   WidgetList,
@@ -74,49 +76,20 @@ export default defineComponent({
       }
     }
   },
-  computed: {
-    showValue: {
-      get() {
-        return this.show
-      },
-      set(newValue) {
-        this.$emit('update:show', newValue)
-      }
-    },
-    localWidgetOptions: {
-      get() {
-        return this.widgetOptions
-      },
-      set(newValue) {
-        this.$emit('update:widgetOptions', newValue)
-      }
-    }
-  },
   emits: ['closeDialog', 'addWidget', 'update:widgetOptions', 'update:show'],
-  methods: {
-    onSelectWidget (data) {
-      this.$emit('addWidget', data)
-    }
-  },
-  setup(props, {emit}) {
+  setup(props, { emit }) {
     const $q = useQuasar()
+    if ($q.$pageBuilderWidgetOptionPanels) {
+      Object.assign(components, $q.$pageBuilderWidgetOptionPanels)
+    }
+
     const widgetExpanded = $q.$QPageBuilderWidgetList
-    widgetExpanded.forEach(element => {
-      if (element.optionPanel !== undefined) {
-        const optionPanelName = element.optionPanelName
-        const optionPanelPath = element.optionPanel.replace('OptionPanel.vue', '')
-        components[optionPanelName] = defineAsyncComponent(() => {
-          return import('src/' + optionPanelPath + 'OptionPanel.vue')
-        })
-      }
-    })
 
     const optionPanel = ref('')
     const loadDynamicComponentForEditPanel = () => {
       const targetOptionPanel = widgetExpanded.find(widget => widget.name === props.widgetName)
       if (props.widgetName === 'pageBuilder' || props.widgetName === 'section' || props.widgetName === 'row' || props.widgetName === 'col') {
         optionPanel.value = props.widgetName.charAt(0).toUpperCase() + props.widgetName.slice(1) + 'OptionPanel'
-      // } else if (targetOptionPanel?.optionPanel !== undefined) {
       } else if (targetOptionPanel && targetOptionPanel.optionPanel !== undefined) {
         optionPanel.value = targetOptionPanel.optionPanelName
       } else {
@@ -140,49 +113,42 @@ export default defineComponent({
       close,
       setTab
     }
+  },
+  computed: {
+    showValue: {
+      get() {
+        return this.show
+      },
+      set(newValue) {
+        this.$emit('update:show', newValue)
+      }
+    },
+    localWidgetOptions: {
+      get() {
+        return this.widgetOptions
+      },
+      set(newValue) {
+        this.$emit('update:widgetOptions', newValue)
+      }
+    }
+  },
+  methods: {
+    onSelectWidget (data) {
+      this.$emit('addWidget', data)
+    }
   }
 })
 </script>
 
 <style lang="scss">
-.element-form-dialog-card {
-  width: 666px;
-  .header {
-    display: flex;
-    flex-flow: row;
-    justify-content: space-between;
-  }
-}
-
-.base-elements-wrapper {
-  display: flex;
-  margin: 10px 40px;
-
-  .base-elements-item {
-    width: 100px;
-    height: 85px;
-    padding: 5px;
-    margin: 10px 15px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    cursor: pointer;
-    border: 1px solid $secondary;
-    border-radius: 15px;
-    transition: all .4s ease;
-
-    .base-elements-name {
-      width: 100%;
-      text-align: center;
-      font-size: 10px;
-    }
-
-    &:hover {
-      background: #fefefe;
-      box-shadow: 0 4px 20px 0 #f1f2fa;
-      transform: scale(1.1);
-      transition: all .4s ease;
+.quasar-page-builder-dialog {
+  .quasar-page-builder-dialog-card {
+    width: 900px;
+    max-width: 80vw;
+    .header {
+      display: flex;
+      flex-flow: row;
+      justify-content: space-between;
     }
   }
 }

@@ -6,5 +6,13 @@
  */
 
 module.exports = function (api) {
-  //
+  // https://quasar.dev/app-extensions/development-guide/install-api#api-render
+    /**
+     * Render a folder from extension templates into devland
+     * Needs a path (to a folder) relative to the path of the file where render() is called
+     *
+     * @param {string} templatePath (relative path to folder to render in app)
+     * @param {object} scope (optional; rendering scope variables)
+     */
+    // api.render('./path/to/a/template/folder')
 }

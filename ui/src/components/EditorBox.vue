@@ -1,41 +1,59 @@
 <template>
-  <div :class="{['position-'+position]: true}" class="widget-editor-box">
+  <div :class="{['position-'+position]: true}"
+       class="widget-editor-box">
     <q-btn-group outline
+                 flat
                  class="edit-toolbar">
       <q-btn v-if="showDelete"
              outline
-             @click="$emit('callAction', 'delete')"
              color="white"
-             icon="delete"/>
+             icon="delete"
+             size="xs"
+             @click="$emit('callAction', 'delete')" />
       <q-btn v-if="showAdd"
              outline
              color="white"
              icon="add"
-             @click="$emit('callAction', 'add')"/>
+             size="xs"
+             @click="$emit('callAction', 'add')" />
       <q-btn v-if="showDuplicate"
              outline
-             @click="$emit('callAction', 'duplicate')"
              color="white"
-             icon="content_copy"/>
+             icon="content_copy"
+             size="xs"
+             @click="$emit('callAction', 'duplicate')" />
       <q-btn v-if="showEdit"
              outline
-             @click="$emit('callAction', 'edit')"
              color="white"
-             icon="edit"/>
+             icon="edit"
+             size="xs"
+             @click="$emit('callAction', 'edit')" />
+      <q-btn v-if="showExport"
+             outline
+             color="white"
+             icon="file_upload"
+             size="xs"
+             @click="$emit('callAction', 'export')" />
+      <q-btn v-if="showImport"
+             outline
+             color="white"
+             icon="file_download"
+             size="xs"
+             @click="$emit('callAction', 'import')" />
       <q-btn v-if="label"
              outline
              color="white"
-             :label="label"/>
+             size="sm"
+             :label="label" />
     </q-btn-group>
   </div>
 </template>
 
 <script>
-import {defineComponent} from 'vue'
+import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'EditorBox',
-  emits: ['callAction'],
   props: {
     label: {
       type: String,
@@ -57,29 +75,45 @@ export default defineComponent({
       type: Boolean,
       default: true
     },
-    showDuplicate: {
+    showImport: {
       type: Boolean,
       default: true
     },
+    showExport: {
+      type: Boolean,
+      default: true
+    },
+    showDuplicate: {
+      type: Boolean,
+      default: true
+    }
   },
+  emits: ['callAction']
 })
 </script>
 
 <style lang="scss" scoped>
 @import 'quasar/src/css/variables.sass';
 
-$edit_toolbar_height: 40px;
+$edit_toolbar_height: 25px;
 
 .widget-editor-box {
-  position: absolute;
-  top: 0;
-  left: 0;
+  position: relative;
   .edit-toolbar {
     position: relative;
     height: $edit_toolbar_height;
     background: rgba($color: $primary, $alpha: .75);
     border-radius: 10px;
     z-index: 999;
+    .q-btn {
+      &:not(:last-child) {
+        width: 25px;
+        padding: 0;
+      }
+      &:last-child {
+        width: max-content;
+      }
+    }
   }
   .add-element {
     position: absolute;

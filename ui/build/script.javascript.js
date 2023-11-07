@@ -22,7 +22,7 @@ const rollupPlugins = [
   replace({
     preventAssignment: false,
     values: {
-      __UI_VERSION__: `'${ version }'`
+      __UI_VERSION__: `'${version}'`
     }
   }),
   nodeResolve({
@@ -35,7 +35,7 @@ const rollupPlugins = [
   json(),
   buble({
     objectAssign: 'Object.assign'
-  }),
+  })
   // commonjs()
 ]
 
@@ -107,10 +107,10 @@ function pathResolve (_path) {
 function addAssets (builds, type, injectName) {
   const
     files = fs.readdirSync(pathResolve('../../ui/src/components/' + type)),
-    plugins = [ buble(bubleConfig) ],
+    plugins = [buble(bubleConfig)],
     outputDir = pathResolve(`../dist/${type}`)
 
-    fse.mkdirp(outputDir)
+  fse.mkdirp(outputDir)
 
   files
     .filter(file => file.endsWith('.js'))
@@ -144,7 +144,7 @@ function build (builds) {
 function genConfig (opts) {
   Object.assign(opts.rollup.input, {
     plugins: rollupPlugins,
-    external: [ 'vue', 'quasar' ]
+    external: ['vue', 'quasar']
   })
 
   Object.assign(opts.rollup.output, {
