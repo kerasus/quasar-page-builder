@@ -25,6 +25,9 @@
       <q-tab v-if="showResponsiveSpacing"
              name="ResponsiveSpacing"
              label="ResponsiveSpacing" />
+      <q-tab v-if="showActionTab"
+             name="ActionPanel"
+             label="ActionPanel" />
     </q-tabs>
 
     <q-separator />
@@ -71,6 +74,10 @@
                    name="ResponsiveSpacing">
         <responsive-spacing v-model:spacing="localOptions.responsiveSpacing" />
       </q-tab-panel>
+      <q-tab-panel v-if="showActionTab"
+                   name="ActionPanel">
+        <action-panel v-model:action="localOptions.action" />
+      </q-tab-panel>
 
     </q-tab-panels>
   </q-card>
@@ -83,6 +90,7 @@ import StyleTabComponent from './Tabs/Style/Style.vue'
 import BoxShadows from './Tabs/BoxShadows/BoxShadows.vue'
 import BorderStyle from './Tabs/BorderStyle/BorderStyle.vue'
 import ResponsiveSpacing from './Tabs/ResponsiveSpacing/ResponsiveSpacing.vue'
+import ActionPanel from "./Tabs/ActionPanel/ActionPanel.vue";
 
 export default {
   name: 'OptionPanelTabs',
@@ -92,7 +100,8 @@ export default {
     HoverEffects,
     ResponsiveShow,
     ResponsiveSpacing,
-    StyleTabComponent
+    StyleTabComponent,
+    ActionPanel
   },
   props: {
     showStyleTab: {
@@ -119,6 +128,10 @@ export default {
       type: Boolean,
       default: false
     },
+    showActionTab: {
+      type: Boolean,
+      default: false
+    },
     options: {
       type: Object,
       default: () => {
@@ -136,9 +149,13 @@ export default {
         return this.getDefaultOptions(this.options)
       },
       set(newValue) {
+        console.log(newValue)
         this.$emit('update:options', newValue)
       }
     }
+  },
+  mounted() {
+    console.log(this.localOptions)
   },
   methods: {
     getDefaultOptions (options) {

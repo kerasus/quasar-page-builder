@@ -1,6 +1,8 @@
 <template>
   <div class="Test-component1-widget"
-       :style="localOptions.style">
+       :style="localOptions.style"
+       :class="{'cursor-pointer': localOptions.action.hasAction}"
+       @click="takeAction()">
     Test-component-11111111111111111111111111111111111111111111111111
     <br>
     Test-component-11111111111111111111111111111111111111111111111111
@@ -97,6 +99,14 @@ export default {
             translateX: 0,
             translateY: 0
           }
+        },
+        action: {
+          hasAction: false,
+          actionName: null,
+          scrollTo: null,
+          route: null,
+          eventName: null,
+          eventArgs: null
         }
       }
     }
