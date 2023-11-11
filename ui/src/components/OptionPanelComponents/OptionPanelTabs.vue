@@ -154,9 +154,6 @@ export default {
       }
     }
   },
-  mounted() {
-    console.log(this.localOptions)
-  },
   methods: {
     getDefaultOptions (options) {
       if (!options.style) {
