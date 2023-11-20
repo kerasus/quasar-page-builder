@@ -2,7 +2,10 @@
   <div :id="sectionOptions.id"
        class="page-builder-section"
        :class="sectionClassName"
-       :style="sectionOptions.style">
+       :style="sectionOptions.style"
+       @dragover="onDragOver"
+       @dragleave="onDragLeave"
+       @drop="onDrop($event, 0, true)">
     <editor-box v-if="editable"
                 :label="'section'"
                 @callAction="callAction" />
@@ -13,8 +16,13 @@
                       v-model:options="row.options"
                       :editable="editable"
                       :drag-status="dragStatus"
+                      :draggable="editable"
                       @onOptionAction="onOptionAction($event, {widget: row, widgetIndex: rowIndex, name: 'row'})"
-                      @onDrag="onDrag" />
+                      @onDrag="onDrag"
+                      @dragstart="onDragStart($event, row, rowIndex)"
+                      @dragover="onDragOver"
+                      @dragleave="onDragLeave"
+                      @drop="onDrop($event, rowIndex)" />
   </div>
 </template>
 
@@ -34,6 +42,7 @@ export default {
   emits: ['onOptionAction', 'update:options', 'onDrag'],
   data() {
     return {
+      localDraggable: null,
       defaultBackground: null,
       eventRow: {},
       action: '',
@@ -148,6 +157,9 @@ export default {
     },
     windowHeight() {
       return this.windowSize.y
+    },
+    computedRows () {
+      return this.data.rows
     }
   },
   watch: {
@@ -280,6 +292,73 @@ export default {
         // this.$props.data.rows.splice(this.eventRow.rowIndex, 1)
       } else if (event === 'duplicate') {
         // this.$props.data.rows.push(this.eventRow.row)
+      }
+    },
+
+    onDragStart (event, widget, widgetIndex) {
+      if (!this.editable) {
+        return
+      }
+      event.stopPropagation()
+      this.$emit('onDrag', 'DragStart')
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
+      this.localDraggable = event
+      // console.log('onDragStart', event.dataTransfer.getData('value'))
+    },
+    onDragOver (event) {
+      if (!this.editable) {
+        return
+      }
+      event.preventDefault()
+      // console.log('onDragOver', event.dataTransfer.getData('value'))
+    },
+    onDragLeave (event) {
+      // if (!props.editable) {
+      //
+      // }
+      /*
+      ev.target.style.marginTop = '2px'
+      ev.target.style.marginBottom = '2px'
+      */
+      // console.log('onDragLeave', event.dataTransfer.getData('value'))
+    },
+    // dragEnter(ev) {
+    //   /*
+    //   if (ev.clientY > ev.target.height / 2) {
+    //     ev.target.style.marginBottom = '10px'
+    //   } else {
+    //     ev.target.style.marginTop = '10px'
+    //   }
+    //   */
+    // },,
+    onDrop (event, newIndex, parent) {
+      if (!this.editable) {
+        return
+      }
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
+      const widget = value.widget
+      const widgetOldIndex = value.widgetIndex
+      const widgetNewIndex = newIndex
+      if (this.localDraggable) {
+        this.updatePosition(this.computedRows, widgetOldIndex, widgetNewIndex)
+      } else {
+        this.addToIndex(this.computedRows, widget, widgetNewIndex)
+      }
+
+      this.localDraggable = null
+      this.$emit('onDrag', 'Drop')
+      event.stopPropagation()
+    },
+    updatePosition (list, oldIndex, newIndex) {
+      list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+    },
+    addToIndex (list, newItem, index) {
+      if (list.length > index) {
+        list.splice(index, 0, newItem)
+      } else {
+        list.push(newItem)
       }
     }
   }
