@@ -259,7 +259,13 @@ export default {
       this.setOptionPanelData(selectedNode, selectedSection)
       this.actionOnSelectedNode((parent, node, index) => {
         if (selectedNode.event === 'add') {
-          if (selectedNode.name === 'section') {
+          if (selectedNode.name === 'section' /* native section */ || selectedNode.name === 'NestedSection' /* nested section */) {
+            if (!node.data) {
+              node.data = {}
+            }
+            if (!node.data.rows) {
+              node.data.rows = []
+            }
             node.data.rows.push({
               cols: []
             })

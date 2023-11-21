@@ -10,7 +10,7 @@
                 :label="'section'"
                 @callAction="callAction" />
     <q-resize-observer @resize="Resize" />
-    <page-builder-row v-for="(row, rowIndex) in data.rows"
+    <page-builder-row v-for="(row, rowIndex) in computedRows"
                       :key="rowIndex"
                       v-model:cols="row.cols"
                       v-model:options="row.options"
@@ -159,6 +159,9 @@ export default {
       return this.windowSize.y
     },
     computedRows () {
+      if (!this.data?.rows) {
+        return []
+      }
       return this.data.rows
     }
   },
@@ -269,9 +272,19 @@ export default {
         widgetData.options = widget.options
       }
       if (this.action === 'add') {
+        if (!this.$props.data?.rows) {
+          this.$props.data = {
+            rows: []
+          }
+        }
         this.$props.data.rows[this.eventRow.rowIndex].cols.push(widgetData)
       } else if (this.action === 'edit') {
         widgetData = widget.item
+        if (!this.$props.data?.rows) {
+          this.$props.data = {
+            rows: []
+          }
+        }
         this.$props.data.rows[this.eventRow.rowIndex] = widgetData
       }
       this.elementFormDialog = false

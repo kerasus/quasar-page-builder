@@ -1,7 +1,7 @@
 <template>
   <div :class="{'editable': editable && widget.name !== 'page-builder-section'}"
        class="page-builder-widget">
-    <editor-box v-if="editable && widget.name !== 'page-builder-section'"
+    <editor-box v-if="editable && widget.name !== 'page-builder-section' && widget.name !== 'NestedSection'"
                 :label="widget.name"
                 :show-add="false"
                 :show-edit="hasOptionPanel"
@@ -9,21 +9,22 @@
     <component :is="widget.name"
                :data="widget.data"
                :options="widget.options"
-               :editable="editable" />
+               :editable="editable"
+               @onOptionAction="onOptionAction" />
   </div>
 </template>
 
 <script>
 import { useQuasar } from 'quasar'
 import EditorBox from '../EditorBox.vue'
-import mixinWidget from '../../mixin/Widgets'
+import mixinWidget from '../../mixin/Widgets.js'
 import { defineAsyncComponent, computed } from 'vue'
+// import { computed } from 'vue'
 
 const components = {
   EditorBox
+  // NestedSection
 }
-
-components.PageBuilderSection = defineAsyncComponent(() => import('../Section/Section.vue'))
 
 export default {
   name: 'PageBuilderWidget',
@@ -44,6 +45,9 @@ export default {
   emits: ['onOptionAction'],
   setup(props, { emit }) {
     const $q = useQuasar()
+    components.NestedSection = defineAsyncComponent(() => import('../Section/Section.vue'))
+    // components.NestedSection = defineAsyncComponent(() => import('../Section/Section.vue'))
+    // components.NestedSection = NestedSection
     if ($q.$pageBuilderWidgetComponents) {
       Object.assign(components, $q.$pageBuilderWidgetComponents)
     }
