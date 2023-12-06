@@ -313,6 +313,9 @@ export default {
   mounted() {
     this.updateBoxedStyle()
     this.updateClassName()
+    this.$nextTick(() => {
+      this.updateClassName()
+    })
     window.addEventListener('resize', () => {
       this.updateBoxedStyle()
     })
