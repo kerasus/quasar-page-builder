@@ -302,6 +302,7 @@ export default {
   },
   mounted() {
     this.updateBoxedStyle()
+    this.updateClassName()
     window.addEventListener('resize', () => {
       this.updateBoxedStyle()
     })
