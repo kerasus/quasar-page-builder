@@ -262,9 +262,19 @@ export default {
         this.$emit('update:options', newValue)
       }
     },
+    rowOptionsClassName () {
+      return this.rowOptions.className
+    },
+    rowOptionsResponsiveBoxedWidth () {
+      return this.rowOptions.responsiveBoxedWidth
+    },
     rowClassName () {
-      const responsiveBoxedWidth = this.rowOptions.responsiveBoxedWidth ? ' responsiveBoxedWidth ' : ''
-      return this.rowOptions.className + this.responsiveShow + responsiveBoxedWidth
+      const responsiveBoxedWidth = this.rowOptionsResponsiveBoxedWidth ? ' responsiveBoxedWidth ' : ''
+      return ([
+        this.rowOptionsClassName,
+        this.responsiveShow,
+        responsiveBoxedWidth
+      ]).join(' ')
     },
     computedCol: {
       get () {
