@@ -2,13 +2,11 @@
   <q-layout view="lHh Lpr lFf">
     <q-header elevated>
       <q-toolbar>
-        <q-btn
-          flat
-          dense
-          round
-          to="/"
-          icon="home"
-        />
+        <q-btn flat
+               dense
+               round
+               to="/"
+               icon="home" />
 
         <q-toolbar-title>
           quasar-ui-q-page-builder v{{ version }}

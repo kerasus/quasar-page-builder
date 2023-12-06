@@ -1,36 +1,35 @@
 <template>
-  <div :class="{'editable': editable && widget.name !== 'page-builder-section'}" class="page-builder-widget">
-    <editor-box v-if="editable && widget.name !== 'page-builder-section'"
+  <div :class="{'editable': editable && widget.name !== 'page-builder-section'}"
+       class="page-builder-widget">
+    <editor-box v-if="editable && widget.name !== 'page-builder-section' && widget.name !== 'NestedSection'"
                 :label="widget.name"
                 :show-add="false"
                 :show-edit="hasOptionPanel"
-                @callAction="callAction"
-    />
+                @callAction="callAction" />
     <component :is="widget.name"
                :data="widget.data"
                :options="widget.options"
                :editable="editable"
-               @onOptionAction="onOptionAction"
-    />
+               @onOptionAction="onOptionAction" />
   </div>
 </template>
 
 <script>
-import {useQuasar} from 'quasar'
+import { useQuasar } from 'quasar'
 import EditorBox from '../EditorBox.vue'
-import mixinWidget from '../../mixin/Widgets'
-import {defineAsyncComponent, computed} from 'vue'
+import mixinWidget from '../../mixin/Widgets.js'
+import { defineAsyncComponent, computed } from 'vue'
+// import { computed } from 'vue'
 
 const components = {
   EditorBox
+  // NestedSection
 }
-
-components.PageBuilderSection = defineAsyncComponent(() => import('../Section/Section.vue'))
 
 export default {
   name: 'PageBuilderWidget',
   components,
-  emits: ['onOptionAction'],
+  mixins: [mixinWidget],
   props: {
     widget: {
       type: Object,
@@ -43,24 +42,24 @@ export default {
       default: false
     }
   },
-  mixins: [mixinWidget],
-  setup(props, {emit}) {
+  emits: ['onOptionAction'],
+  setup(props, { emit }) {
     const $q = useQuasar()
+    components.NestedSection = defineAsyncComponent(() => import('../Section/Section.vue'))
+    // components.NestedSection = defineAsyncComponent(() => import('../Section/Section.vue'))
+    // components.NestedSection = NestedSection
     if ($q.$pageBuilderWidgetComponents) {
-      Object.keys($q.$pageBuilderWidgetComponents).forEach(key => {
-        components[key] = $q.$pageBuilderWidgetComponents[key]
-      })
+      Object.assign(components, $q.$pageBuilderWidgetComponents)
     }
-    const computedWidget = computed(() => {
-      return props.widget
-    })
+
     const hasOptionPanel = computed(() => {
-      return !!Object.keys($q.$pageBuilderWidgetOptionPanels).find(key=>$q.$pageBuilderWidgetOptionPanels[key].name===props.widget.name)
+      // return !!Object.keys($q.$pageBuilderWidgetOptionPanels).find(key => $q.$pageBuilderWidgetOptionPanels[key].name === props.widget.name)
+      return !!Object.keys($q.$pageBuilderWidgetOptionPanels).find(key => key === props.widget.name + 'OptionPanel')
     })
 
     const callAction = (event) => {
       const path = {
-        node: 'widgets',
+        node: 'widgets'
       }
       const data = {
         event,
@@ -74,9 +73,7 @@ export default {
       emit('onOptionAction', data)
     }
 
-
     return {
-      computedWidget,
       onOptionAction,
       hasOptionPanel,
       callAction
@@ -92,7 +89,6 @@ export default {
   position: relative;
   &.editable {
     border: dashed 2px $primary;
-    padding-top: 40px;
   }
 }
 </style>

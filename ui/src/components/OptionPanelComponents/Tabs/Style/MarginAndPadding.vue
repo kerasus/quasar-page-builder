@@ -3,44 +3,36 @@
     <q-input v-model="localValue.marginTop"
              label="marginTop"
              dense
-             class="margin-input input-marginTop"
-    />
+             class="margin-input input-marginTop" />
     <q-input v-model="localValue.marginLeft"
              label="marginLeft"
              dense
-             class="margin-input input-marginLeft"
-    />
+             class="margin-input input-marginLeft" />
     <q-input v-model="localValue.marginRight"
              label="marginRight"
              dense
-             class="margin-input input-marginRight"
-    />
+             class="margin-input input-marginRight" />
     <q-input v-model="localValue.marginBottom"
              label="marginBottom"
              dense
-             class="margin-input input-marginBottom"
-    />
+             class="margin-input input-marginBottom" />
     <div class="padding-square">
       <q-input v-model="localValue.paddingTop"
                label="paddingTop"
                dense
-               class="padding-input input-paddingTop"
-      />
+               class="padding-input input-paddingTop" />
       <q-input v-model="localValue.paddingLeft"
                label="paddingLeft"
                dense
-               class="padding-input input-paddingLeft"
-      />
+               class="padding-input input-paddingLeft" />
       <q-input v-model="localValue.paddingRight"
                label="paddingRight"
                dense
-               class="padding-input input-paddingRight"
-      />
+               class="padding-input input-paddingRight" />
       <q-input v-model="localValue.paddingBottom"
                label="paddingBottom"
                dense
-               class="padding-input input-paddingBottom"
-      />
+               class="padding-input input-paddingBottom" />
     </div>
   </div>
 </template>
@@ -50,7 +42,9 @@ export default {
   name: 'MarginAndPadding',
   props: {
     value: {
-      default: {},
+      default: () => {
+        return {}
+      },
       type: Object
     }
   },

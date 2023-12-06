@@ -1,12 +1,10 @@
 <template>
   <q-page padding>
-    <q-page-builder
-      v-model:sections="sections"
-      v-model::options="pageConfig"
-      :preview="true"
-      :editable="editable"
-      @toggleEdit="toggleEdit"
-    />
+    <q-page-builder v-model:sections="sections"
+                    v-model::options="pageConfig"
+                    :preview="true"
+                    :editable="editable"
+                    @toggleEdit="toggleEdit" />
   </q-page>
 </template>
 
@@ -17,7 +15,7 @@ export default {
     return {
       editable: false,
       pageConfig: {},
-      sections: [],
+      sections: []
     }
   },
   methods: {

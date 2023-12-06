@@ -53,7 +53,7 @@ const generateWidgetList = (_dirname) => {
 
   fs.writeFile(`${absolutePath}/widget.json`, data, (err) => {
     if (err) throw err
-    console.log('Data written to file')
+    console.info('Data written to file')
   })
   return data
 }
