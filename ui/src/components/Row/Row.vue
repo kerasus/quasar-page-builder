@@ -347,6 +347,12 @@ export default {
         const removeArray = (array) => {
           array.forEach(item => {
             if (item) {
+              if (!result) {
+                result = ''
+              }
+              if (typeof result !== 'string') {
+                result = result.toString()
+              }
               result = result.replaceAll(item, '')
             }
           })
