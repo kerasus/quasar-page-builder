@@ -39,7 +39,7 @@ const mixinWidget = {
         className += finalClassString
       }
       if (!state) {
-        className = className.replaceAll(finalClassString, ' ')
+        className = String(className).replace(new RegExp(finalClassString, 'g'), ' ')
       }
 
       return className
