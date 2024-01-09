@@ -353,7 +353,7 @@ export default {
               if (typeof result !== 'string') {
                 result = result.toString()
               }
-              result = result.replaceAll(item, '')
+              result = String(result).replace(new RegExp(item, 'g'), ' ')
             }
           })
         }
