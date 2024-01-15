@@ -380,7 +380,7 @@ export default {
       }
 
       this.rowElementClass = this.getRemoveAlignmentClasses(this.rowElementClass)
-      this.rowElementClass = this.rowElementClass.replaceAll('  ', ' ')
+      this.rowElementClass = String(this.rowElementClass).replace(/\s+/g, ' ')
       this.rowElementClass += this.getAlignmentClasses()
     },
     getGutterSize (size, type) {
