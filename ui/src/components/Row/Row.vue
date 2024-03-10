@@ -2,7 +2,7 @@
   <div ref="pageBuilderRow"
        class="page-builder-row"
        :class="rowClassName"
-       :style="rowOptions.style"
+       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
@@ -52,6 +52,7 @@ export default {
   emits: ['onOptionAction', 'update:options', 'update:cols', 'onDrag'],
   data () {
     return {
+      mounted: false,
       localDraggable: null,
       deviceWidth: 1920,
       boxedInFullWidthStatus: false,
@@ -228,6 +229,13 @@ export default {
     }
   },
   computed: {
+    optionsStyle () {
+      if (!this.mounted) {
+        return {}
+      }
+
+      return this.rowOptions.style
+    },
     responsiveShow () {
       let responsiveShow = ''
       Object.keys(this.rowOptions.responsiveShow).forEach(key => {
@@ -318,6 +326,7 @@ export default {
     this.updateRowElementClass()
   },
   mounted () {
+    this.mounted = true
     this.updateBoxedStyle()
     this.updateRowElementClass()
     window.addEventListener('resize', () => {

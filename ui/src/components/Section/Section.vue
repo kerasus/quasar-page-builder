@@ -2,7 +2,7 @@
   <div :id="sectionOptions.id"
        class="page-builder-section"
        :class="sectionClassName"
-       :style="sectionOptions.style"
+       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
@@ -42,6 +42,7 @@ export default {
   emits: ['onOptionAction', 'update:options', 'onDrag'],
   data() {
     return {
+      mounted: false,
       localDraggable: null,
       defaultBackground: null,
       eventRow: {},
@@ -90,6 +91,13 @@ export default {
     }
   },
   computed: {
+    optionsStyle () {
+      if (!this.mounted) {
+        return {}
+      }
+
+      return this.sectionOptions.style
+    },
     responsiveShow () {
       let responsiveShow = ''
       Object.keys(this.sectionOptions.responsiveShow).forEach(key => {
@@ -199,6 +207,9 @@ export default {
     containerFullHeight() {
       this.setFullHeight()
     }
+  },
+  mounted() {
+    this.mounted = true
   },
   created() {
     this.setFullHeight()

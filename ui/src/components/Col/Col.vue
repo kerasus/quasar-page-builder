@@ -1,7 +1,7 @@
 <template>
   <div class="page-builder-col"
        :class="colClassName"
-       :style="colOptions.style"
+       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
@@ -254,10 +254,18 @@ export default {
   },
   data() {
     return {
+      mounted: false,
       defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    optionsStyle () {
+      if (!this.mounted) {
+        return {}
+      }
+
+      return this.colOptions.style
+    },
     responsiveShow () {
       let responsiveShow = ''
       Object.keys(this.colOptions.responsiveShow).forEach(key => {
@@ -328,6 +336,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted() {
+    this.mounted = true
   },
   methods: {
     computeOptionsClassName () {
