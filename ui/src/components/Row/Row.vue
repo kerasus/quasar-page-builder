@@ -288,7 +288,8 @@ export default {
         'absolute-right': this.rowOptions.absolute === 'right',
         'absolute-bottom': this.rowOptions.absolute === 'bottom',
         'absolute-left': this.rowOptions.absolute === 'left',
-        [this.rowOptions.className]: true
+        [this.rowOptions.className]: true,
+        [this.responsiveShow] :true
       }
     },
     computedCol: {
