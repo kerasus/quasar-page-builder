@@ -1,6 +1,9 @@
 <template>
   <div :class="pageBuilderClassName"
-       :style="pageBuilderOptions.style">
+       :style="pageBuilderOptions.style"
+       @dragover="onDragOver"
+       @dragleave="onDragLeave"
+       @drop="onDrop($event, 0, true)">
     <template v-if="!loading">
       <editor-box v-if="pageBuilderEditable"
                   label="page-builder"
@@ -13,8 +16,13 @@
                             v-model:options="section.options"
                             :editable="pageBuilderEditable"
                             :drag-status="localDragStatus"
+                            :draggable="editable"
                             @onOptionAction="onOptionAction($event, {widget: section, widgetIndex: sectionIndex, name: 'section'})"
-                            @onDrag="onDrag" />
+                            @onDrag="onDrag"
+                            @dragstart="onDragStart($event, row, rowIndex)"
+                            @dragover="onDragOver"
+                            @dragleave="onDragLeave"
+                            @drop="onDrop($event, rowIndex)" />
       <option-panel-dialog v-model:widget-options="selectedNode.widget.options"
                            v-model:show="optionPanelDialog"
                            :action-type="selectedNode.event"
@@ -81,6 +89,7 @@ export default {
   emits: ['toggleEdit', 'update:options', 'exported', 'notExported'],
   data() {
     return {
+      localDraggable: null,
       localDragStatus: null,
       optionPanelDialog: false,
       selectedNode: {
@@ -250,7 +259,13 @@ export default {
       this.setOptionPanelData(selectedNode, selectedSection)
       this.actionOnSelectedNode((parent, node, index) => {
         if (selectedNode.event === 'add') {
-          if (selectedNode.name === 'section') {
+          if (selectedNode.name === 'section' /* native section */ || selectedNode.name === 'NestedSection' /* nested section */) {
+            if (!node.data) {
+              node.data = {}
+            }
+            if (!node.data.rows) {
+              node.data.rows = []
+            }
             node.data.rows.push({
               cols: []
             })
@@ -305,6 +320,73 @@ export default {
     },
     toggleEdit () {
       this.$emit('toggleEdit')
+    },
+
+    onDragStart (event, widget, widgetIndex) {
+      if (!this.editable) {
+        return
+      }
+      event.stopPropagation()
+      this.$emit('onDrag', 'DragStart')
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
+      this.localDraggable = event
+      // console.log('onDragStart', event.dataTransfer.getData('value'))
+    },
+    onDragOver (event) {
+      if (!this.editable) {
+        return
+      }
+      event.preventDefault()
+      // console.log('onDragOver', event.dataTransfer.getData('value'))
+    },
+    onDragLeave (event) {
+      // if (!props.editable) {
+      //
+      // }
+      /*
+      ev.target.style.marginTop = '2px'
+      ev.target.style.marginBottom = '2px'
+      */
+      // console.log('onDragLeave', event.dataTransfer.getData('value'))
+    },
+    // dragEnter(ev) {
+    //   /*
+    //   if (ev.clientY > ev.target.height / 2) {
+    //     ev.target.style.marginBottom = '10px'
+    //   } else {
+    //     ev.target.style.marginTop = '10px'
+    //   }
+    //   */
+    // },,
+    onDrop (event, newIndex, parent) {
+      if (!this.editable) {
+        return
+      }
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
+      const widget = value.widget
+      const widgetOldIndex = value.widgetIndex
+      const widgetNewIndex = newIndex
+      if (this.localDraggable) {
+        this.updatePosition(this.pageBuilderSections, widgetOldIndex, widgetNewIndex)
+      } else {
+        this.addToIndex(this.pageBuilderSections, widget, widgetNewIndex)
+      }
+
+      this.localDraggable = null
+      this.$emit('onDrag', 'Drop')
+      event.stopPropagation()
+    },
+    updatePosition (list, oldIndex, newIndex) {
+      list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+    },
+    addToIndex (list, newItem, index) {
+      if (list.length > index) {
+        list.splice(index, 0, newItem)
+      } else {
+        list.push(newItem)
+      }
     }
   }
 }

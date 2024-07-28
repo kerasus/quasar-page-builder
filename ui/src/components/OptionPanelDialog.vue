@@ -28,8 +28,13 @@
         <component :is="optionPanel"
                    v-if="actionType==='edit' && optionPanel"
                    v-model:options="localWidgetOptions" />
-        <widget-list v-else-if="actionType==='add' && widgetName==='col'"
-                     @selectWidget="onSelectWidget" />
+        <template v-else-if="actionType==='add' && widgetName==='col'">
+          <q-btn color="primary"
+                 class="full-width q-mb-md"
+                 label="add section"
+                 @click="addSection" />
+          <widget-list @selectWidget="onSelectWidget" />
+        </template>
         <div v-else-if="actionType==='import'" />
       </q-card-section>
     </q-card>
@@ -133,6 +138,16 @@ export default defineComponent({
     }
   },
   methods: {
+    addSection () {
+      this.$emit('addWidget', {
+        name: 'NestedSection',
+        optionPanel: '',
+        optionPanelName: 'SectionOptionPanel',
+        path: '',
+        self_type: '',
+        type: 'widget'
+      })
+    },
     onSelectWidget (data) {
       this.$emit('addWidget', data)
     }

@@ -2,7 +2,7 @@
   <div ref="pageBuilderRow"
        class="page-builder-row"
        :class="rowClassName"
-       :style="rowOptions.style"
+       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
@@ -50,8 +50,9 @@ export default {
     }
   },
   emits: ['onOptionAction', 'update:options', 'update:cols', 'onDrag'],
-  data() {
+  data () {
     return {
+      mounted: false,
       localDraggable: null,
       deviceWidth: 1920,
       boxedInFullWidthStatus: false,
@@ -228,6 +229,13 @@ export default {
     }
   },
   computed: {
+    optionsStyle () {
+      if (!this.mounted) {
+        return {}
+      }
+
+      return this.rowOptions.style
+    },
     responsiveShow () {
       let responsiveShow = ''
       Object.keys(this.rowOptions.responsiveShow).forEach(key => {
@@ -262,9 +270,26 @@ export default {
         this.$emit('update:options', newValue)
       }
     },
+    rowOptionsClassName () {
+      return this.rowOptions.className
+    },
+    rowOptionsResponsiveBoxedWidth () {
+      return this.rowOptions.responsiveBoxedWidth
+    },
     rowClassName () {
-      const responsiveBoxedWidth = this.rowOptions.responsiveBoxedWidth ? ' responsiveBoxedWidth ' : ''
-      return this.rowOptions.className + this.responsiveShow + responsiveBoxedWidth
+      const isAbsolute = this.rowOptions.absolute === 'top' || this.rowOptions.absolute === 'right' || this.rowOptions.absolute === 'bottom' || this.rowOptions.absolute === 'left'
+      return {
+        editable: this.editable,
+        'boxed rtl-fixed-for-boxed': this.rowOptions.boxed,
+        responsiveBoxedWidth: this.rowOptionsResponsiveBoxedWidth,
+        boxedInFullWidthStatus: this.boxedInFullWidthStatus,
+        'absolute-row': isAbsolute,
+        'absolute-top': this.rowOptions.absolute === 'top',
+        'absolute-right': this.rowOptions.absolute === 'right',
+        'absolute-bottom': this.rowOptions.absolute === 'bottom',
+        'absolute-left': this.rowOptions.absolute === 'left',
+        [this.rowOptions.className]: true
+      }
     },
     computedCol: {
       get () {
@@ -278,7 +303,7 @@ export default {
   watch: {
     rowOptions: {
       handler() {
-        this.updateClassName()
+        this.updateRowElementClass()
         this.updateBoxedStyle()
       },
       deep: true
@@ -286,22 +311,24 @@ export default {
     },
     editable: {
       handler() {
-        this.updateClassName()
+        this.updateRowElementClass()
       }
       // immediate: true
     },
     boxedInFullWidthStatus: {
       handler() {
-        this.updateClassName()
+        this.updateRowElementClass()
       }
       // immediate: true
     }
   },
-  created() {
-    this.updateClassName()
+  created () {
+    this.updateRowElementClass()
   },
-  mounted() {
+  mounted () {
+    this.mounted = true
     this.updateBoxedStyle()
+    this.updateRowElementClass()
     window.addEventListener('resize', () => {
       this.updateBoxedStyle()
     })
@@ -329,7 +356,13 @@ export default {
         const removeArray = (array) => {
           array.forEach(item => {
             if (item) {
-              result = result.replaceAll(item, '')
+              if (!result) {
+                result = ''
+              }
+              if (typeof result !== 'string') {
+                result = result.toString()
+              }
+              result = String(result).replace(new RegExp(item, 'g'), ' ')
             }
           })
         }
@@ -346,15 +379,7 @@ export default {
 
       return result
     },
-    updateClassName () {
-      let newClassName = this.rowOptions.className
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed rtl-fixed-for-boxed', this.rowOptions.boxed)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-top', this.rowOptions.absolute === 'top')
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-right', this.rowOptions.absolute === 'right')
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-bottom', this.rowOptions.absolute === 'bottom')
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-left', this.rowOptions.absolute === 'left')
+    updateRowElementClass () {
       this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-([xy])-(xs|sm|md|lg|xl)/gi, '')
       if (this.rowOptions.gutterXSize) {
         this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
@@ -364,10 +389,8 @@ export default {
       }
 
       this.rowElementClass = this.getRemoveAlignmentClasses(this.rowElementClass)
-      this.rowElementClass = this.rowElementClass.replaceAll('  ', ' ')
+      this.rowElementClass = String(this.rowElementClass).replace(/\s+/g, ' ')
       this.rowElementClass += this.getAlignmentClasses()
-
-      this.rowOptions.className = newClassName
     },
     getGutterSize (size, type) {
       return 'q-col-gutter-' + type + '-' + size

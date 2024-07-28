@@ -12,6 +12,11 @@
       <q-input v-model="localOptions.scrollTo"
                label="scrollTo" />
     </div>
+    <div v-if="localOptions.actionName === 'scroll'"
+         class="input-container col-md-3">
+      <q-input v-model="localOptions.headerOffset"
+               label="scrollTo" />
+    </div>
     <div v-if="localOptions.actionName === 'link'"
          class="input-container col-md-8">
       <q-input v-model="localOptions.route"

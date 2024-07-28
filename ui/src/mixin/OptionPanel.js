@@ -42,16 +42,16 @@ const OptionPanel = {
       if (!this.localOptions.action.hasAction) {
         return
       } else if (this.localOptions.action.actionName && this.localOptions.action.actionName === 'scroll') {
-        this.scrollToElement(this.localOptions.action.scrollTo)
+        this.scrollToElement(this.localOptions.action.scrollTo, this.localOptions.action.headerOffset)
       } else if (this.localOptions.action.actionName && this.localOptions.action.actionName === 'link') {
         this.redirectRoute(this.localOptions.action.route)
       } else if (this.localOptions.action.actionName && this.localOptions.action.actionName === 'event') {
         this.$bus.emit(this.localOptions.action.eventName, this.localOptions.action.eventArgs)
       }
     },
-    scrollToElement(className) {
+    scrollToElement(className, offset = 0) {
       const el = document.getElementsByClassName(className)[0]
-      const headerOffset = 0
+      const headerOffset = offset
       const elementPosition = el.getBoundingClientRect().top
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset
       window.scrollTo({
