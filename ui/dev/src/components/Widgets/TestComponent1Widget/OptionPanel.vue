@@ -2,6 +2,7 @@
   <option-panel-tabs v-model:options="localOptions"
                      :show-hover-effects-tab="true"
                      :show-box-shadows-tab="true"
+                     :show-action-tab="true"
                      :show-border-style-tab="true">
     <template #main-tab>
       <div />
@@ -49,7 +50,15 @@ export default defineComponent({
             skewY: 0,
             translateX: 0,
             translateY: 0
-          }
+          },
+        },
+        action: {
+          hasAction: false,
+          actionName: null,
+          scrollTo: null,
+          route: null,
+          eventName: null,
+          eventArgs: null
         }
       }
     }

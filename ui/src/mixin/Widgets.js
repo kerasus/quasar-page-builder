@@ -28,12 +28,18 @@ const mixinWidget = {
   },
   methods: {
     getUpdateClassNamesWithKey (className, key, state) {
+      if (!className) {
+        className = ''
+      }
+      if (typeof className !== 'string') {
+        className = className.toString()
+      }
       const finalClassString = ' ' + key + ' '
       if (state && className.search(finalClassString) === -1) {
         className += finalClassString
       }
       if (!state) {
-        className = className.replaceAll(finalClassString, ' ')
+        className = String(className).replace(new RegExp(finalClassString, 'g'), ' ')
       }
 
       return className

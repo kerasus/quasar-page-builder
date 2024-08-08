@@ -40,21 +40,53 @@
                             label="Boxed">
             <q-card>
               <q-card-section>
-                <div class="row q-col-gutter-md">
-                  <div class="col-md-3">
-                    <q-checkbox v-model="localOptions.boxed"
-                                label="Boxed" />
+                <q-checkbox v-model="localOptions.boxed"
+                            label="Boxed" />
+                <div v-if="localOptions.boxed"
+                     class="row q-col-gutter-md">
+                  <div class="col-12">
+                    <q-checkbox v-model="localOptions.responsiveBoxedWidth"
+                                label="ResponsiveBoxedWidth" />
                   </div>
-                  <div class="col-md-3">
-                    <q-input v-if="!!localOptions.boxed"
-                             v-model="localOptions.boxedWidth"
-                             label="boxedWidth" />
-                  </div>
-                  <div class="col-md-3">
-                    <q-input v-model="localOptions.paddingOfBoxedInFullWidth"
-                             hint="use when box is in full width state (always use with units like px)"
-                             label="PaddingOfBoxedState" />
-                  </div>
+                  <template v-if="!localOptions.responsiveBoxedWidth">
+                    <div class="col-md-6 col-12">
+                      <q-input v-model="localOptions.boxedWidth"
+                               hint="just number in px"
+                               label="boxedWidth" />
+                    </div>
+                    <div class="col-md-6 col-12">
+                      <q-input v-model="localOptions.paddingOfBoxedInFullWidth"
+                               hint="use when box is in full width state (always use with units like px)"
+                               label="PaddingOfBoxedState" />
+                    </div>
+                  </template>
+                  <template v-else>
+                    <div class="col-12">
+                      <q-input v-model="localOptions.responsiveBoxedWidths.xs.width"
+                               hint="just number in px"
+                               label="boxedWidth (xs)" />
+                    </div>
+                    <div class="col-12">
+                      <q-input v-model="localOptions.responsiveBoxedWidths.sm.width"
+                               hint="just number in px"
+                               label="boxedWidth (sm)" />
+                    </div>
+                    <div class="col-12">
+                      <q-input v-model="localOptions.responsiveBoxedWidths.md.width"
+                               hint="just number in px"
+                               label="boxedWidth (md)" />
+                    </div>
+                    <div class="col-12">
+                      <q-input v-model="localOptions.responsiveBoxedWidths.lg.width"
+                               hint="just number in px"
+                               label="boxedWidth (lg)" />
+                    </div>
+                    <div class="col-12">
+                      <q-input v-model="localOptions.responsiveBoxedWidths.xl.width"
+                               hint="just number in px"
+                               label="boxedWidth (xl)" />
+                    </div>
+                  </template>
                 </div>
               </q-card-section>
             </q-card>
@@ -224,7 +256,7 @@ import { defineComponent } from 'vue'
 import defaultOptions from './DefaultOptions.js'
 import mixinOptionPanel from '../../mixin/OptionPanel.js'
 import OptionPanelTabs from '../OptionPanelComponents/OptionPanelTabs.vue'
-import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround.vue'
+import ResponsiveBackGround from '../OptionPanelComponents/ResponsiveBackGround/ResponsiveBackGround.vue'
 
 export default defineComponent({
   name: 'RowOptionPanel',

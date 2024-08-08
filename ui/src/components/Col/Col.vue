@@ -1,7 +1,7 @@
 <template>
   <div class="page-builder-col"
        :class="colClassName"
-       :style="colOptions.style"
+       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
@@ -10,11 +10,11 @@
         <editor-box v-if="editable"
                     :label="'column'"
                     @callAction="callAction" />
-        <template v-for="(widget, widgetIndex) in widgets"
+        <template v-for="(widget, widgetIndex) in computedWidgets"
                   :key="widgetIndex">
           <q-intersection v-if="widget && widget.options && widget.options.intersection"
                           :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'">
-            <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
+            <page-builder-widget v-model:widget="computedWidgets[widgetIndex]"
                                  v-model:options="widget.options"
                                  :editable="editable"
                                  :draggable="editable"
@@ -25,7 +25,7 @@
                                  @drop="onDrop($event, widgetIndex)" />
           </q-intersection>
           <page-builder-widget v-else
-                               v-model:widget="computedWidget[widgetIndex]"
+                               v-model:widget="computedWidgets[widgetIndex]"
                                v-model:options="widget.options"
                                :editable="editable"
                                :draggable="editable"
@@ -38,11 +38,11 @@
       </div>
     </template>
     <template v-else>
-      <template v-for="(widget, widgetIndex) in widgets"
+      <template v-for="(widget, widgetIndex) in computedWidgets"
                 :key="widgetIndex">
         <q-intersection v-if="widget && widget.options && widget.options.intersection"
                         :transition="widget.options.intersection.transition ? widget.options.intersection.transition : 'flip-right'">
-          <page-builder-widget v-model:widget="computedWidget[widgetIndex]"
+          <page-builder-widget v-model:widget="computedWidgets[widgetIndex]"
                                v-model:options="widget.options"
                                :editable="editable"
                                :draggable="editable"
@@ -53,7 +53,7 @@
                                @drop="onDrop($event, widgetIndex)" />
         </q-intersection>
         <page-builder-widget v-else
-                             v-model:widget="computedWidget[widgetIndex]"
+                             v-model:widget="computedWidgets[widgetIndex]"
                              v-model:options="widget.options"
                              :editable="editable"
                              :draggable="editable"
@@ -90,10 +90,10 @@ export default {
       }
     }
   },
-  emits: ['onOptionAction', 'update:options'],
+  emits: ['onOptionAction', 'update:options', 'onDrag'],
   setup(props, { emit }) {
     const $q = useQuasar()
-    const computedWidget = computed({
+    const computedWidgets = computed({
       get: () => props.widgets,
       set: (value) => emit('update:widget', value)
     })
@@ -145,10 +145,10 @@ export default {
             color: 'red'
           })
         } else {
-          computedWidget.value[eventWidget.value.widgetIndex].data.rows.push(widgetData)
+          computedWidgets.value[eventWidget.value.widgetIndex].data.rows.push(widgetData)
         }
       } else if (action.value === 'edit') {
-        computedWidget[eventWidget.value.widgetIndex] = widgetData
+        computedWidgets[eventWidget.value.widgetIndex] = widgetData
       }
       elementFormDialog.value = false
     }
@@ -157,6 +157,7 @@ export default {
       if (!props.editable) {
         return
       }
+      event.stopPropagation()
       emit('onDrag', 'DragStart')
       event.dataTransfer.dropEffect = 'move'
       event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
@@ -197,15 +198,20 @@ export default {
       if (!props.editable) {
         return
       }
-      const valueStringfied = event.dataTransfer.getData('value')
-      const value = valueStringfied ? JSON.parse(valueStringfied) : null
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
       const widget = value.widget
       const widgetOldIndex = value.widgetIndex
       const widgetNewIndex = newIndex
+      const dragedObjectIsWidget = !!widget.name
+      if (!dragedObjectIsWidget) {
+        event.stopPropagation()
+        return
+      }
       if (localDraggable.value) {
-        updatePosition(computedWidget.value, widgetOldIndex, widgetNewIndex)
+        updatePosition(computedWidgets.value, widgetOldIndex, widgetNewIndex)
       } else {
-        addToIndex(computedWidget.value, widget, widgetNewIndex)
+        addToIndex(computedWidgets.value, widget, widgetNewIndex)
       }
 
       localDraggable.value = null
@@ -239,7 +245,7 @@ export default {
 
       action,
       form,
-      computedWidget,
+      computedWidgets,
       elementFormDialog,
       callAction,
       onSubmitElement,
@@ -248,10 +254,18 @@ export default {
   },
   data() {
     return {
+      mounted: false,
       defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    optionsStyle () {
+      if (!this.mounted) {
+        return {}
+      }
+
+      return this.colOptions.style
+    },
     responsiveShow () {
       let responsiveShow = ''
       Object.keys(this.colOptions.responsiveShow).forEach(key => {
@@ -310,7 +324,7 @@ export default {
         const valueStringfied = event.dataTransfer.getData('value')
         const value = valueStringfied ? JSON.parse(valueStringfied) : null
         const widgetOldIndex = value.widgetIndex
-        this.removeFromIndex(this.computedWidget, widgetOldIndex)
+        this.removeFromIndex(this.computedWidgets, widgetOldIndex)
       }
       if (newValue === 'Drop') {
         this.localDraggable = null
@@ -322,6 +336,9 @@ export default {
       },
       immediate: true
     }
+  },
+  mounted() {
+    this.mounted = true
   },
   methods: {
     computeOptionsClassName () {

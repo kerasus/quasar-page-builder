@@ -2,7 +2,10 @@
   <div ref="pageBuilderRow"
        class="page-builder-row"
        :class="rowClassName"
-       :style="rowOptions.style">
+       :style="optionsStyle"
+       @dragover="onDragOver"
+       @dragleave="onDragLeave"
+       @drop="onDrop($event, 0, true)">
     <editor-box v-if="editable"
                 :label="'row'"
                 @callAction="callAction" />
@@ -14,8 +17,13 @@
                         v-model:widgets="col.widgets"
                         :editable="editable"
                         :drag-status="dragStatus"
+                        :draggable="editable"
                         @onOptionAction="onOptionAction($event, {widget: col, widgetIndex: colIndex, name: 'col'})"
-                        @onDrag="onDrag" />
+                        @onDrag="onDrag"
+                        @dragstart="onDragStart($event, col, colIndex)"
+                        @dragover="onDragOver"
+                        @dragleave="onDragLeave"
+                        @drop="onDrop($event, colIndex)" />
     </div>
   </div>
 </template>
@@ -41,9 +49,11 @@ export default {
       }
     }
   },
-  emits: ['onOptionAction', 'update:options'],
-  data() {
+  emits: ['onOptionAction', 'update:options', 'update:cols', 'onDrag'],
+  data () {
     return {
+      mounted: false,
+      localDraggable: null,
       deviceWidth: 1920,
       boxedInFullWidthStatus: false,
       form: {},
@@ -219,6 +229,13 @@ export default {
     }
   },
   computed: {
+    optionsStyle () {
+      if (!this.mounted) {
+        return {}
+      }
+
+      return this.rowOptions.style
+    },
     responsiveShow () {
       let responsiveShow = ''
       Object.keys(this.rowOptions.responsiveShow).forEach(key => {
@@ -253,14 +270,40 @@ export default {
         this.$emit('update:options', newValue)
       }
     },
+    rowOptionsClassName () {
+      return this.rowOptions.className
+    },
+    rowOptionsResponsiveBoxedWidth () {
+      return this.rowOptions.responsiveBoxedWidth
+    },
     rowClassName () {
-      return this.rowOptions.className + this.responsiveShow
+      const isAbsolute = this.rowOptions.absolute === 'top' || this.rowOptions.absolute === 'right' || this.rowOptions.absolute === 'bottom' || this.rowOptions.absolute === 'left'
+      return {
+        editable: this.editable,
+        'boxed rtl-fixed-for-boxed': this.rowOptions.boxed,
+        responsiveBoxedWidth: this.rowOptionsResponsiveBoxedWidth,
+        boxedInFullWidthStatus: this.boxedInFullWidthStatus,
+        'absolute-row': isAbsolute,
+        'absolute-top': this.rowOptions.absolute === 'top',
+        'absolute-right': this.rowOptions.absolute === 'right',
+        'absolute-bottom': this.rowOptions.absolute === 'bottom',
+        'absolute-left': this.rowOptions.absolute === 'left',
+        [this.rowOptions.className]: true
+      }
+    },
+    computedCol: {
+      get () {
+        return this.cols
+      },
+      set (value) {
+        this.$emit('update:cols', value)
+      }
     }
   },
   watch: {
     rowOptions: {
       handler() {
-        this.updateClassName()
+        this.updateRowElementClass()
         this.updateBoxedStyle()
       },
       deep: true
@@ -268,22 +311,24 @@ export default {
     },
     editable: {
       handler() {
-        this.updateClassName()
+        this.updateRowElementClass()
       }
       // immediate: true
     },
     boxedInFullWidthStatus: {
       handler() {
-        this.updateClassName()
+        this.updateRowElementClass()
       }
       // immediate: true
     }
   },
-  created() {
-    this.updateClassName()
+  created () {
+    this.updateRowElementClass()
   },
-  mounted() {
+  mounted () {
+    this.mounted = true
     this.updateBoxedStyle()
+    this.updateRowElementClass()
     window.addEventListener('resize', () => {
       this.updateBoxedStyle()
     })
@@ -311,7 +356,13 @@ export default {
         const removeArray = (array) => {
           array.forEach(item => {
             if (item) {
-              result = result.replaceAll(item, '')
+              if (!result) {
+                result = ''
+              }
+              if (typeof result !== 'string') {
+                result = result.toString()
+              }
+              result = String(result).replace(new RegExp(item, 'g'), ' ')
             }
           })
         }
@@ -328,16 +379,8 @@ export default {
 
       return result
     },
-    updateClassName () {
-      let newClassName = this.rowOptions.className
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'editable', this.editable)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxed', this.rowOptions.boxed)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'boxedInFullWidthStatus', this.boxedInFullWidthStatus)
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-top', this.rowOptions.absolute === 'top')
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-right', this.rowOptions.absolute === 'right')
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-bottom', this.rowOptions.absolute === 'bottom')
-      newClassName = this.getUpdateClassNamesWithKey(newClassName, 'absolute-row absolute-left', this.rowOptions.absolute === 'left')
-      this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-(x|y)-(xs|sm|md|lg|xl)/gi, '')
+    updateRowElementClass () {
+      this.rowElementClass = this.rowElementClass.replace(/q-col-gutter-([xy])-(xs|sm|md|lg|xl)/gi, '')
       if (this.rowOptions.gutterXSize) {
         this.rowElementClass = this.getUpdateClassNamesWithKey(this.rowElementClass, this.getGutterSize(this.rowOptions.gutterXSize, 'x'), this.rowOptions.gutterXSize)
       }
@@ -346,23 +389,23 @@ export default {
       }
 
       this.rowElementClass = this.getRemoveAlignmentClasses(this.rowElementClass)
-      this.rowElementClass = this.rowElementClass.replaceAll('  ', ' ')
+      this.rowElementClass = String(this.rowElementClass).replace(/\s+/g, ' ')
       this.rowElementClass += this.getAlignmentClasses()
-
-      this.rowOptions.className = newClassName
     },
     getGutterSize (size, type) {
       return 'q-col-gutter-' + type + '-' + size
     },
     updateBoxedStyle () {
-      // this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
-      const pageBuilderRowWidth = (this.$refs.pageBuilderRow) ? this.$refs.pageBuilderRow.offsetWidth : 1920
       // pageBuilderRow
-      if (!this.rowOptions.boxed) {
+      if (!this.rowOptions.boxed || this.rowOptions.responsiveBoxedWidth) {
         this.rowOptions.style.width = null
         this.rowOptions.style.maxWidth = null
+        this.boxedInFullWidthStatus = false
         return
       }
+
+      // this.deviceWidth = typeof window !== 'undefined' ? window.innerWidth : 0
+      const pageBuilderRowWidth = (this.$refs.pageBuilderRow) ? this.$refs.pageBuilderRow.offsetWidth : 1920
 
       this.rowOptions.style.maxWidth = this.rowOptions.boxedWidth + 'px'
       this.rowOptions.style.width = this.rowOptions.boxedWidth + 'px'
@@ -419,6 +462,76 @@ export default {
         widgetIndex: data.widgetIndex ? data.widgetIndex : widgetItem.widgetIndex
       }
       this.$emit('onOptionAction', emitData)
+    },
+
+    onDragStart (event, widget, widgetIndex) {
+      if (!this.editable) {
+        return
+      }
+      event.stopPropagation()
+      this.$emit('onDrag', 'DragStart')
+      event.dataTransfer.dropEffect = 'move'
+      event.dataTransfer.setData('value', JSON.stringify({ widget, widgetIndex }))
+      this.localDraggable = event
+      // console.log('onDragStart', event.dataTransfer.getData('value'))
+    },
+    onDragOver (event) {
+      if (!this.editable) {
+        return
+      }
+      event.preventDefault()
+      // console.log('onDragOver', event.dataTransfer.getData('value'))
+    },
+    onDragLeave (event) {
+      // if (!props.editable) {
+      //
+      // }
+      /*
+      ev.target.style.marginTop = '2px'
+      ev.target.style.marginBottom = '2px'
+      */
+      // console.log('onDragLeave', event.dataTransfer.getData('value'))
+    },
+    // dragEnter(ev) {
+    //   /*
+    //   if (ev.clientY > ev.target.height / 2) {
+    //     ev.target.style.marginBottom = '10px'
+    //   } else {
+    //     ev.target.style.marginTop = '10px'
+    //   }
+    //   */
+    // },,
+    onDrop (event, newIndex, parent) {
+      if (!this.editable) {
+        return
+      }
+      const valueStringField = event.dataTransfer.getData('value')
+      const value = valueStringField ? JSON.parse(valueStringField) : null
+      const widget = value.widget
+      const widgetOldIndex = value.widgetIndex
+      const widgetNewIndex = newIndex
+      if (this.localDraggable) {
+        this.updatePosition(this.computedCol, widgetOldIndex, widgetNewIndex)
+      } else {
+        this.addToIndex(this.computedCol, widget, widgetNewIndex)
+      }
+
+      this.localDraggable = null
+      this.$emit('onDrag', 'Drop')
+      event.stopPropagation()
+    },
+    updatePosition (list, oldIndex, newIndex) {
+      list.splice(newIndex, 0, list.splice(oldIndex, 1)[0])
+    },
+    addToIndex (list, newItem, index) {
+      if (list.length > index) {
+        list.splice(index, 0, newItem)
+      } else {
+        list.push(newItem)
+      }
+    },
+    removeFromIndex (list, index) {
+      list.splice(index, 1)
     }
   }
 }
@@ -537,6 +650,40 @@ $responsiveSpacing: (
         paddingBottom: v-bind('defaultOptions.responsiveSpacing.xl.paddingBottom'),
     )
 );
+$responsiveBoxedWidths: (
+    xs: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.xs.width')
+    ),
+    sm: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.sm.width')
+    ),
+    md: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.md.width')
+    ),
+    lg: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.lg.width')
+    ),
+    xl: (
+        width: v-bind('defaultOptions.responsiveBoxedWidths.xl.width')
+    )
+);
+
+@mixin media-query-boxed-width($min-width, $responsiveBoxedWidth) {
+  @media (min-width: $min-width) {
+    & {
+      width: map_get($responsiveBoxedWidth, 'width');
+      max-width: map_get($responsiveBoxedWidth, 'width');
+      min-width: map_get($responsiveBoxedWidth, 'width');
+    }
+  }
+}
+
+@mixin media-query-boxed-widths($responsiveBoxedWidths, $sizes) {
+  @each $name, $min-width in $sizes {
+    $responsiveBoxedWidth: map_get($responsiveBoxedWidths, $name);
+    @include media-query-boxed-width($min-width, $responsiveBoxedWidth);
+  }
+}
 
 .page-builder-row {
   position: relative;
@@ -576,14 +723,19 @@ $responsiveSpacing: (
       border: dashed 2px $primary;
     }
   }
-  &.boxed {
+  &.boxed.rtl-fixed-for-boxed {
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
     width: 100%;
     &.boxedInFullWidthStatus {
       padding: 0 v-bind('rowOptions.paddingOfBoxedInFullWidth');
+      @include media-query-spacings($responsiveSpacing, $sizes, true, false);
       max-width: 100% !important;
+    }
+
+    &.responsiveBoxedWidth {
+      @include media-query-boxed-widths($responsiveBoxedWidths, $sizes);
     }
   }
   &.absolute-row {
@@ -615,8 +767,6 @@ $responsiveSpacing: (
   }
 
   @include media-query-backgrounds($backgrounds, $sizes);
-  &:not(.boxed) {
-    @include media-query-spacings($responsiveSpacing, $sizes);
-  }
+  @include media-query-spacings($responsiveSpacing, $sizes);
 }
 </style>
