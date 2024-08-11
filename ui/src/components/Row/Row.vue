@@ -2,10 +2,13 @@
   <div ref="pageBuilderRow"
        class="page-builder-row"
        :class="rowClassName"
-       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
+    <component :is="'style'"
+               v-if="mounted">
+      {{ styleInTag }}
+    </component>
     <editor-box v-if="editable"
                 :label="'row'"
                 @callAction="callAction" />
@@ -29,6 +32,7 @@
 </template>
 
 <script>
+import { uid } from 'quasar'
 import EditorBox from '../EditorBox.vue'
 import PageBuilderCol from '../Col/Col.vue'
 import mixinWidget from '../../mixin/Widgets.js'
@@ -52,6 +56,7 @@ export default {
   emits: ['onOptionAction', 'update:options', 'update:cols', 'onDrag'],
   data () {
     return {
+      uid: Date.now(),
       mounted: false,
       localDraggable: null,
       deviceWidth: 1920,
@@ -229,6 +234,25 @@ export default {
     }
   },
   computed: {
+    kebabCaseStyle () {
+      return Object.entries(this.rowOptions.style)
+        .map(([key, value]) => {
+          const kebabKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+          return `${kebabKey}: ${value};`
+        })
+        .join(' ')
+    },
+    styleInTag () {
+      return '.page-builder-row.' + this.uidClass + ' {' +
+          this.kebabCaseStyle +
+          '}'
+    },
+    uidClass () {
+      if (!this.mounted) {
+        return ' '
+      }
+      return 'page-builder-row-' + this.uid
+    },
     optionsStyle () {
       if (!this.mounted) {
         return {}
@@ -288,7 +312,8 @@ export default {
         'absolute-right': this.rowOptions.absolute === 'right',
         'absolute-bottom': this.rowOptions.absolute === 'bottom',
         'absolute-left': this.rowOptions.absolute === 'left',
-        [this.rowOptions.className]: true
+        [this.rowOptions.className]: true,
+        [this.uidClass]: true
       }
     },
     computedCol: {
@@ -323,6 +348,7 @@ export default {
     }
   },
   created () {
+    this.uid = uid()
     this.updateRowElementClass()
   },
   mounted () {
@@ -727,11 +753,11 @@ $responsiveBoxedWidths: (
     max-width: 1200px;
     margin-right: auto;
     margin-left: auto;
-    width: 100%;
+    //width: 100%;
     &.boxedInFullWidthStatus {
       padding: 0 v-bind('rowOptions.paddingOfBoxedInFullWidth');
-      @include media-query-spacings($responsiveSpacing, $sizes, true, false);
       max-width: 100% !important;
+      @include media-query-spacings($responsiveSpacing, $sizes, true, false);
     }
 
     &.responsiveBoxedWidth {

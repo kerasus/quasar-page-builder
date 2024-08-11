@@ -1,10 +1,13 @@
 <template>
   <div class="page-builder-col"
        :class="colClassName"
-       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
+    <component :is="'style'"
+               v-if="mounted">
+      {{ styleInTag }}
+    </component>
     <template v-if="editable">
       <div class="editable-wrapper">
         <editor-box v-if="editable"
@@ -68,7 +71,7 @@
 </template>
 
 <script>
-import { useQuasar } from 'quasar'
+import { uid, useQuasar } from 'quasar'
 import { computed, ref } from 'vue'
 import EditorBox from '../EditorBox.vue'
 import mixinWidget from '../../mixin/Widgets'
@@ -254,11 +257,31 @@ export default {
   },
   data() {
     return {
+      uid: Date.now(),
       mounted: false,
       defaultOptions: JSON.parse(JSON.stringify(defaultOptions))
     }
   },
   computed: {
+    kebabCaseStyle () {
+      return Object.entries(this.optionsStyle)
+        .map(([key, value]) => {
+          const kebabKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+          return `${kebabKey}: ${value};`
+        })
+        .join(' ')
+    },
+    styleInTag () {
+      return '.page-builder-col.' + this.uidClass + ' {' +
+          this.kebabCaseStyle +
+          '}'
+    },
+    uidClass () {
+      if (!this.mounted) {
+        return ' '
+      }
+      return 'page-builder-col-' + this.uid
+    },
     optionsStyle () {
       if (!this.mounted) {
         return {}
@@ -295,7 +318,7 @@ export default {
     colClassName () {
       const colNumber = this.colNumber ? this.colNumber : ''
 
-      return this.colOptions.className + ' ' + colNumber + this.responsiveShow
+      return this.colOptions.className + ' ' + colNumber + this.responsiveShow + ' ' + this.uidClass
     },
     optionsClassName () {
       return this.colOptions.className

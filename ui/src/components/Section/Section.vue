@@ -2,10 +2,13 @@
   <div :id="sectionOptions.id"
        class="page-builder-section"
        :class="sectionClassName"
-       :style="optionsStyle"
        @dragover="onDragOver"
        @dragleave="onDragLeave"
        @drop="onDrop($event, 0, true)">
+    <component :is="'style'"
+               v-if="mounted">
+      {{ styleInTag }}
+    </component>
     <editor-box v-if="editable"
                 :label="'section'"
                 @callAction="callAction" />
@@ -27,6 +30,7 @@
 </template>
 
 <script>
+import { uid } from 'quasar'
 import EditorBox from '../EditorBox.vue'
 import PageBuilderRow from '../Row/Row.vue'
 import defaultOptions from './DefaultOptions.js'
@@ -42,6 +46,7 @@ export default {
   emits: ['onOptionAction', 'update:options', 'onDrag'],
   data() {
     return {
+      uid: Date.now(),
       mounted: false,
       localDraggable: null,
       defaultBackground: null,
@@ -91,12 +96,18 @@ export default {
     }
   },
   computed: {
-    optionsStyle () {
-      if (!this.mounted) {
-        return {}
-      }
-
-      return this.sectionOptions.style
+    kebabCaseStyle () {
+      return Object.entries(this.sectionOptions.style)
+        .map(([key, value]) => {
+          const kebabKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+          return `${kebabKey}: ${value};`
+        })
+        .join(' ')
+    },
+    styleInTag () {
+      return '.page-builder-section.' + this.uidClass + ' {' +
+          this.kebabCaseStyle +
+          '}'
     },
     responsiveShow () {
       let responsiveShow = ''
@@ -132,8 +143,14 @@ export default {
         this.$emit('update:options', newValue)
       }
     },
+    uidClass () {
+      if (!this.mounted) {
+        return ' '
+      }
+      return 'page-builder-section-' + this.uid
+    },
     sectionClassName () {
-      return this.optionsClassName + this.responsiveShow
+      return this.optionsClassName + this.responsiveShow + ' ' + this.uidClass
     },
     optionsClassName () {
       return this.sectionOptions.className
@@ -212,6 +229,7 @@ export default {
     this.mounted = true
   },
   created() {
+    this.uid = uid()
     this.setFullHeight()
   },
   methods: {

@@ -25,6 +25,14 @@ const OptionPanel = {
     }
   },
   computed: {
+    kebabCaseStyle () {
+      return Object.entries(this.localOptions.style)
+        .map(([key, value]) => {
+          const kebabKey = key.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase()
+          return `${kebabKey}: ${value};`
+        })
+        .join(' ')
+    },
     localOptions: {
       get() {
         return Object.assign(this.defaultOptions, this.options)
@@ -40,7 +48,7 @@ const OptionPanel = {
     },
     takeAction() {
       if (!this.localOptions.action.hasAction) {
-        return
+
       } else if (this.localOptions.action.actionName && this.localOptions.action.actionName === 'scroll') {
         this.scrollToElement(this.localOptions.action.scrollTo, this.localOptions.action.headerOffset)
       } else if (this.localOptions.action.actionName && this.localOptions.action.actionName === 'link') {

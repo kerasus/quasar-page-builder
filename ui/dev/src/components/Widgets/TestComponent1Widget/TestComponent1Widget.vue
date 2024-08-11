@@ -1,8 +1,10 @@
 <template>
   <div class="Test-component1-widget"
-       :style="localOptions.style"
        :class="{'cursor-pointer': localOptions.action.hasAction}"
        @click="takeAction()">
+    <component :is="'style'">
+      {{ kebabCaseStyle }}
+    </component>
     Test-component-11111111111111111111111111111111111111111111111111
     <br>
     Test-component-11111111111111111111111111111111111111111111111111
