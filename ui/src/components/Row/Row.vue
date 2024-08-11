@@ -348,10 +348,10 @@ export default {
     }
   },
   created () {
-    this.uid = uid()
     this.updateRowElementClass()
   },
   mounted () {
+    this.uid = uid()
     this.mounted = true
     this.updateBoxedStyle()
     this.updateRowElementClass()

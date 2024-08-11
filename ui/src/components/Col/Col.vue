@@ -361,6 +361,7 @@ export default {
     }
   },
   mounted() {
+    this.uid = uid()
     this.mounted = true
   },
   methods: {

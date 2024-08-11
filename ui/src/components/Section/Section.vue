@@ -184,7 +184,7 @@ export default {
       return this.windowSize.y
     },
     computedRows () {
-      if (!this.data?.rows) {
+      if (!this.data || !this.data.rows) {
         return []
       }
       return this.data.rows
@@ -226,10 +226,10 @@ export default {
     }
   },
   mounted() {
+    this.uid = uid()
     this.mounted = true
   },
   created() {
-    this.uid = uid()
     this.setFullHeight()
   },
   methods: {
@@ -301,7 +301,7 @@ export default {
         widgetData.options = widget.options
       }
       if (this.action === 'add') {
-        if (!this.$props.data?.rows) {
+        if (!this.$props.data || !this.$props.data.rows) {
           this.$props.data = {
             rows: []
           }
@@ -309,7 +309,7 @@ export default {
         this.$props.data.rows[this.eventRow.rowIndex].cols.push(widgetData)
       } else if (this.action === 'edit') {
         widgetData = widget.item
-        if (!this.$props.data?.rows) {
+        if (!this.$props.data || !this.$props.data.rows) {
           this.$props.data = {
             rows: []
           }
